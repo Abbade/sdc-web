@@ -95,7 +95,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       })
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
-
+      console.log("foi");
       Router.push('/dashboard');
     } catch (err) {
       console.log(err);
