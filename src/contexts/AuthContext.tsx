@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { setCookie, parseCookies, destroyCookie } from 'nookies' 
+import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import Router from 'next/router'
 
 import { api } from "../services/apiClient";
@@ -32,11 +32,8 @@ let authChannel: BroadcastChannel
 
 export function signOut() {
   destroyCookie(undefined, 'nextauth.token')
-
-
-  authChannel.postMessage('signOut');
-
   Router.push('/')
+
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -49,7 +46,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case 'signOut':
-          signOut();
+          signOut();          
+
           break;
         default:
           break;
@@ -59,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const { 'nextauth.token': token } = parseCookies()
-
+    console.log(token)
     if (token) {
       api.get('/me')
         .then(response => {
@@ -67,6 +65,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
           const { email, permissions, roles } = response.data
 
           setUser({ email, permissions, roles })
+
+          if (Router.route == "/") {
+            Router.push('/dashboard')
+
+          }
+
         })
         .catch(() => {
           signOut();

@@ -13,7 +13,7 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
   return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);
     const token = cookies['nextauth.token'];
-
+    console.log(cookies)
     if (!token) {
       return {
         redirect: {
