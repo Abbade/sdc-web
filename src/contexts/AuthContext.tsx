@@ -32,6 +32,7 @@ let authChannel: BroadcastChannel
 
 export function signOut() {
   destroyCookie(undefined, 'nextauth.token')
+  authChannel.postMessage('signOut');
   Router.push('/')
 
 }
@@ -46,8 +47,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case 'signOut':
-          signOut();          
-
+          setUser(null);         
+        
           break;
         default:
           break;
@@ -57,7 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const { 'nextauth.token': token } = parseCookies()
-    console.log(token)
+    console.log("abbade bonitao mesmo")
     if (token) {
       api.get('/me')
         .then(response => {
@@ -75,6 +76,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         .catch(() => {
           signOut();
         })
+    }
+    else{
+      console.log("abbade bonitao")
     }
   }, [])
 
