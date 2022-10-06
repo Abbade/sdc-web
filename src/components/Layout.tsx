@@ -22,10 +22,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import { grey } from '@mui/material/colors';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
+  //backgroundColor: grey[100],
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -38,6 +40,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+ // backgroundColor: grey[100],
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
@@ -69,6 +72,7 @@ const AppBar = styled(MuiAppBar, {
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
+    
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
@@ -85,12 +89,15 @@ type Props = {
 }
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
+    backgroundColor: grey[200],
     width: drawerWidth,
     flexShrink: 0,
+    marginRight: theme.spacing(2),
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
     ...(open && {
       ...openedMixin(theme),
+      
       '& .MuiDrawer-paper': openedMixin(theme),
     }),
     ...(!open && {
@@ -215,7 +222,7 @@ export default function Layout({children} : LayoutProps) {
             )}
             </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer  variant="permanent" open={open}>
             <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
