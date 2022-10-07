@@ -8,10 +8,11 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 interface selectParams {
     label: string;
     name: string;
+    values?: any[];
 
 }
 
-export default function BasicSelect({label, name}: selectParams) {
+export default function BasicSelect({label, name, values}: selectParams) {
   const [value, setValue] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -30,9 +31,9 @@ export default function BasicSelect({label, name}: selectParams) {
           name={name}
           onChange={handleChange}
         >
-          <MenuItem value={4}>Ten</MenuItem>
-          <MenuItem value={2}>Twenty</MenuItem>
-          <MenuItem value={3}>Thirty</MenuItem>
+          {values?.map( (selectValue) => {
+            return <MenuItem key={selectValue.id} value={selectValue.id}>{selectValue.name}</MenuItem>
+          })}
         </Select>
       </FormControl>
     </Box>

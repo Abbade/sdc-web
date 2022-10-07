@@ -1,17 +1,18 @@
 import { ThemeProvider } from "@emotion/react";
 import { Typography, createTheme, Container, CssBaseline, Box, Avatar, Grid, TextField, FormControlLabel, Checkbox, Button, TextFieldProps, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Link from "next/link";
-import { api } from "../../services/apiClient";
+import { useRouter } from "next/router"
+import { api } from "../../../services/apiClient";
 import Router from 'next/router'
 import React, { useEffect, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import BasicDatePicker from "../../components/Inputs/BasicDatePicker";
+import BasicDatePicker from "../../../components/Inputs/BasicDatePicker";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import BasicSelect from "../../components/Inputs/BasicSelect";
-import BasicTextField from "../../components/Inputs/BasicTextField";
-import { Genetic, LoteInterface, PropagationType } from "../../interfaces/LoteInterface";
+import BasicSelect from "../../../components/Inputs/BasicSelect";
+import BasicTextField from "../../../components/Inputs/BasicTextField";
+import { Genetic, LoteInterface, PropagationType } from "../../../interfaces/LoteInterface";
 
 function Copyright(props: any) {
     return (
@@ -29,41 +30,34 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function CreateLote() {
-    const [propagationType, setPropagationType] = useState([] as PropagationType[]);
 
+    const router = useRouter()
+    const {
+      query: { id },
+    } = router
+    const [lotes, setLotes] = useState();
+    console.log(router.query.id)
     useEffect(() => {
-      const getPropagationTypes = async () => {
-        var response = await api.get("/propagation-type");
-        setPropagationType(response.data);
+      const getLotes = async () => {
+        var response = await api.get("/lote");
+        console.log(response)
+        var selectedLote = 
+        console.log(selectedLote)
+        setLotes(response?.data?.filter(lote => {
+            return lote.id.toString() == router.query.id
+        })[0]);
+        console.log(lotes)
       };
   
-      getPropagationTypes();
-    }, []);
-    
-    const [genetic, setGenetics] = useState([] as Genetic[]);
-
-    useEffect(() => {
-      const getGenetics = async () => {
-        var response = await api.get("/genetic");
-        setGenetics(response.data);
-      };
+      getLotes();
   
-      getGenetics();
     }, []);
-
-    const [location, setLocation] = useState([] as Location[]);
-
-    useEffect(() => {
-      const getLocations = async () => {
-        var response = await api.get("/location");
-        setLocation(response.data);
-      };
   
-      getLocations();
-    }, []);
+   
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        
         const data = new FormData(event.currentTarget);
         const { propDate, id_propagationType, id_genetic, id_location_init, qtTotal, obs } = {
             propDate: new Date(data.get('propDate').toString()) ,
@@ -103,15 +97,11 @@ export default function CreateLote() {
                         {/* <LockOutlinedIcon /> */}
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Novo Lote
+                        Lote {lotes?.name}
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={12}>
-                                <BasicSelect label={"Genética"} name={"id_genetic"} values={genetic}
-                                />
-
-                            </Grid>
+                          
                             <Grid item xs={12} sm={12}>
                                 <BasicDatePicker label={"Data de Propagação"} name={"propDate"}
                                 />
@@ -132,35 +122,7 @@ export default function CreateLote() {
                                 </LocalizationProvider>
                             </Grid> */}
 
-                            <Grid item xs={12} sm={12}>
-                                <BasicSelect label={"Tipo de Propagação"} name={"id_propagationType"} values={propagationType}
-                                />
-
-                            </Grid>
-
-                            <Grid item xs={12} sm={12}>
-
-                                <BasicSelect label={"Origem"} name={"id_origem"}
-                                />
-
-                            </Grid>
-
-                            <Grid item xs={12} sm={12}>
-                                <BasicSelect label={"Local"} name={"id_location_init"} values={location}
-                                />
-
-                            </Grid>
-                            <Grid item xs={12} sm={12}>
-                                <BasicTextField label={"Quantidade"} name={"qtTotal"}
-                                />
-
-                            </Grid>
-                            <Grid item xs={12} sm={12}>
-                                <BasicTextField label={"obs"} name={"obs"}
-                                />
-
-                            </Grid>
-
+                     
                         </Grid>
                         <Button
                             type="submit"

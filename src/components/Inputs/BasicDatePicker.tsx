@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-
+import { format } from 'date-fns';
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -26,7 +26,7 @@ export default function BasicDatePicker({label, name}: DatePickerParams) {
         label={label}
         value={value}
         onChange={(newValue) => {
-          setValue(newValue);
+          setValue(new Date(newValue.toString()));
         }}
         renderInput={(params) => <TextField {...params} name={name} fullWidth/>}
       />

@@ -1,3 +1,12 @@
+export interface PropagationType {
+    id: number;
+    name: string;
+    description: string;
+    id_user_create: number;
+    created_at: Date;
+
+}
+
 export interface Location {
     id: number;
     name: string;

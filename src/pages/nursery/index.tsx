@@ -17,10 +17,12 @@ export default function Nursery() {
   useEffect(() => {
     const getLotes = async () => {
       var response = await api.get("/lote");
+      console.log(response.data)
       setLotes(response.data);
     };
 
     getLotes();
+
   }, []);
 
   return (
@@ -41,9 +43,10 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
+  { field: "genetic", headerName: "Genética", width: 130 },
   { field: "name", headerName: "Código", width: 130 },
-  { field: "qtTotal", headerName: "Total", width: 90 },
-  { field: "qtProp", headerName: "Total Propagado", width: 130 },
-  { field: "qtPropTrashed", headerName: "Total despejado", width: 130 },
-  { field: "qtPlant", headerName: "Total Planta", width: 130 },
+  // { field: "qtTotal", headerName: "Total", width: 90 },
+  { field: "qtProp", headerName: "Em Propagação", width: 130 },
+  { field: "qtPlant", headerName: "Transplantes", width: 130 },
+  { field: "qtPropTrashed", headerName: "Descartes", width: 130 },
 ];
