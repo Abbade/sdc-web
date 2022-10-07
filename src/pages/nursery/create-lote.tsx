@@ -1,0 +1,124 @@
+import { ThemeProvider } from "@emotion/react";
+import { Typography, createTheme, Container, CssBaseline, Box, Avatar, Grid, TextField, FormControlLabel, Checkbox, Button, TextFieldProps, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import Link from "next/link";
+import { api } from "../../services/apiClient";
+import Router from 'next/router'
+import React from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import BasicDatePicker from "../../components/BasicDatePicker";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import BasicSelect from "../../components/Select";
+
+function Copyright(props: any) {
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://mui.com/">
+                Your Website
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+
+const theme = createTheme();
+
+export default function SignUp() {
+    const { signIn } = React.useContext(AuthContext);
+
+    const [propDate, setValue] = React.useState<AdapterDateFns | null>(null);
+
+
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        const { name, email, password } = {
+            name: data.get('firstName') + " " + data.get('lastName'),
+            email: data.get('email'),
+            password: data.get('password'),
+        };
+
+        try {
+            const user = await api.post('lote', { propDate, id_propagationType, id_genetic, id_location_init, qtTotal, obs });
+            await signIn({ email: email as string, password: password as string })
+
+        } catch (error) {
+            const errorOficial = error as Error
+            console.log(error as Error)
+        }
+
+
+
+
+    };
+
+    return (
+        <ThemeProvider theme={theme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        {/* <LockOutlinedIcon /> */}
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Novo Lote
+                    </Typography>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+
+                            <Grid item xs={12} sm={12}>
+
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                        label="Propagation Date"
+                                        value={propDate}
+                                        onChange={(newValue) => {
+                                            setValue(newValue);
+                                        }}
+                                        renderInput={(params) => <TextField {...params} name="" fullWidth />}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
+
+                            <Grid item xs={12} sm={12}>
+                              <BasicSelect label="Propagation Type" name="id_propagationType"
+                              >
+
+                              </BasicSelect>
+                            </Grid>
+                          
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justifyContent="flex-end">
+                            <Grid item>
+                                <Link href="#" >
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
+                <Copyright sx={{ mt: 5 }} />
+            </Container>
+        </ThemeProvider>
+    );
+}

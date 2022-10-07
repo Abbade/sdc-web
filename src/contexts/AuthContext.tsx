@@ -67,7 +67,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
           setUser({ email, permissions, roles })
 
-          if (Router.route == "/") {
+          if (Router.route == "/" || Router.route == "/account/create") {
             Router.push('/dashboard')
 
           }
