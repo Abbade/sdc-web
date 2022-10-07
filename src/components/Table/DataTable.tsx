@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
-
+let pageSize = 10
 
 export interface DataTableInterface {
   columns: GridColDef[];
@@ -14,8 +14,8 @@ export default function DataTable({columns, rows} : DataTableInterface) {
       <DataGrid
         rows={rows}
         columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
+        pageSize={5}
+        rowsPerPageOptions={[5,10,20]}
         checkboxSelection
       />
     </div>

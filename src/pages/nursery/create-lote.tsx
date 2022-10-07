@@ -76,6 +76,7 @@ export default function CreateLote() {
 
         try {
             const user = await api.post('lote', { propDate, id_propagationType, id_genetic, id_location_init, qtTotal, obs });
+            Router.back()
 
         } catch (error) {
             const errorOficial = error as Error
