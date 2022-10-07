@@ -13,7 +13,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 export default function SnackbarAlert() {
-  const { openAlert, alertType, alertMessage, closeAlert} = React.useContext(AlertContext);
+  const { openAlert, alertType, alertMessage, closeAlert } = React.useContext(AlertContext);
   const [open, setOpen] = React.useState(false);
 
  
