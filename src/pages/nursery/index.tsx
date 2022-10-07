@@ -43,7 +43,10 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
-  { field: "genetic", headerName: "Genética", width: 130 },
+  { field: "genetic.name", headerName: "Genética", width: 130,    renderCell: (params) => {
+    console.log(params.row.genetic.name)
+    return <div className="MuiDataGrid-cellContent">{params.row.genetic.name}</div>;
+  }, },
   { field: "name", headerName: "Código", width: 130 },
   // { field: "qtTotal", headerName: "Total", width: 90 },
   { field: "qtProp", headerName: "Em Propagação", width: 130 },
