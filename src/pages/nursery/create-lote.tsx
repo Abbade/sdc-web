@@ -9,7 +9,8 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import BasicDatePicker from "../../components/BasicDatePicker";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import BasicSelect from "../../components/Select";
+import BasicSelect from "../../components/Inputs/BasicSelect";
+import BasicTextField from "../../components/Inputs/BasicTextField";
 
 function Copyright(props: any) {
     return (
@@ -37,14 +38,16 @@ export default function SignUp() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        const { name, id_propagationType, password } = {
-            name: data.get('firstName') + " " + data.get('lastName'),
-            id_propagationType: data.get('id_propagationType'),
+        const { id_propagationType, id_genetic, id_location_init, qtTotal, obs } = {
+            id_propagationType: new Number(data.get('id_propagationType')),
+            id_genetic: new Number(data.get('id_genetic')),
+            id_location_init: new Number(data.get('id_location_init')),
+            qtTotal: new Number(data.get('qtTotal')),
+            obs: data.get('obs'),
         };
 
         try {
             const user = await api.post('lote', { propDate, id_propagationType, id_genetic, id_location_init, qtTotal, obs });
-            await signIn({ email: email as string, password: password as string })
 
         } catch (error) {
             const errorOficial = error as Error
@@ -76,7 +79,11 @@ export default function SignUp() {
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
+                        <Grid item xs={12} sm={12}>
+                              <BasicSelect label={"Genética"} name={"id_genetic"}
+                              />
 
+                            </Grid>
                             <Grid item xs={12} sm={12}>
 
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -92,10 +99,32 @@ export default function SignUp() {
                             </Grid>
 
                             <Grid item xs={12} sm={12}>
-                              <BasicSelect label="Propagation Type" name="id_propagationType"
-                              >
+                              <BasicSelect label={"Propagation Type"} name={"id_propagationType"}
+                              />
 
-                              </BasicSelect>
+                            </Grid>
+                           
+                            <Grid item xs={12} sm={12}>
+
+                            <BasicSelect label={"Origem"} name={"id_origem"}
+                              />
+
+                            </Grid>
+                           
+                            <Grid item xs={12} sm={12}>
+                              <BasicSelect label={"Local"} name={"id_location_init"}
+                              />
+
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                              <BasicTextField label={"Quantidade"} name={"qtTotal"}
+                              />
+
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                              <BasicTextField label={"obs"} name={"obs"}
+                              />
+
                             </Grid>
                           
                         </Grid>
@@ -105,7 +134,7 @@ export default function SignUp() {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign Up
+                            Cadastrar Lote
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
