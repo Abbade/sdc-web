@@ -90,6 +90,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(props,
 
   return (
     <MuiLink
+      underline='none'
       component={NextLinkComposed}
       className={className}
       ref={ref}

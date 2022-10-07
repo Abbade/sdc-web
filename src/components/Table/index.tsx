@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import { Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { GridColDef } from "@mui/x-data-grid";
+import Link from "../Link";
 
 export interface TableIndexInterface {
     columns: GridColDef[];
@@ -36,13 +37,16 @@ export default function Table({ columns, rows, searchName} : TableIndexInterface
             />
           </Grid>
           <Grid item xs={2} textAlign="end">
+          <Link href={'/nursery/create-lote'}>
             <Button
               variant="contained"
               disableElevation
+              
               startIcon={<AddIcon />}
             >
-              Adicionar
+               Adicionar
             </Button>
+            </Link>
           </Grid>
         </Grid>
         <DataTable columns={columns} rows={rows} />
