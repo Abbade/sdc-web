@@ -14,8 +14,8 @@ export default function DataTable({columns, rows} : DataTableInterface) {
       <DataGrid
         rows={rows}
         columns={columns}
-        pageSize={100}
-        rowsPerPageOptions={[100]}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
         checkboxSelection
       />
     </div>
