@@ -16,15 +16,18 @@
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
-    "@mui/x-date-pickers": "^5.0.4",
     "@mui/x-data-grid": "^5.17.6",
+    "@mui/x-date-pickers": "^5.0.4",
     "axios": "^1.0.0",
     "date-fns": "^2.29.3",
     "jwt-decode": "^3.1.2",
     "next": "12.3.1",
     "nookies": "^2.5.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-form-hook": "^0.0.1",
+    "react-hook-form": "^7.37.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "18.8.2",

@@ -3,16 +3,18 @@ import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import { FieldError } from 'react-hook-form'
+
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { TextField } from '@mui/material';
 
 interface selectParams {
     label: string;
     name: string;
-
+    error?: FieldError
 }
 
-export default function BasicTextField({label, name}: selectParams) {
+export default function BasicTextField({label, name, error}: selectParams) {
   const [value, setValue] = React.useState('');
 
   const handleChange = (event: any) => {
@@ -23,11 +25,13 @@ export default function BasicTextField({label, name}: selectParams) {
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         {/* <InputLabel id={name}>{name}</InputLabel> */}
-        <TextField
+        <TextField 
+          error={!!error}
+          helperText={error?.message}
           id={name}
           onChange={handleChange}
           value={value}
-          label={name}
+          label={label}
           name={name}
         >
         </TextField>

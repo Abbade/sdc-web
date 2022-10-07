@@ -3,33 +3,18 @@ import { Typography, createTheme, Container, CssBaseline, Box, Avatar, Grid, Tex
 import Link from "next/link";
 import * as yup from 'yup';
 
-import { api } from "../../services/apiClient";
 import Router from 'next/router'
 import React, { useEffect, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import BasicDatePicker from "../../components/Inputs/BasicDatePicker";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import BasicSelect from "../../components/Inputs/BasicSelect";
-import BasicTextField from "../../components/Inputs/BasicTextField";
-import { Genetic, LoteInterface, PropagationType } from "../../interfaces/LoteInterface";
+import BasicDatePicker from "../../../components/Inputs/BasicDatePicker";
+import BasicSelect from "../../../components/Inputs/BasicSelect";
+import BasicTextField from "../../../components/Inputs/BasicTextField";
+import { PropagationType, Genetic, TrashReason } from "../../../interfaces/LoteInterface";
+import { api } from "../../../services/apiClient";
 
-type CreateUserFormData = {
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-  };
-  
-  const createUserFormSchema = yup.object().shape({
-    name: yup.string().required('Nome obrigatório'),
-    email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
-    password: yup.string().required('Senha obrigatória').min(6, 'No mínimo 6 caracteres'),
-    password_confirmation: yup.string().oneOf([
-      null, yup.ref('password')
-    ], 'As senhas precisam ser iguais')
-  })
+
 
 function Copyright(props: any) {
     return (
@@ -50,15 +35,15 @@ export default function CreateLote() {
 
 
     
-    const [propagationType, setPropagationType] = useState([] as PropagationType[]);
+    const [trashReason, setTrashReason] = useState([] as TrashReason[]);
 
     useEffect(() => {
-      const getPropagationTypes = async () => {
-        var response = await api.get("/propagation-type");
-        setPropagationType(response.data);
+      const getTrashReasons = async () => {
+        var response = await api.get("/trash-reason");
+        setTrashReason(response.data);
       };
   
-      getPropagationTypes();
+      getTrashReasons();
     }, []);
     
     const [genetic, setGenetics] = useState([] as Genetic[]);
@@ -125,17 +110,13 @@ export default function CreateLote() {
                         {/* <LockOutlinedIcon /> */}
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Novo Lote
+                        Descartar Estacas
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
+                         
                             <Grid item xs={12} sm={12}>
-                                <BasicSelect label={"Genética"} name={"id_genetic"} values={genetic}
-                                />
-
-                            </Grid>
-                            <Grid item xs={12} sm={12}>
-                                <BasicDatePicker label={"Data de Propagação"} name={"propDate"}
+                                <BasicDatePicker label={"Data de Descarte"} name={"trashDate"}
                                 />
                             </Grid>
 
@@ -153,28 +134,15 @@ export default function CreateLote() {
                                     />
                                 </LocalizationProvider>
                             </Grid> */}
-
-                            <Grid item xs={12} sm={12}>
-                                <BasicSelect label={"Tipo de Propagação"} name={"id_propagationType"} values={propagationType}
-                                />
-
-                            </Grid>
-
                             <Grid item xs={12} sm={12}>
 
-                                <BasicSelect label={"Origem"} name={"id_origem"}
+        <BasicSelect label={"Motivo de Descarte"} name={"id_trashReason"} values={trashReason}
                                 />
-
                             </Grid>
-
-                            <Grid item xs={12} sm={12}>
-                                <BasicSelect label={"Local"} name={"id_location_init"} values={location}
-                                />
-
-                            </Grid>
+                        
                             <Grid item xs={12} sm={12}>
                                 
-                                <BasicTextField label={"Quantidade"} name={"qtTotal"} 
+                                <BasicTextField label={"Quantidade"} name={"qtTrash"} 
                                 />
 
                             </Grid>

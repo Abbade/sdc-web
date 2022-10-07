@@ -24,6 +24,12 @@ export interface Genetic {
     id_profile: number;
 }
 
+export interface TrashReason {
+    id: number;
+    name: string;
+    description: string;
+}
+
 export interface LoteInterface {
     id: number;
     name: string;
