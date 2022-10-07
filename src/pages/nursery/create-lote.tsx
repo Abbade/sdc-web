@@ -37,8 +37,8 @@ export default function SignUp() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
-        const { id_propagationType, id_genetic, id_location_init, qtTotal, obs } = {
+        const { propDate, id_propagationType, id_genetic, id_location_init, qtTotal, obs } = {
+            propDate: data.get('propDate'),
             id_propagationType: new Number(data.get('id_propagationType')),
             id_genetic: new Number(data.get('id_genetic')),
             id_location_init: new Number(data.get('id_location_init')),
@@ -85,18 +85,24 @@ export default function SignUp() {
 
                             </Grid>
                             <Grid item xs={12} sm={12}>
+                              <BasicDatePicker label={"Propagation Date"} name={"propDate"}
+                              />
+                              </Grid>
 
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+
+                                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
+                                    className="propDate"
                                         label="Propagation Date"
                                         value={propDate}
                                         onChange={(newValue) => {
                                             setValue(newValue);
+
                                         }}
-                                        renderInput={(params) => <TextField {...params} name="" fullWidth />}
+                                        renderInput={(params) => <TextField {...params} name="propDate" fullWidth />}
                                     />
                                 </LocalizationProvider>
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item xs={12} sm={12}>
                               <BasicSelect label={"Propagation Type"} name={"id_propagationType"}
@@ -136,13 +142,7 @@ export default function SignUp() {
                         >
                             Cadastrar Lote
                         </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="#" >
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
+
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
