@@ -14,6 +14,7 @@ export interface TableIndexInterface {
     columns: GridColDef[];
     rows: any[];
     searchName: string;
+    url: string;
   }
 
 export default function Table({ columns, rows, searchName} : TableIndexInterface) {
