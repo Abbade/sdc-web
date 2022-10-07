@@ -6,7 +6,6 @@ import { setupAPIClient } from "../../services/api";
 import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { Can } from "../../components/Can";
-import TableToolbar from "../../components/Table/TableToolbar";
 import Table from "../../components/Table";
 import { Typography } from "@mui/material";
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
@@ -26,7 +25,7 @@ export default function Nursery() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Table columns={columns} rows={lotes} searchName="Procurar Lotes" />
+      <Table columns={columns} rows={lotes} searchName="Procurar Lotes" url="/nursery/create-lote" />
       {/* <Can permissions={["lote.list"]}>
         <div>Métricas</div>
       </Can> */}
