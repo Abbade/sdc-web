@@ -35,7 +35,7 @@ export default function CreateLote() {
     const {
       query: { id },
     } = router
-    const [lotes, setLotes] = useState();
+    const [lote, setLote] = useState();
     console.log(router.query.id)
     useEffect(() => {
       const getLotes = async () => {
@@ -43,10 +43,10 @@ export default function CreateLote() {
         console.log(response)
         var selectedLote = 
         console.log(selectedLote)
-        setLotes(response?.data?.filter(lote => {
+        setLote(response?.data?.filter(lote => {
             return lote.id.toString() == router.query.id
         })[0]);
-        console.log(lotes)
+        console.log(lote)
       };
   
       getLotes();
@@ -97,7 +97,7 @@ export default function CreateLote() {
                         {/* <LockOutlinedIcon /> */}
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Lote {lotes?.name}
+                        Lote {lote?.name}
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>

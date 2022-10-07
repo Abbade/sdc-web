@@ -18,7 +18,7 @@ export default function Nursery() {
     const getLotes = async () => {
       var response = await api.get("/lote");
       console.log(response.data)
-      setLotes(response.data);
+      setLotes(response.data.itens);
     };
 
     getLotes();
