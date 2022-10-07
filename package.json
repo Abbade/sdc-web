@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
+    "@mui/x-data-grid": "^5.17.6",
     "axios": "^1.0.0",
     "jwt-decode": "^3.1.2",
     "next": "12.3.1",
