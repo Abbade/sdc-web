@@ -1,10 +1,13 @@
 import axios, { AxiosError } from 'axios';
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
+import { useContext } from 'react';
+import { AlertContext, showAlert } from '../contexts/AlertContext';
 import { signOut } from '../contexts/AuthContext';
 import { AuthTokenError } from './errors/AuthTokenError';
 
 let isRefreshing = false;
 let failedRequestsQueue = [];
+
 
 export function setupAPIClient(ctx = undefined) {
   let cookies = parseCookies(ctx);
@@ -85,8 +88,14 @@ export function setupAPIClient(ctx = undefined) {
         // }
       // }
     }
-  
-    return Promise.reject(error.response?.data);
+    else if(error.response.status === 400){
+      const data = error.response.data as any;
+      showAlert(data.message as string);
+    }
+    else{
+      showAlert(error.message)
+    }
+    return Promise.reject(error);
   });
 
   return api;

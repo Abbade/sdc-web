@@ -37,10 +37,9 @@ export default function SignUp() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        const { name, email, password } = {
+        const { name, id_propagationType, password } = {
             name: data.get('firstName') + " " + data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
+            id_propagationType: data.get('id_propagationType'),
         };
 
         try {
