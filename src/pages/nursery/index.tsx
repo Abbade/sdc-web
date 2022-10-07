@@ -13,12 +13,13 @@ import { LoteInterface } from "../../interfaces/LoteInterface";
 
 export default function Nursery() {
   const [lotes, setLotes] = useState([] as LoteInterface[]);
-
+  const [total, setTotal] = useState([] as number)
   useEffect(() => {
     const getLotes = async () => {
       var response = await api.get("/lote");
       console.log(response.data)
       setLotes(response.data.itens);
+      setTotal(response.data.total)
     };
 
     getLotes();
