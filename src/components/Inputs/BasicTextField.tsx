@@ -1,40 +1,37 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import { FieldError } from 'react-hook-form'
-
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { TextField } from '@mui/material';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import { FieldError, Controller, FieldValues, Control } from "react-hook-form";
+import { TextField, TextFieldProps } from "@mui/material";
 
 interface selectParams {
-    label: string;
-    name: string;
-    error?: FieldError
+  label: string;
+  name: string;
+  error?: FieldError;
+  control?: Control<FieldValues, any>;
 }
-
-export default function BasicTextField({label, name, error}: selectParams) {
-  const [value, setValue] = React.useState('');
-
-  const handleChange = (event: any) => {
-    setValue(event.target.value as string);
-  };
-
+export default function BasicTextField({
+  name,
+  label,
+  control,
+  error = null,
+}: selectParams) {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        {/* <InputLabel id={name}>{name}</InputLabel> */}
-        <TextField 
-          error={!!error}
-          helperText={error?.message}
-          id={name}
-          onChange={handleChange}
-          value={value}
-          label={label}
+        <Controller
           name={name}
-        >
-        </TextField>
+          control={control}
+          render={({ field: { onChange, value = '' } }) => (
+            <TextField
+              onChange={onChange}
+              value={value}
+              label={label}
+              error={!!error}
+              helperText={error?.message}
+            />
+          )}
+        />
       </FormControl>
     </Box>
   );
