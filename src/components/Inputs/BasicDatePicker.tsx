@@ -5,6 +5,9 @@ import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+
+
 interface DatePickerParams {
   label: string;
   name: string;
@@ -13,10 +16,10 @@ interface DatePickerParams {
 export default function BasicDatePicker({label, name}: DatePickerParams) {
 
 
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(new Date());
 
   const handleChange = (event: any) => {
-    setValue(event.target.value as string);
+    setValue(event.target.value);
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -26,7 +29,7 @@ export default function BasicDatePicker({label, name}: DatePickerParams) {
         label={label}
         value={value}
         onChange={(newValue) => {
-          setValue(new Date(newValue.toString()));
+          setValue(newValue)
         }}
         renderInput={(params) => <TextField {...params} name={name} fullWidth/>}
       />

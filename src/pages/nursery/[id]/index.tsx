@@ -35,7 +35,7 @@ export default function CreateLote() {
     const {
       query: { id },
     } = router
-    const [lote, setLote] = useState();
+    const [lote, setLote] = useState({} as LoteInterface);
     console.log(router.query.id)
     useEffect(() => {
       const getLotes = async () => {
