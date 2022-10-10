@@ -31,7 +31,7 @@ export default function LoteDetailDashboard() {
       });
       console.log(response.data)
       setSelectedLote(response.data?.itens[0]);
-    };
+    }; 
 
     getLote();
 
@@ -49,7 +49,7 @@ export default function LoteDetailDashboard() {
 
       <h3>Descartes de Lote:</h3>
       
-      <TrashedLoteTable id={selectedLote?.id}></TrashedLoteTable>
+      <TrashedLoteTable id={idLote}></TrashedLoteTable>
       <Can permissions={['lote.list']}>
         <div>Métricas</div>
       </Can>

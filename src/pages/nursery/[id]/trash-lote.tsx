@@ -56,10 +56,9 @@ const createObjFormSchema = yup.object().shape({
   id_trashReason: yup.number().required("Genética é obrigatório"),
   qtTrash: yup.number().required("Quantidade total é obrigatória"),
 });
-let idLote: number;
 const theme = createTheme();
 
-export default function TrashLote(idLote) {
+export default function TrashLote(idLote?) {
   const {
     register,
     handleSubmit,
@@ -68,10 +67,6 @@ export default function TrashLote(idLote) {
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
   
-    const routing = useRouter()
-    idLote = Number.parseInt(routing.asPath.split("/")[2])
-
-
   const [trashReason, setTrashReason] = useState(
     [] as TrashReason[]
   );
@@ -81,7 +76,6 @@ export default function TrashLote(idLote) {
       var response = await api.get("/trash-reason");
       setTrashReason(response.data);
     };
-
     getTrashReasons();
 
   }, []);
@@ -93,10 +87,12 @@ export default function TrashLote(idLote) {
     formData
   ) => {
     try {
+      console.log(idLote)
+      formData.idLote = idLote.idLote?.id;
+      console.log(formData)
 
-      formData.idLote = idLote;
       const user = await api.put("trash-lote", formData);
-      Router.back();
+      Router.push('/nursery')
     } catch (error) {
       const errorOficial = error as Error;
       console.log(error as Error);
@@ -114,7 +110,7 @@ export default function TrashLote(idLote) {
         }}
       >
         <Typography component="h1" variant="h5">
-          Descarte em Lote ID: {idLote}
+          Descarte em Lote ID: {idLote.idLote?.id}
         </Typography>
         <Box
           component="form"
@@ -123,7 +119,7 @@ export default function TrashLote(idLote) {
           sx={{ mt: 3 }}
         >
           <Grid container spacing={2}>
-       
+
             <Grid item xs={12} sm={12}>
               <BasicDatePicker
                 label={"Data de Descarte"}

@@ -9,6 +9,8 @@ export interface DataTableInterface {
 }
 
 export default function DataTable({columns, rows} : DataTableInterface) {
+
+
   return (
     <div style={{ height: 'calc(100vh - 200px)', width: '100%' }}>
       <DataGrid

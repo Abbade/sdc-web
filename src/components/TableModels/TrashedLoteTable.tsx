@@ -14,6 +14,7 @@ import { LoteInterface, TrashedLote } from "../../interfaces/LoteInterface";
 export default function TrashedLoteTable({id}) {
   const [lotes, setLotes] = useState([] as TrashedLote[]);
   const [total, setTotal] = useState({} as number)
+  const [idLote, setIdLote] = useState ({id})
 
   useEffect(() => {
     console.log(id)
