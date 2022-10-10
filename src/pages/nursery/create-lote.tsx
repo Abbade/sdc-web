@@ -42,9 +42,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 type CreateLoteFormData = {
   id_propagationType: number;
-  id_genetic: string;
-  id_location_init: string;
-  qtTotal: string;
+  id_genetic: number;
+  id_location_init: number;
+  qtTotal: number;
   obs: string;
   propDate: Date;
 };
@@ -53,8 +53,8 @@ const createObjFormSchema = yup.object().shape({
   propDate: yup.date().required("Data obrigatória"),
   obs: yup.string().required("Observação obrigatória"),
   id_propagationType: yup.number().required("Tipo de propagação é obrigatório"),
-  id_genetic: yup.string().required("Genética é obrigatório"),
-  id_location_init: yup.string().required("Localização é obrigatória"),
+  id_genetic: yup.number().required("Genética é obrigatório"),
+  id_location_init: yup.number().required("Localização é obrigatória"),
   qtTotal: yup.number().required("Quantidade total é obrigatória"),
 });
 
