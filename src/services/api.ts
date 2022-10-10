@@ -13,7 +13,7 @@ export function setupAPIClient(ctx = undefined) {
   let cookies = parseCookies(ctx);
 
   const api = axios.create({
-    baseURL: 'http://localhost:3333',
+    baseURL: 'https://plantaqui.herokuapp.com',
     headers: {
       Authorization: `Bearer ${cookies['nextauth.token']}`
     }
