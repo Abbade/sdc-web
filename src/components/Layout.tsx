@@ -148,7 +148,6 @@ export default function Layout({children} : LayoutProps) {
 
 
   return (
-    isAuthenticated ? (
         <Box sx={{ display: 'flex' }}>
             
         <CssBaseline />
@@ -254,8 +253,7 @@ export default function Layout({children} : LayoutProps) {
             {children}
         </Box>
         </Box>
-    ) : <div>{children}</div>
-  );
+    )
 }
 export interface ICustomLink{
   open : boolean;

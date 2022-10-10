@@ -20,6 +20,11 @@ interface MyAppProps extends AppProps {
 
 function MyApp(props: MyAppProps) {
   const { Component, pageProps } = props;
+  
+  const isLayoutNeeded = ![`/login`].includes(props.router.pathname);
+
+ 
+const LayoutComponent = isLayoutNeeded ? Layout : React.Fragment;
   return (
     <AuthProvider>
       <Head>
@@ -29,9 +34,9 @@ function MyApp(props: MyAppProps) {
         <AlertProvider>
           <SnackbarAlert />
           <CssBaseline />
-          <Layout>
+          <LayoutComponent>
             <Component {...pageProps} />
-          </Layout>
+          </LayoutComponent>
         </AlertProvider>
       </ThemeProvider>
     </AuthProvider>

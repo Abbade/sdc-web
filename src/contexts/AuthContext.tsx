@@ -33,7 +33,7 @@ let authChannel: BroadcastChannel
 export function signOut() {
   destroyCookie(undefined, 'nextauth.token')
   authChannel.postMessage('signOut');
-  Router.push('/')
+  Router.push('/login')
 
 }
 
