@@ -24,9 +24,9 @@ import { api } from "../../services/apiClient";
 import Router from "next/router";
 import React, { useEffect, useState } from "react";
 
-import BasicDatePicker from "../../components/Inputs/BasicDatePicker";
-import BasicSelect from "../../components/Inputs/BasicSelect";
-import BasicTextField from "../../components/Inputs/BasicTextField";
+import BasicDatePicker from "../Inputs/BasicDatePicker";
+import BasicSelect from "../Inputs/BasicSelect";
+import BasicTextField from "../Inputs/BasicTextField";
 import {
   Genetic,
   LoteInterface,
@@ -60,7 +60,7 @@ const createObjFormSchema = yup.object().shape({
 
 const theme = createTheme();
 
-export default function CreateLote() {
+export default function CreateLoteForm() {
   const {
     register,
     handleSubmit,

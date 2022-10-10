@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import { Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { GridColDef } from "@mui/x-data-grid";
+import Modal from '@mui/material/Modal';
 import Link from "../Link";
 
 export interface TableIndexInterface {
@@ -17,7 +18,7 @@ export interface TableIndexInterface {
     url: string;
   }
 
-export default function Table({ columns, rows, searchName} : TableIndexInterface) {
+export default function Table({ columns, rows, searchName, url} : TableIndexInterface) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Paper elevation={0} sx={{ p: 2 }}>
@@ -38,7 +39,7 @@ export default function Table({ columns, rows, searchName} : TableIndexInterface
             />
           </Grid>
           <Grid item xs={2} textAlign="end">
-          <Link href={'/nursery/create-lote'}>
+          <Link href={url}>
             <Button
               variant="contained"
               disableElevation
@@ -49,6 +50,7 @@ export default function Table({ columns, rows, searchName} : TableIndexInterface
             </Button>
             </Link>
           </Grid>
+         
         </Grid>
         <DataTable columns={columns} rows={rows} />
       </Paper>

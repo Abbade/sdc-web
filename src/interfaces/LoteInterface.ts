@@ -30,6 +30,16 @@ export interface TrashReason {
     description: string;
 }
 
+export interface TrashedLote {
+    id: number;
+    id_lote: number
+    name: string;
+    obs: string;
+    id_trashReason: number;
+    trashDate: Date;
+    massTrahed: number
+}
+
 export interface LoteInterface {
     id: number;
     name: string;
