@@ -67,6 +67,24 @@ const renderDetailsButton = (params) => {
       <strong>
           <Button
               variant="contained"
+              color="secondary"
+              size="small"
+              style={{ marginLeft: 16 }}
+              onClick={() => {
+                  Router.push('nursery/' + params.row.id)
+              }}
+          >
+              Detalhes
+          </Button>
+      </strong>
+  )
+}
+
+const renderTrashButton = (params) => {
+  return (
+      <strong>
+          <Button
+              variant="contained"
               color="error"
               size="small"
               style={{ marginLeft: 16 }}
@@ -79,6 +97,7 @@ const renderDetailsButton = (params) => {
       </strong>
   )
 }
+
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
@@ -93,10 +112,15 @@ const columns: GridColDef[] = [
   { field: "qtPlant", headerName: "Transplantes", width: 130 },
   { field: "qtPropTrashed", headerName: "Descartes", width: 130 },
   {
-    field: 'trash',
+    field: 'detail',
     headerName: '',
     width: 150,
     renderCell: renderDetailsButton,
+  },{
+    field: 'trash',
+    headerName: '',
+    width: 150,
+    renderCell: renderTrashButton,
 },
 ];
 

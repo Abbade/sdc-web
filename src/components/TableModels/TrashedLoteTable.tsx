@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import Box from "@mui/material/Box";
 import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
@@ -15,30 +15,13 @@ export default function TrashedLoteTable({id}) {
   const [lotes, setLotes] = useState([] as TrashedLote[]);
   const [total, setTotal] = useState({} as number)
 
-  const renderDetailsButton = (params) => {
-    return (
-        <strong>
-            <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                style={{ marginLeft: 16 }}
-                onClick={() => {
-                    console.log(params.row.id)
-                }}
-            >
-                More Info
-            </Button>
-        </strong>
-    )
-}
-
   useEffect(() => {
+    console.log(id)
     const getLotes = async () => {
-
-      var response = await api.get("/trashed-lote", id? {params: {
+      
+      var response = await api.get("/trashed-lote", {params: {
         id: id
-      }}:{});
+      }});
       console.log(response.data)
       setLotes(response.data.itens);
       setTotal(response.data.total)
@@ -60,11 +43,6 @@ export default function TrashedLoteTable({id}) {
   );
 }
 
-export const getServerSideProps = withSSRAuth(async (ctx) => {
-  return {
-    props: {},
-  };
-});
 const renderDetailsButton = (params) => {
   return (
       <strong>

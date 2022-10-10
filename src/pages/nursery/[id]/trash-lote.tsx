@@ -59,7 +59,7 @@ const createObjFormSchema = yup.object().shape({
 let idLote: number;
 const theme = createTheme();
 
-export default function TrashLote() {
+export default function TrashLote(idLote) {
   const {
     register,
     handleSubmit,
@@ -71,25 +71,6 @@ export default function TrashLote() {
     const routing = useRouter()
     idLote = Number.parseInt(routing.asPath.split("/")[2])
 
-  const [selectedLote, setSelectedLote] = useState(
-    [] as LoteInterface[]
-  );
-
-  useEffect(() => {
-
-    const getLotes = async () => {
-    idLote = Number.parseInt(routing.asPath.split("/")[2])
-
-      var response = await api.get("/lote",{params: 
-        idLote ? {id: idLote} : { }
-      });
-      console.log(response.data)
-      setSelectedLote(response.data?.itens[0]);
-    };
-
-    getLotes();
-
-  }, []);
 
   const [trashReason, setTrashReason] = useState(
     [] as TrashReason[]
