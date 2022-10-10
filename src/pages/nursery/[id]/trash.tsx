@@ -116,8 +116,8 @@ export default function CreateLote() {
                         <Grid container spacing={2}>
                          
                             <Grid item xs={12} sm={12}>
-                                <BasicDatePicker label={"Data de Descarte"} name={"trashDate"}
-                                />
+                                {/* <BasicDatePicker label={"Data de Descarte"} name={"trashDate"}
+                                /> */}
                             </Grid>
 
 
@@ -136,8 +136,8 @@ export default function CreateLote() {
                             </Grid> */}
                             <Grid item xs={12} sm={12}>
 
-        <BasicSelect label={"Motivo de Descarte"} name={"id_trashReason"} values={trashReason}
-                                />
+        {/* <BasicSelect label={"Motivo de Descarte"} name={"id_trashReason"} values={trashReason}
+                                /> */}
                             </Grid>
                         
                             <Grid item xs={12} sm={12}>
