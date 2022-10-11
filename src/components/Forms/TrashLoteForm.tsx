@@ -99,7 +99,7 @@ export default function TrashLoteForm(selectedLote) {
       console.log(formData)
 
       const lote = await api.put("trash-lote", formData);
-      Router.push('/nursery/'+selectedLote.id)
+      // Router.push('/nursery/'+selectedLote.id)
 
       
     } catch (error) {

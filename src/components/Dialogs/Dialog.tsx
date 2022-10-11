@@ -29,7 +29,7 @@ export default function FormDialog(props: DialogProps) {
   };
 
   return (
-    <div>
+    <div align-center>
       <Button color={props?.buttonColor} variant="outlined" onClick={handleClickOpen}>
         {props?.buttonIcon}
       </Button>
@@ -40,8 +40,8 @@ export default function FormDialog(props: DialogProps) {
          
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          {/* <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Subscribe</Button> */}
         </DialogActions>
       </Dialog>
     </div>

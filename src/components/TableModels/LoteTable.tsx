@@ -63,6 +63,7 @@ export default function Nursery() {
       //    <Delete />
       //   </Button>
       // </strong>
+      
       <FormDialog buttonIcon={<Delete />} buttonColor={"error"} onClose={handleClose} open={open} title={'Descartar Lote ' + params.row.name}>
       <TrashLoteForm selectedLote={params.row}></TrashLoteForm>
     </FormDialog>
@@ -90,12 +91,10 @@ export default function Nursery() {
     {
       field: 'detail',
       headerName: '',
-      width: 150,
       renderCell: renderDetailsButton,
     }, {
       field: 'trash',
       headerName: '',
-      width: 150,
       renderCell: renderTrashButton,
     }, 
     
