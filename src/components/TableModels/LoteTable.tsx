@@ -23,8 +23,9 @@ export default function Nursery() {
     return (
       <strong>
         <Button
-          variant="contained"
+          variant="outlined"
           color="secondary"
+          
           size="small"
           style={{ marginLeft: 16 }}
           onClick={() => {
