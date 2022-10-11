@@ -7,6 +7,17 @@ export interface PropagationType {
 
 }
 
+export interface Recipiente {
+    id: number           
+    created_at: Date     
+    id_user_create: number 
+  
+    name:string
+    description: string; 
+  
+  
+  }
+
 export interface Location {
     id: number;
     name: string;

@@ -11,7 +11,7 @@ import { Button, Typography } from "@mui/material";
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { LoteInterface, TrashedLote } from "../../interfaces/LoteInterface";
 
-export default function TrashedLoteTable({id}) {
+export default function PlantsTable({id}) {
   const [lotes, setLotes] = useState([] as TrashedLote[]);
   const [total, setTotal] = useState({} as number)
 
@@ -19,7 +19,7 @@ export default function TrashedLoteTable({id}) {
     console.log(id)
     const getLotes = async () => {
       
-      var response = await api.get("/trashed-lote", {params: {
+      var response = await api.get("/plant", {params: {
         id: id
       }});
       console.log(response.data)
@@ -63,14 +63,26 @@ const renderDetailsButton = (params) => {
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
-  { field: "trashDate", headerName: "Data de Descarte", width: 130 },
-  { field: "trashReason.name", headerName: "Motivo", width: 130,    renderCell: (params) => {
-    console.log(params.row.trashReason.name)
-    return <div className="MuiDataGrid-cellContent">{params.row.trashReason.name}</div>;
+  { field: "name", headerName: "Codigo", width: 200 },
+  { field: "genetic.nick", headerName: "Genética", width: 130,    renderCell: (params) => {
+    console.log(params.row.genetic.nick)
+    return <div className="MuiDataGrid-cellContent">{params.row.genetic.nick}</div>;
   }, },
+
+  { field: "recipiente.name", headerName: "Recipiente", width: 130,    renderCell: (params) => {
+    console.log(params.row.recipiente.name)
+    return <div className="MuiDataGrid-cellContent">{params.row.recipiente.name}</div>;
+  }, },
+
+ 
+  { field: "location.name", headerName: "Local", width: 130,    renderCell: (params) => {
+    console.log(params.row.location.name)
+    return <div className="MuiDataGrid-cellContent">{params.row.location.name}</div>;
+  }, },
+
  
   // { field: "qtTotal", headerName: "Total", width: 90 },
-  { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
+  // { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
 
 ];
 

@@ -12,6 +12,7 @@ import { Button, Container, Grid, Typography } from "@mui/material";
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { LoteInterface } from "../../../interfaces/LoteInterface";
 import TrashedLoteTable from "../../../components/TableModels/TrashedLoteTable";
+import PlantsTable from "../../../components/TableModels/PlantsTable";
 export default function LoteDetail() {
   const { user, signOut, isAuthenticated } = useContext(AuthContext)
 
@@ -64,7 +65,9 @@ export default function LoteDetail() {
         </Grid>
       </Grid>
 
-      <h3>Descartes de Lote:</h3>
+      <h3>Plantas Transplantadas</h3>
+      <PlantsTable id={idLote}></PlantsTable>
+      <h3>Descartes</h3>
       <TrashedLoteTable id={idLote}></TrashedLoteTable>
       <Can permissions={['lote.list']}>
         <div>Métricas</div>
