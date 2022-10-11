@@ -27,10 +27,9 @@ export default function Table({ columns, rows, searchName, url} : TableIndexInte
           direction="row"
           justifyContent="space-between"
           alignItems="flex-end"
-          spacing={3}
           pb={3}
         >
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <TextField
               id="standard-basic"
               label={searchName}

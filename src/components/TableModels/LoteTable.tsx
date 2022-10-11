@@ -12,12 +12,9 @@ import { Modal } from "@mui/material";
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { LoteInterface } from "../../interfaces/LoteInterface";
 import React from "react";
-import TrashLote from "../../pages/nursery/[id]/trash-lote";
-import Dialog from "../Dialogs/Dialog";
-import SimpleDialogDemo from "../Dialogs/Dialog";
-import SimpleDialog from "../Dialogs/Dialog";
-import path from "path";
-
+import { Delete,ZoomIn } from "@mui/icons-material";
+import TrashLoteForm from "../Forms/TrashLoteForm";
+import FormDialog from "../Dialogs/Dialog";
 export default function Nursery() {
 
   
@@ -36,29 +33,38 @@ export default function Nursery() {
             //handleOpen()
           }}
         >
-          Detalhes
+                   <ZoomIn />
+
         </Button>
       </strong>
     )
   }
 
+  const [open, setOpen] = useState(false)
+  const handleClose = () => {
+    setOpen(!false);
+  };
+
 
   const renderTrashButton = (params) => {
     return (
-      <strong>
-        <Button
-          variant="contained"
-          color="error"
-          size="small"
-          style={{ marginLeft: 16 }}
-          onClick={(e) => {
-            console.log(e)
-            Router.push('nursery/' + params.row.id + '/trash-lote')
-          }}
-        >
-          Descartar
-        </Button>
-      </strong>
+      // <strong>
+      //   <Button
+      //     variant="contained"
+      //     color="error"
+      //     size="small"
+      //     style={{ marginLeft: 16 }}
+      //     onClick={(e) => {
+      //       console.log(e)
+      //       Router.push('nursery/' + params.row.id + '/trash-lote')
+      //     }}
+      //   >
+      //    <Delete />
+      //   </Button>
+      // </strong>
+      <FormDialog buttonIcon={<Delete />} buttonColor={"error"} onClose={handleClose} open={open} title={'Descartar Lote ' + params.row.name}>
+      <TrashLoteForm selectedLote={params.row}></TrashLoteForm>
+    </FormDialog>
     )
   }
 

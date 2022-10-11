@@ -12,7 +12,7 @@ import { Button, Container, Grid, Typography } from "@mui/material";
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { LoteInterface } from "../../../interfaces/LoteInterface";
 import TrashedLoteTable from "../../../components/TableModels/TrashedLoteTable";
-export default function LoteDetailDashboard() {
+export default function LoteDetail() {
   const { user, signOut, isAuthenticated } = useContext(AuthContext)
 
 
