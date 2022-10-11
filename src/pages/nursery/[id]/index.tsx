@@ -15,28 +15,32 @@ import TrashedLoteTable from "../../../components/TableModels/TrashedLoteTable";
 export default function LoteDetailDashboard() {
   const { user, signOut, isAuthenticated } = useContext(AuthContext)
 
-  const routing = useRouter()
-  let idLote = Number.parseInt(routing.asPath.split("/")[2])
 
-  const [selectedLote, setSelectedLote] = useState(
-    { id: 0 } as LoteInterface
-  );
+  const routing = useRouter()
+  const [idLote, setIdLote] = useState(Number.parseInt(routing.asPath.split("/")[2]))
+
+  const [selectedLote, setSelectedLote] = useState({} as LoteInterface)
+
+
+
+
+
+
 
   useEffect(() => {
+    console.log(idLote)
 
-    const getLote = async () => {
-
-      var response = await api.get("/lote", {
-        params:
-          idLote ? { id: idLote } : {}
-      });
+    const getLotes = async () => {
+      var response = await api.get("/lote", idLote ? { params: { id: idLote } } : {});
       console.log(response.data)
-      setSelectedLote(response.data?.itens[0]);
+      console.log(response.data.itens[0])
+      setSelectedLote(response.data.itens[0]);
+      setIdLote(Number.parseInt(routing.asPath.split("/")[2]))
     };
+    
+    getLotes()
 
-    getLote();
-
-  }, []);
+  }, [routing.asPath, routing.isReady]);
 
 
   useEffect(() => {

@@ -20,19 +20,7 @@ import path from "path";
 
 export default function Nursery() {
 
-  const [open, setOpen] = React.useState(false);
-  const [idLote, setIdLote] = React.useState(0);
-  const [selectedValue, setSelectedValue] = React.useState();
- 
-  const handleClickOpen = (params) => {
-    console.log(idLote)
-    setIdLote(params.id)
-    setOpen(true);
-  };
-
-  const handleClose = (value: string) => {
-    setOpen(false);
-  };
+  
 
   const renderDetailsButton = (params) => {
     return (
@@ -53,24 +41,6 @@ export default function Nursery() {
       </strong>
     )
   }
-
-  // const renderModalButton = (params) => {
-  //   console.log(params)
-  //   setIdLote(params.id);
-  //   return (
-
-  //     <div>
-
-  //       <Button onClick={() => {handleClickOpen(params.id)}} >{params.id}</Button>
-
-  //       <SimpleDialog title={params.id} open={open} onClose={handleClose}   >
-  //         <TrashLote id={params.id} />
-  //       </SimpleDialog>
-  //     </div>
-
-  //   )
-  // }
-
 
 
   const renderTrashButton = (params) => {
@@ -121,12 +91,7 @@ export default function Nursery() {
       width: 150,
       renderCell: renderTrashButton,
     }, 
-    // {
-    //   field: 'dialog',
-    //   headerName: '',
-    //   width: 150,
-    //   renderCell: renderModalButton,
-    // },
+    
   ];
 
 

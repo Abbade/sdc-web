@@ -41,6 +41,8 @@ import {
   useForm,
 } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import TrashLoteForm from "../../../components/Forms/TrashLoteForm";
+import { withSSRAuth } from "../../../utils/withSSRAuth";
 
 type TrashLoteFormData = {
   idLote: number;
@@ -59,8 +61,8 @@ const createObjFormSchema = yup.object().shape({
 const theme = createTheme();
 
 
-export default function TrashLote(id) {
- 
+export default function TrashLote() {
+
   const {
     register,
     handleSubmit,
@@ -68,46 +70,42 @@ export default function TrashLote(id) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  
+
   const [trashReason, setTrashReason] = useState(
     [] as TrashReason[]
   );
+
   const routing = useRouter()
-  const idLote = Number.parseInt(routing.asPath.split("/")[2])
+  const [idLote, setIdLote] = useState(Number.parseInt(routing.asPath.split("/")[2]))
+
+  const [selectedLote, setSelectedLote] = useState({} as LoteInterface)
+
+
+
+
+
+
+
   useEffect(() => {
     console.log(idLote)
-    
-    const getTrashReasons = async () => {
-      var response = await api.get("/trash-reason");
-      setTrashReason(response.data);
+
+    const getLotes = async () => {
+      var response = await api.get("/lote", idLote ? { params: { id: idLote } } : {});
+      console.log(response.data)
+      console.log(response.data.itens[0])
+      setSelectedLote(response.data.itens[0]);
+      setIdLote(Number.parseInt(routing.asPath.split("/")[2]))
     };
-    getTrashReasons();
+    
+    getLotes()
 
-  }, []);
+  }, [routing.asPath, routing.isReady]);
 
 
-
-
-  const handleLoteSubmit: SubmitHandler<TrashLoteFormData> = async (
-    formData
-  ) => {
-    try {
-      console.log(idLote)
-      formData.idLote = idLote;
-      console.log(formData)
-
-      const lote = await api.put("trash-lote", formData);
-      Router.push('/nursery/'+idLote)
-
-      
-    } catch (error) {
-      const errorOficial = error as Error;
-      console.log(error as Error);
-    }
-  };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="md">
+
       <Box
         sx={{
           marginTop: 1,
@@ -116,63 +114,20 @@ export default function TrashLote(id) {
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5">
-          Descarte em Lote ID: {idLote}
+              <Typography component="h1" variant="h5">
+          Descartar Estacas: {selectedLote.name}
         </Typography>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit(handleLoteSubmit)}
-          sx={{ mt: 3 }}
-        >
-          <Grid container spacing={2}>
-
-            <Grid item xs={12} sm={12}>
-              <BasicDatePicker
-                label={"Data de Descarte"}
-                name={"trashDate"}
-                control={control}
-                error={errors.trashDate as FieldError}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <BasicTextField
-                label={"Quantidade"}
-                name={"qtTrash"}
-                control={control}
-                error={errors.qtTrash as FieldError}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Trash Reason"}
-                name={"id_trashReason"}
-                values={trashReason}
-                control={control}
-                error={errors.id_trashReason as FieldError}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <BasicTextField
-                label={"obs"}
-                name={"obs"}
-                control={control}
-                error={errors.obs as FieldError}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Descartar Estacas
-          </Button>
-        </Box>
+        <TrashLoteForm selectedLote={selectedLote}></TrashLoteForm>
       </Box>
     </Container>
   );
 }
+
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+
+  return {
+    props: {
+
+    }
+  }
+})

@@ -115,18 +115,7 @@ export default function CreateLoteForm() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Novo Lote
-        </Typography>
+
         
         <Box
           component="form"
@@ -207,7 +196,6 @@ export default function CreateLoteForm() {
             Cadastrar Lote
           </Button>
         </Box>
-      </Box>
-    </Container>
+
   );
 }

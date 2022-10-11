@@ -3,19 +3,7 @@ import {
   Typography,
   createTheme,
   Container,
-  CssBaseline,
-  Box,
-  Avatar,
-  Grid,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  TextFieldProps,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
+
 } from "@mui/material";
 import Link from "next/link";
 import * as yup from "yup";
@@ -24,190 +12,25 @@ import { api } from "../../services/apiClient";
 import Router from "next/router";
 import React, { useEffect, useState } from "react";
 
-import BasicDatePicker from "../../components/Inputs/BasicDatePicker";
-import BasicSelect from "../../components/Inputs/BasicSelect";
-import BasicTextField from "../../components/Inputs/BasicTextField";
+
 import {
   Genetic,
-  LoteInterface,
   PropagationType,
 } from "../../interfaces/LoteInterface";
-import {
-  Controller,
-  FieldError,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import CreateLoteForm from "../../components/Forms/CreateLoteForm";
 
-type CreateLoteFormData = {
-  id_propagationType: number;
-  id_genetic: number;
-  id_location_init: number;
-  qtTotal: number;
-  obs: string;
-  propDate: Date;
-};
-
-const createObjFormSchema = yup.object().shape({
-  propDate: yup.date().required("Data obrigatória"),
-  obs: yup.string().required("Observação obrigatória"),
-  id_propagationType: yup.number().required("Tipo de propagação é obrigatório"),
-  id_genetic: yup.number().required("Genética é obrigatório"),
-  id_location_init: yup.number().required("Localização é obrigatória"),
-  qtTotal: yup.number().required("Quantidade total é obrigatória"),
-});
 
 const theme = createTheme();
 
 export default function CreateLote() {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(createObjFormSchema) });
-
-  const [propagationType, setPropagationType] = useState(
-    [] as PropagationType[]
-  );
-  const [genetic, setGenetics] = useState([] as Genetic[]);
-  const [location, setLocation] = useState([] as Location[]);
-
-  useEffect(() => {
-    const getPropagationTypes = async () => {
-      var response = await api.get("/propagation-type");
-      setPropagationType(response.data);
-    };
-
-    getPropagationTypes();
-  }, []);
-
-  useEffect(() => {
-    const getGenetics = async () => {
-      var response = await api.get("/genetic");
-      setGenetics(response.data);
-    };
-
-    getGenetics();
-  }, []);
-
-  useEffect(() => {
-    const getLocations = async () => {
-      var response = await api.get("/location");
-      setLocation(response.data);
-    };
-
-    getLocations();
-  }, []);
-
-  const handleLoteSubmit: SubmitHandler<CreateLoteFormData> = async (
-    formData
-  ) => {
-    try {
-      console.log(formData);
-      const user = await api.post("lote", formData);
-      Router.back();
-    } catch (error) {
-      const errorOficial = error as Error;
-      console.log(error as Error);
-    }
-  };
+  
 
   return (
     <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5">
+       <Typography component="h1" variant="h5">
           Novo Lote
         </Typography>
-        
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit(handleLoteSubmit)}
-          sx={{ mt: 3 }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Genética"}
-                name={"id_genetic"}
-                values={genetic}
-                control={control}
-                error={errors.id_genetic as FieldError}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <BasicDatePicker
-                label={"Data de Propagação"}
-                name={"propDate"}
-                control={control}
-                error={errors.propDate as FieldError}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Tipo de Propagação"}
-                name={"id_propagationType"}
-                values={propagationType}
-                control={control}
-                error={errors.id_propagationType as FieldError}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Origem"}
-                control={control}
-                name={"id_origem"}
-                error={errors.id_origem as FieldError}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Local"}
-                name={"id_location_init"}
-                values={location}
-                control={control}
-                error={errors.id_location_init as FieldError}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <BasicTextField
-                label={"Quantidade"}
-                name={"qtTotal"}
-                control={control}
-                error={errors.qtTotal as FieldError}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <BasicTextField
-                label={"obs"}
-                name={"obs"}
-                control={control}
-                error={errors.obs as FieldError}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Cadastrar Lote
-          </Button>
-        </Box>
-      </Box>
+      <CreateLoteForm></CreateLoteForm>
     </Container>
   );
 }
