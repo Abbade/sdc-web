@@ -71,11 +71,6 @@ const columns: GridColDef[] = [
  
   // { field: "qtTotal", headerName: "Total", width: 90 },
   { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
-  {
-    field: 'trash',
-    headerName: '',
-    width: 150,
-    renderCell: renderDetailsButton,
-},
+
 ];
 

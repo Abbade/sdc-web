@@ -58,7 +58,9 @@ const createObjFormSchema = yup.object().shape({
 });
 const theme = createTheme();
 
-export default function TrashLote(idLote?) {
+
+export default function TrashLote(id) {
+ 
   const {
     register,
     handleSubmit,
@@ -70,8 +72,11 @@ export default function TrashLote(idLote?) {
   const [trashReason, setTrashReason] = useState(
     [] as TrashReason[]
   );
-
+  const routing = useRouter()
+  const idLote = Number.parseInt(routing.asPath.split("/")[2])
   useEffect(() => {
+    console.log(idLote)
+    
     const getTrashReasons = async () => {
       var response = await api.get("/trash-reason");
       setTrashReason(response.data);
@@ -88,11 +93,13 @@ export default function TrashLote(idLote?) {
   ) => {
     try {
       console.log(idLote)
-      formData.idLote = idLote.idLote?.id;
+      formData.idLote = idLote;
       console.log(formData)
 
-      const user = await api.put("trash-lote", formData);
-      Router.push('/nursery')
+      const lote = await api.put("trash-lote", formData);
+      Router.push('/nursery/'+idLote)
+
+      
     } catch (error) {
       const errorOficial = error as Error;
       console.log(error as Error);
@@ -110,7 +117,7 @@ export default function TrashLote(idLote?) {
         }}
       >
         <Typography component="h1" variant="h5">
-          Descarte em Lote ID: {idLote.idLote?.id}
+          Descarte em Lote ID: {idLote}
         </Typography>
         <Box
           component="form"

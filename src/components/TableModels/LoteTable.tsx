@@ -13,13 +13,27 @@ import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { LoteInterface } from "../../interfaces/LoteInterface";
 import React from "react";
 import TrashLote from "../../pages/nursery/[id]/trash-lote";
-import Dialog from "../Dialogs/TrashLoteDialog";
-import SimpleDialogDemo from "../Dialogs/TrashLoteDialog";
+import Dialog from "../Dialogs/Dialog";
+import SimpleDialogDemo from "../Dialogs/Dialog";
+import SimpleDialog from "../Dialogs/Dialog";
+import path from "path";
 
 export default function Nursery() {
 
-
+  const [open, setOpen] = React.useState(false);
+  const [idLote, setIdLote] = React.useState(0);
+  const [selectedValue, setSelectedValue] = React.useState();
  
+  const handleClickOpen = (params) => {
+    console.log(idLote)
+    setIdLote(params.id)
+    setOpen(true);
+  };
+
+  const handleClose = (value: string) => {
+    setOpen(false);
+  };
+
   const renderDetailsButton = (params) => {
     return (
       <strong>
@@ -30,7 +44,7 @@ export default function Nursery() {
           style={{ marginLeft: 16 }}
           onClick={() => {
             Router.push('nursery/' + params.row.id);
-            
+
             //handleOpen()
           }}
         >
@@ -39,32 +53,26 @@ export default function Nursery() {
       </strong>
     )
   }
-  
-  const modalDetail = (params) => {
-    return (
 
-      <strong>
-        {/* <Button
-          variant="contained"
-          color="secondary"
-          size="small"
-          style={{ marginLeft: 16 }}
-          onClick={() => {
-            Router.push('nursery/' + params.row.id);
-            
-            //handleOpen()
-          }}
-        >
-          Detalhes
-        </Button> */}
-        <SimpleDialogDemo id={params.row.id}></SimpleDialogDemo>
-      </strong>
+  // const renderModalButton = (params) => {
+  //   console.log(params)
+  //   setIdLote(params.id);
+  //   return (
 
-    )
-  }
-  
-  
-  
+  //     <div>
+
+  //       <Button onClick={() => {handleClickOpen(params.id)}} >{params.id}</Button>
+
+  //       <SimpleDialog title={params.id} open={open} onClose={handleClose}   >
+  //         <TrashLote id={params.id} />
+  //       </SimpleDialog>
+  //     </div>
+
+  //   )
+  // }
+
+
+
   const renderTrashButton = (params) => {
     return (
       <strong>
@@ -75,7 +83,7 @@ export default function Nursery() {
           style={{ marginLeft: 16 }}
           onClick={(e) => {
             console.log(e)
-            // Router.push('nursery/' + params.row.id + '/trash-lote')
+            Router.push('nursery/' + params.row.id + '/trash-lote')
           }}
         >
           Descartar
@@ -83,23 +91,22 @@ export default function Nursery() {
       </strong>
     )
   }
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
     {
       field: "genetic.name", headerName: "Genética", width: 130, renderCell: (params) => {
-        console.log(params.row.genetic.name)
+        // console.log(params.row.genetic.name)
         return <div className="MuiDataGrid-cellContent">{params.row.genetic.name}</div>;
       },
     },
-  
+
     { field: "name", headerName: "Código", width: 130 },
-    // { field: "qtTotal", headerName: "Total", width: 90 },
     { field: "qtProp", headerName: "Em Propagação", width: 130 },
     { field: "qtPlant", headerName: "Transplantes", width: 130 },
     { field: "qtPropTrashed", headerName: "Descartes", width: 130 },
@@ -113,12 +120,13 @@ export default function Nursery() {
       headerName: '',
       width: 150,
       renderCell: renderTrashButton,
-    },{
-      field: 'dialog',
-      headerName: '',
-      width: 150,
-      renderCell: modalDetail,
-    },
+    }, 
+    // {
+    //   field: 'dialog',
+    //   headerName: '',
+    //   width: 150,
+    //   renderCell: renderModalButton,
+    // },
   ];
 
 
@@ -126,7 +134,7 @@ export default function Nursery() {
 
   const [lotes, setLotes] = useState([] as LoteInterface[]);
   const [total, setTotal] = useState({} as number)
-  
+
 
   useEffect(() => {
     const getLotes = async () => {
