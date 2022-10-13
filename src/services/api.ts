@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios';
-import { parseCookies, setCookie, destroyCookie } from 'nookies'
-import { useContext } from 'react';
-import { AlertContext, showAlert } from '../contexts/AlertContext';
+import { parseCookies } from 'nookies';
+import { showAlert } from '../contexts/AlertContext';
 import { signOut } from '../contexts/AuthContext';
 import { AuthTokenError } from './errors/AuthTokenError';
 
@@ -26,20 +25,26 @@ export function setupAPIClient(ctx = undefined) {
   }, (error: AxiosError) => {
     console.log("deu erro");
     console.log(error);
-    if (error.response.status === 401) {
-      if (process.browser) {
-        signOut()
-      } else {
-        return Promise.reject(new AuthTokenError())
+    if(error.response !== undefined){
+      if (error.response.status === 401) {
+        if (process.browser) {
+          signOut()
+        } else {
+          return Promise.reject(new AuthTokenError())
+        }
+      }
+      else if(error.response.status === 400){
+        const data = error.response.data as any;
+        showAlert(data.message as string);
+      }
+      else{
+        showAlert(error.message)
       }
     }
-    else if(error.response.status === 400){
-      const data = error.response.data as any;
-      showAlert(data.message as string);
-    }
     else{
-      showAlert(error.message)
+      showAlert('Ocorreu um erro!')
     }
+    
     return Promise.reject(error);
   });
 

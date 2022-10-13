@@ -1,44 +1,24 @@
-import { ThemeProvider } from "@emotion/react";
 import {
-  Typography,
-  createTheme,
-  Container,
-  CssBaseline,
-  Box,
-  Avatar,
-  Grid,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  TextFieldProps,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
+  Box, Button, createTheme, Grid
 } from "@mui/material";
-import Link from "next/link";
 import * as yup from "yup";
 
-import { api } from "../../services/apiClient";
 import Router from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { api } from "../../services/apiClient";
 
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  FieldError,
+  SubmitHandler,
+  useForm
+} from "react-hook-form";
+import {
+  Genetic, PropagationType
+} from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
-import {
-  Genetic,
-  LoteInterface,
-  PropagationType,
-} from "../../interfaces/LoteInterface";
-import {
-  Controller,
-  FieldError,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 type CreateLoteFormData = {
   id_propagationType: number;
