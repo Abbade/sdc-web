@@ -26,14 +26,14 @@ export function setupAPIClient(ctx = undefined) {
     console.log("deu erro");
     console.log(error);
     if(error.response !== undefined){
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         if (process.browser) {
           signOut()
         } else {
           return Promise.reject(new AuthTokenError())
         }
       }
-      else if(error.response.status === 400){
+      else if(error.response?.status === 400){
         const data = error.response.data as any;
         showAlert(data.message as string);
       }
