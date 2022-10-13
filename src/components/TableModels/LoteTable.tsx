@@ -77,11 +77,13 @@ export default function Nursery() {
         width: 80,
         getActions: (params) => [
           <GridActionsCellItem
+            key="detail"
             icon={<ZoomInIcon />}
             label="Detalhes"
             onClick={handleOpenDetails(params.row)}
           />,
           <GridActionsCellItem
+            key="delete"
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleOpenTrashLote(params.row)}
