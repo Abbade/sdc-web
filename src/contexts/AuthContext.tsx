@@ -43,7 +43,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     authChannel = new BroadcastChannel('auth')
-
+    console.log("teste")
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case 'signOut':
