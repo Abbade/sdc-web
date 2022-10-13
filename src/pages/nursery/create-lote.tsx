@@ -27,7 +27,7 @@ export default function CreateLote() {
 
   return (
     <Container component="main" maxWidth="xs">
-       <Typography component="h1" variant="h5">
+       <Typography component="h1" variant="h4" >
           Novo Lote
         </Typography>
       <CreateLoteForm></CreateLoteForm>

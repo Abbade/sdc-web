@@ -105,7 +105,7 @@ export default function CreatePlantForm(selectedLote) {
 
   useEffect(() => {
     setIdLote(selectedLote.selectedLote.id)
-    console.log(selectedLote)
+
 
   }, [selectedLote])
 
@@ -116,7 +116,7 @@ export default function CreatePlantForm(selectedLote) {
   ) => {
     try {
       formData.id_lote = idLote;
-      console.log(formData)
+
 
       const lote = await api.post("plant", formData);
       // Router.push('/nursery/'+selectedLote.id)
@@ -124,7 +124,7 @@ export default function CreatePlantForm(selectedLote) {
 
     } catch (error) {
       const errorOficial = error as Error;
-      console.log(error as Error);
+
     }
   };
 

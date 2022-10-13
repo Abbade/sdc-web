@@ -85,7 +85,7 @@ export default function TrashLoteForm(selectedLote) {
 
   useEffect(() => {
     setIdLote(selectedLote.selectedLote.id)
-    console.log(selectedLote)
+
 
   },[selectedLote])
 

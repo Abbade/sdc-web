@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useState, useEffect } from "react";
 import { Can } from "../../components/Can";
@@ -22,7 +23,10 @@ export default function LoteDashboard() {
 
   return (
     <>
-      <h1>Buscar no berçário</h1>
+    <Typography component="h1" variant="h4" sx={{pt: 1, pb: 1}}>
+      Buscar no berçário
+    </Typography>
+
 
       <LoteTable></LoteTable>
       <Can permissions={['lote.list']}>

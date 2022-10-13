@@ -29,7 +29,7 @@ export default function Table({ columns, rows, searchName, url} : TableIndexInte
           alignItems="flex-end"
           pb={3}
         >
-          <Grid item xs={3}>
+          <Grid item sm={3} xs={12}>
             <TextField
               id="standard-basic"
               label={searchName}
@@ -37,7 +37,7 @@ export default function Table({ columns, rows, searchName, url} : TableIndexInte
               fullWidth
             />
           </Grid>
-          <Grid item xs={2} textAlign="end">
+          <Grid item sm={2} xs={12} textAlign="end">
           <Link href={url}>
             <Button
               variant="contained"

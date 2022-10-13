@@ -105,12 +105,12 @@ export default function CreateLoteForm() {
     formData
   ) => {
     try {
-      console.log(formData);
+  
       const user = await api.post("lote", formData);
       Router.back();
     } catch (error) {
       const errorOficial = error as Error;
-      console.log(error as Error);
+ 
     }
   };
 

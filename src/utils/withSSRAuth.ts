@@ -13,7 +13,7 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
   return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);
     const token = cookies['nextauth.token'];
-    console.log(cookies)
+  
     if (!token) {
       return {
         redirect: {
@@ -25,7 +25,7 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
 
     if (options) {
       const user = decode<{ permissions: string[], roles: string[] }>(token);
-      console.log(user);
+
       const { permissions, roles } = options
 
       const userHasValidPermissions = validateUserPermissions({
