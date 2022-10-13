@@ -1,41 +1,40 @@
-import { useContext, useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
-import { AuthContext } from "../../contexts/AuthContext";
-import { setupAPIClient } from "../../services/api";
+import { GridColDef } from "@mui/x-data-grid";
+import Router from "next/router";
+import { useEffect, useState } from "react";
+import { TrashedLote } from "../../interfaces/LoteInterface";
 import { api } from "../../services/apiClient";
-import { withSSRAuth } from "../../utils/withSSRAuth";
-import { Can } from "../Can";
 import Table from "../Table";
-import { Button, Typography } from "@mui/material";
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { LoteInterface, TrashedLote } from "../../interfaces/LoteInterface";
 
-export default function PlantsTable({id}) {
+export default function PlantsTable({ id }) {
   const [lotes, setLotes] = useState([] as TrashedLote[]);
-  const [total, setTotal] = useState({} as number)
+  const [total, setTotal] = useState({} as number);
 
   useEffect(() => {
-    console.log(id)
+    console.log(id);
     const getLotes = async () => {
-      
-      var response = await api.get("/plant", {params: {
-        id: id
-      }});
-      console.log(response.data)
+      var response = await api.get("/plant", {
+        params: {
+          id: id,
+        },
+      });
+      console.log(response.data);
       setLotes(response.data.itens);
-      setTotal(response.data.total)
+      setTotal(response.data.total);
     };
 
     getLotes();
-
   }, []);
-
-
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Table columns={columns} rows={lotes} url="/nursery/create-lote" searchName={""} />
+      <Table
+        columns={columns}
+        rows={lotes}
+        url="/nursery/create-lote"
+        searchName={""}
+      />
       {/* <Can permissions={["lote.list"]}>
         <div>Métricas</div>
       </Can> */}
@@ -45,44 +44,65 @@ export default function PlantsTable({id}) {
 
 const renderDetailsButton = (params) => {
   return (
-      <strong>
-          <Button
-              variant="contained"
-              color="error"
-              size="small"
-              style={{ marginLeft: 16 }}
-              onClick={() => {
-                  Router.push('nursery/' + params.row.id + '/trash-lote')
-              }}
-          >
-              Descartar
-          </Button>
-      </strong>
-  )
-}
+    <strong>
+      <Button
+        variant="contained"
+        color="error"
+        size="small"
+        style={{ marginLeft: 16 }}
+        onClick={() => {
+          Router.push("nursery/" + params.row.id + "/trash-lote");
+        }}
+      >
+        Descartar
+      </Button>
+    </strong>
+  );
+};
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
   { field: "name", headerName: "Codigo", width: 200 },
-  { field: "genetic.nick", headerName: "Genética", width: 130,    renderCell: (params) => {
-    console.log(params.row.genetic.nick)
-    return <div className="MuiDataGrid-cellContent">{params.row.genetic.nick}</div>;
-  }, },
+  {
+    field: "genetic.nick",
+    headerName: "Genética",
+    width: 130,
+    renderCell: (params) => {
+      console.log(params.row.genetic.nick);
+      return (
+        <div className="MuiDataGrid-cellContent">{params.row.genetic.nick}</div>
+      );
+    },
+  },
 
-  { field: "recipiente.name", headerName: "Recipiente", width: 130,    renderCell: (params) => {
-    console.log(params.row.recipiente.name)
-    return <div className="MuiDataGrid-cellContent">{params.row.recipiente.name}</div>;
-  }, },
+  {
+    field: "recipiente.name",
+    headerName: "Recipiente",
+    width: 130,
+    renderCell: (params) => {
+      console.log(params.row.recipiente.name);
+      return (
+        <div className="MuiDataGrid-cellContent">
+          {params.row.recipiente.name}
+        </div>
+      );
+    },
+  },
 
- 
-  { field: "location.name", headerName: "Local", width: 130,    renderCell: (params) => {
-    console.log(params.row.location.name)
-    return <div className="MuiDataGrid-cellContent">{params.row.location.name}</div>;
-  }, },
+  {
+    field: "location.name",
+    headerName: "Local",
+    width: 130,
+    renderCell: (params) => {
+      console.log(params.row.location.name);
+      return (
+        <div className="MuiDataGrid-cellContent">
+          {params.row.location.name}
+        </div>
+      );
+    },
+  },
 
- 
   // { field: "qtTotal", headerName: "Total", width: 90 },
   // { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
-
 ];
-

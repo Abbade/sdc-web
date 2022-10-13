@@ -22,7 +22,7 @@ let messageOutSide = "";
 export function showAlert(msg: string) {
   console.log("chegou alert 1");
   messageOutSide = msg;
-  alertChannel.postMessage("alertSnack");
+  alertChannel.postMessage("snackalert");
 }
 
 export function AlertProvider({ children }: AlertProviderProps) {
@@ -34,8 +34,10 @@ export function AlertProvider({ children }: AlertProviderProps) {
     alertChannel = new BroadcastChannel("alertSnack");
 
     alertChannel.onmessage = (message) => {
+      console.log("alert 1.1 data: ")
+      console.log(message.data);
       switch (message.data) {
-        case "alertSnack":
+        case "snackalert":
           console.log("chegou alert 2");
           showAlert(messageOutSide, "error");
 
