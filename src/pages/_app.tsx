@@ -27,18 +27,20 @@ function MyApp(props: MyAppProps) {
 const LayoutComponent = isLayoutNeeded ? Layout : React.Fragment;
   return (
     <AuthProvider>
+      <AlertProvider>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>
-        <AlertProvider>
+
           <SnackbarAlert />
           <CssBaseline />
           <LayoutComponent>
             <Component {...pageProps} />
           </LayoutComponent>
-        </AlertProvider>
+  
       </ThemeProvider>
+      </AlertProvider>
     </AuthProvider>
   );
 }
