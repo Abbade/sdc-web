@@ -9,6 +9,7 @@ import { withSSRAuth } from "../../utils/withSSRAuth";
 import FormDialog from "../Dialogs/Dialog";
 import TrashLoteForm from "../Forms/TrashLoteForm";
 import Table from "../Table";
+import Router from "next/router";
 
 const InitialLoteDetailsProps = {
   id: 0,
@@ -45,6 +46,8 @@ export default function Nursery() {
 
   const handleOpenDetails = useCallback(
     (lote: LoteInterface) => () => {
+      setLote(lote);
+      Router.push('/nursery/' + lote.id)
       console.log(lote);
     },
     []
