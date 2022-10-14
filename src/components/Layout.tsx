@@ -23,6 +23,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { grey } from '@mui/material/colors';
+import { ListSubheader } from '@mui/material';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -241,7 +242,30 @@ export default function Layout({children} : LayoutProps) {
             
             {/* mais aqui */}
             </List>
+            <Divider />
+
+            <List>
+            <   CustomLink keylink='plants_link' linkstr='/plants' name='Plantas' open={open} icon={<AssignmentTurnedInIcon />}  />     
+
+        
+                
+            {/* <CustomLink keylink='audit_lkb' linkstr='apr' name='Auditorias' open={open} icon={<PageviewIcon />} /> */}
             
+            {/* mais aqui */}
+            </List>
+            <Divider />
+            <List>
+            <ListSubheader>Parâmetros</ListSubheader>  
+            <CustomLink keylink='params_profile' linkstr='/params/profile/create-profile' name='Perfil Genético' open={open} icon={<AssignmentTurnedInIcon />} />
+            <CustomLink keylink='params_genetic' linkstr='/params/genetic/create-genetic' name='Genética' open={open} icon={<AssignmentTurnedInIcon />} />
+            <CustomLink keylink='params_section' linkstr='/params/location/create-section' name='Seção' open={open} icon={<AssignmentTurnedInIcon />} />
+            <CustomLink keylink='params_location' linkstr='/params/location/create-location' name='Local' open={open} icon={<AssignmentTurnedInIcon />} />
+            <CustomLink keylink='params_propagationType' linkstr='/params/propagation-type/create-propagation-type' name='Forma de Propagação' open={open} icon={<AssignmentTurnedInIcon />} />
+            <CustomLink keylink='params_faseCultivo' linkstr='/params/fase-cultivo/create-fase-cultivo' name='Fase de Cultivo' open={open} icon={<AssignmentTurnedInIcon />} />
+            <CustomLink keylink='params_recipiente' linkstr='/params/recipiente/create-recipiente' name='Recipiente' open={open} icon={<AssignmentTurnedInIcon />} />
+            
+            {/* mais aqui */}
+            </List>
             <Divider />
             <List>
                 <AnchorLink href='/'  />

@@ -51,7 +51,6 @@ export default function CreateLoteForm() {
   const [propagationType, setPropagationType] = useState(
     [] as PropagationType[]
   );
-  const [genetic, setGenetics] = useState([] as Genetic[]);
   const [location, setLocation] = useState([] as Location[]);
 
   useEffect(() => {
@@ -62,6 +61,8 @@ export default function CreateLoteForm() {
 
     getPropagationTypes();
   }, []);
+
+  const [genetic, setGenetics] = useState([] as Genetic[]);
 
   useEffect(() => {
     const getGenetics = async () => {
