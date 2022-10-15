@@ -105,13 +105,6 @@ const columns: GridColDef[] = [
       );
     },
   },
-  { field: "lastTransplant", headerName: "Ultimo Transplante", width: 200 },
-  { field: "aclimatationDate", headerName: "Data Aclimatação", width: 200 },
-  { field: "vegetationDate", headerName: "Data Vegetação", width: 200 },
-  { field: "floweringDate", headerName: "Data Floração", width: 200 },
-  { field: "harvestDate", headerName: "Data de Colheita", width: 200 },
-
-
   {
     field: "location.name",
     headerName: "Local",
@@ -126,6 +119,14 @@ const columns: GridColDef[] = [
     },
   },
 
+  { field: "lastTransplant", headerName: "Ultimo Transplante", width: 200 },
+  { field: "aclimatationDate", headerName: "Data Aclimatação", width: 200 },
+  { field: "vegetationDate", headerName: "Data Vegetação", width: 200 },
+  { field: "floweringDate", headerName: "Data Floração", width: 200 },
+  { field: "harvestDate", headerName: "Data de Colheita", width: 200 },
+
+
+ 
   // { field: "qtTotal", headerName: "Total", width: 90 },
   // { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
 ];

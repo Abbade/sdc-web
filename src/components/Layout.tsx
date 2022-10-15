@@ -263,6 +263,7 @@ export default function Layout({children} : LayoutProps) {
             <CustomLink keylink='params_propagationType' linkstr='/params/propagation-type/create-propagation-type' name='Forma de Propagação' open={open} icon={<AssignmentTurnedInIcon />} />
             <CustomLink keylink='params_faseCultivo' linkstr='/params/fase-cultivo/create-fase-cultivo' name='Fase de Cultivo' open={open} icon={<AssignmentTurnedInIcon />} />
             <CustomLink keylink='params_recipiente' linkstr='/params/recipiente/create-recipiente' name='Recipiente' open={open} icon={<AssignmentTurnedInIcon />} />
+            <CustomLink keylink='params_trashReason' linkstr='/params/trash-reason/create-trash-reason' name='Motivos de Descarte' open={open} icon={<AssignmentTurnedInIcon />} />
             
             {/* mais aqui */}
             </List>
