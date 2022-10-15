@@ -30,6 +30,7 @@ import {
   const createObjFormSchema = yup.object().shape({
     name: yup.string().required("Nome é obrigatório"),
     id_section: yup.number().required("Perfil genético é obrigatório"),
+    id_faseCultivo: yup.number().required("Perfil genético é obrigatório"),
     description: yup.string().required("Descrição é obrigatório"),
   });
   
@@ -52,6 +53,17 @@ import {
       };
   
       getProfiles();
+    }, []);
+
+    const [faseCultivo, setFasesCultivo] = useState([] as any[]);
+
+    useEffect(() => {
+      const getFasesCultivo = async () => {
+        var response = await api.get("/fase-cultivo");
+        setFasesCultivo(response.data);
+      };
+  
+      getFasesCultivo();
     }, []);
   
   
@@ -86,6 +98,15 @@ import {
                 values={section}
                 control={control}
                 error={errors.id_profile as FieldError}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Fase de Cultivo Vinculado"}
+                name={"id_faseCultivo"}
+                values={faseCultivo}
+                control={control}
+                error={errors.id_faseCultivo as FieldError}
               />
             </Grid>
               <Grid item xs={12} sm={12}>

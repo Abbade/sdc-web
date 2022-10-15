@@ -256,7 +256,7 @@ export default function Layout({children} : LayoutProps) {
             <Divider />
             <List>
             <ListSubheader>Parâmetros</ListSubheader>  
-            <CustomLink keylink='params_profile' linkstr='/params/profile/create-profile' name='Perfil Genético' open={open} icon={<AssignmentTurnedInIcon />} />
+            <CustomLink keylink='params_profile' linkstr='/params/genetic/create-profile' name='Perfil Genético' open={open} icon={<AssignmentTurnedInIcon />} />
             <CustomLink keylink='params_genetic' linkstr='/params/genetic/create-genetic' name='Genética' open={open} icon={<AssignmentTurnedInIcon />} />
             <CustomLink keylink='params_section' linkstr='/params/location/create-section' name='Seção' open={open} icon={<AssignmentTurnedInIcon />} />
             <CustomLink keylink='params_location' linkstr='/params/location/create-location' name='Local' open={open} icon={<AssignmentTurnedInIcon />} />

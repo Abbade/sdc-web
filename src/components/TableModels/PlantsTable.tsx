@@ -63,6 +63,8 @@ const renderDetailsButton = (params) => {
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
   { field: "name", headerName: "Codigo", width: 200 },
+
+
   {
     field: "genetic.nick",
     headerName: "Genética",
@@ -74,6 +76,21 @@ const columns: GridColDef[] = [
       );
     },
   },
+
+  {
+    field: "faseCultivo.name",
+    headerName: "Fase",
+    width: 130,
+    renderCell: (params) => {
+      console.log(params.row.faseCultivo.name);
+      return (
+        <div className="MuiDataGrid-cellContent">
+          {params.row.faseCultivo.name}
+        </div>
+      );
+    },
+  },
+  
 
   {
     field: "recipiente.name",
@@ -88,6 +105,12 @@ const columns: GridColDef[] = [
       );
     },
   },
+  { field: "lastTransplant", headerName: "Ultimo Transplante", width: 200 },
+  { field: "aclimatationDate", headerName: "Data Aclimatação", width: 200 },
+  { field: "vegetationDate", headerName: "Data Vegetação", width: 200 },
+  { field: "floweringDate", headerName: "Data Floração", width: 200 },
+  { field: "harvestDate", headerName: "Data de Colheita", width: 200 },
+
 
   {
     field: "location.name",

@@ -7,6 +7,15 @@ export interface PropagationType {
 
 }
 
+export interface FaseCultivo {
+    id: number;
+    name: string;
+    description: string;
+    id_user_create: number;
+    created_at: Date;
+
+}
+
 export interface Recipiente {
     id: number           
     created_at: Date     
