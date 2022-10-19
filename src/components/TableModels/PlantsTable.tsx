@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
-import { GridColDef } from "@mui/x-data-grid";
+import { GridCallbackDetails, GridColDef } from "@mui/x-data-grid";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { TrashedLote } from "../../interfaces/LoteInterface";
@@ -11,21 +11,53 @@ export default function PlantsTable({ id }) {
   const [lotes, setLotes] = useState([] as TrashedLote[]);
   const [total, setTotal] = useState({} as number);
 
+  const [fastSearch, setFastSearch] = useState('');
+  const [pageSize, setPageSize] = useState(100);
+  const [page, setPage] = useState(0);
+  const [rowCount, setRowCount] = useState(0);
+
   useEffect(() => {
-    console.log(id);
-    const getLotes = async () => {
+    const get = async (name : string, page: number, pageSize: number) => {
       var response = await api.get("/plant", {
         params: {
           id: id,
         },
       });
-      console.log(response.data);
       setLotes(response.data.itens);
-      setTotal(response.data.total);
+      setRowCount(response.data.total);
     };
-
-    getLotes();
+    get('', 1, 100);
   }, []);
+
+  useEffect(() => {
+    const get = async (name : string, page: number, pageSize: number) => {
+      var response = await api.get("/plant", {
+        params: {
+          id: id,
+        },
+      });
+      setLotes(response.data.itens);
+      setRowCount(response.data.total);
+    };
+    get(fastSearch, page, pageSize);
+  }, [pageSize, page, fastSearch]);
+
+ 
+
+  const onPageSizeChange = async (pageSize: number, details: GridCallbackDetails)  => {
+    setPageSize(pageSize);
+  };
+
+  const onPageChange = async (page: number, details: GridCallbackDetails)  => {
+    setPage(page);
+  };
+
+  const onFastSearchChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+    setFastSearch(event.target.value);
+    //get(event.target.value, page, pageSize);
+  };
+
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -33,6 +65,11 @@ export default function PlantsTable({ id }) {
         columns={columns}
         rows={lotes}
         url="/nursery/create-lote"
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        page={page}
+        pageSize={pageSize}
+        rowCount={rowCount}
         searchName={""}
       />
       {/* <Can permissions={["lote.list"]}>

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
-import { GridActionsCellItem, GridColumns } from "@mui/x-data-grid";
+import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
 import { LoteInterface } from "../../interfaces/LoteInterface";
 import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
@@ -22,15 +22,38 @@ export default function Nursery() {
   const [lotes, setLotes] = useState([] as LoteInterface[]);
   const [total, setTotal] = useState({} as number);
 
-  useEffect(() => {
-    const getLotes = async () => {
-      var response = await api.get("/lote");
-      setLotes(response.data.itens);
-      setTotal(response.data.total);
-    };
+  const [fastSearch, setFastSearch] = useState('');
+  const [pageSize, setPageSize] = useState(100);
+  const [page, setPage] = useState(0);
+  const [rowCount, setRowCount] = useState(0);
 
-    getLotes();
+  useEffect(() => {
+    get('', 1, 100);
   }, []);
+
+  useEffect(() => {
+    get(fastSearch, page, pageSize);
+  }, [pageSize, page, fastSearch]);
+
+
+  const get = async (name : string, page: number, pageSize: number) => {
+    var response = await api.get("/lote");
+    setLotes(response.data.itens);
+    setRowCount(response.data.total);
+  };
+
+  const onPageSizeChange = async (pageSize: number, details: GridCallbackDetails)  => {
+    setPageSize(pageSize);
+  };
+
+  const onPageChange = async (page: number, details: GridCallbackDetails)  => {
+    setPage(page);
+  };
+
+  const onFastSearchChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+    setFastSearch(event.target.value);
+   // get(event.target.value, page, pageSize);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -102,6 +125,13 @@ export default function Nursery() {
       <Table
         columns={columns}
         rows={lotes}
+
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        page={page}
+        pageSize={pageSize}
+        rowCount={rowCount}
+
         searchName="Procurar Lotes"
         url="/nursery/create-lote"
       />

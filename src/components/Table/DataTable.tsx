@@ -1,14 +1,19 @@
 import * as React from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridCallbackDetails, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 let pageSize = 10
 
 export interface DataTableInterface {
   columns: GridColDef[];
   rows: any[];
+  rowCount: number;
+  page: number;
+  pageSize: number;
+  onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
+  onPageChange : (page: number, details: GridCallbackDetails) => void;
 }
 
-export default function DataTable({columns, rows} : DataTableInterface) {
+export default function DataTable({columns, rows, onPageChange, pageSize, page, onPageSizeChange, rowCount} : DataTableInterface) {
 
 
   return (
@@ -16,7 +21,12 @@ export default function DataTable({columns, rows} : DataTableInterface) {
       <DataGrid
         rows={rows}
         columns={columns}
-        pageSize={20}
+        onPageChange={onPageChange}
+        page={page}
+        pageSize={pageSize}
+        rowCount={rowCount}
+        onPageSizeChange={onPageSizeChange}
+        paginationMode="server"
         rowsPerPageOptions={[10,20,40]}
         //checkboxSelection
       />

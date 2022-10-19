@@ -7,18 +7,34 @@ import DataTable, { DataTableInterface } from "./DataTable";
 import TextField from "@mui/material/TextField";
 import { Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { GridColDef } from "@mui/x-data-grid";
-import Modal from '@mui/material/Modal';
+import { GridCallbackDetails, GridColDef } from "@mui/x-data-grid";
+import Modal from "@mui/material/Modal";
 import Link from "../Link";
 
 export interface TableIndexInterface {
-    columns: GridColDef[];
-    rows: any[];
-    searchName: string;
-    url: string;
-  }
+  columns: GridColDef[];
+  rows: any[];
+  searchName: string;
+  url: string;
+  rowCount: number;
+  page: number;
+  pageSize: number;
+  onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
+  onPageChange: (page: number, details: GridCallbackDetails) => void;
+  //onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-export default function Table({ columns, rows, searchName, url} : TableIndexInterface) {
+export default function Table({
+  columns,
+  rows,
+  searchName,
+  url,
+  onPageChange,
+  pageSize,
+  page,
+  onPageSizeChange,
+  rowCount,
+}: TableIndexInterface) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Paper elevation={0} sx={{ p: 2 }}>
@@ -38,20 +54,26 @@ export default function Table({ columns, rows, searchName, url} : TableIndexInte
             />
           </Grid>
           <Grid item sm={2} xs={12} textAlign="end">
-          <Link href={url}>
-            <Button
-              variant="contained"
-              disableElevation
-              
-              startIcon={<AddIcon />}
-            >
-               Adicionar
-            </Button>
+            <Link href={url}>
+              <Button
+                variant="contained"
+                disableElevation
+                startIcon={<AddIcon />}
+              >
+                Adicionar
+              </Button>
             </Link>
           </Grid>
-         
         </Grid>
-        <DataTable columns={columns} rows={rows} />
+        <DataTable
+          columns={columns}
+          rows={rows}
+          onPageChange={onPageChange}
+          page={page}
+          pageSize={pageSize}
+          rowCount={rowCount}
+
+        />
       </Paper>
     </Box>
   );
