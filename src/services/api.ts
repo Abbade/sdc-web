@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { parseCookies } from 'nookies';
-import { showAlert } from '../contexts/AlertContext';
+import { showAlert } from '../contexts/AuthContext';
 import { signOut } from '../contexts/AuthContext';
 import { AuthTokenError } from './errors/AuthTokenError';
 
@@ -13,8 +13,8 @@ export function setupAPIClient(ctx = undefined) {
 
   const api = axios.create({
     //baseURL: '//127.0.0.1:80',
-   // baseURL: 'http://localhost:3333',
-  baseURL: 'https://plantaqui.herokuapp.com',
+    baseURL: 'http://localhost:3333',
+ // baseURL: 'https://plantaqui.herokuapp.com',
     headers: {
       Authorization: `Bearer ${cookies['nextauth.token']}`
     }

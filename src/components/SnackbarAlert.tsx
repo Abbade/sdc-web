@@ -3,7 +3,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { AlertContext } from '../contexts/AlertContext';
+
+import { AuthContext } from '../contexts/AuthContext';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -13,7 +14,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 export default function SnackbarAlert() {
-  const { openAlert, alertType, alertMessage, closeAlert } = React.useContext(AlertContext);
+  const { openAlert, alertType, alertMessage, closeAlert } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
 
  

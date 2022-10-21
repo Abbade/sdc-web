@@ -3,6 +3,7 @@ import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import Router from 'next/router'
 
 import { api } from "../services/apiClient";
+import  {AlertColor}  from "@mui/material/Alert";
 
 type User = {
   email: string;
@@ -20,6 +21,11 @@ type AuthContextData = {
   signOut: () => void;
   user: User;
   isAuthenticated: boolean;
+  showAlert: (message: string, alertType: AlertColor) => void;
+  openAlert: boolean;
+  alertType: AlertColor;
+  alertMessage: string;
+  closeAlert: () => void;
 };
 
 type AuthProviderProps = {
@@ -36,10 +42,20 @@ export function signOut() {
   Router.push('/login')
 
 }
+let messageOutSide = "";
+export function showAlert(msg: string) {
+  console.log("chegou alert 1");
+  console.log(msg);
+  messageOutSide = msg;
+  authChannel.postMessage("snackalert");
+}
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
   const isAuthenticated = !!user;
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertType, setAlertType] = useState<AlertColor>("success");
 
   useEffect(() => {
     authChannel = new BroadcastChannel('auth')
@@ -50,6 +66,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser(null);         
         
           break;
+        case "snackalert":
+            console.log("chegou alert 2");
+            showAlert(messageOutSide, "error");
+  
+            break;
         default:
           break;
       }
@@ -82,6 +103,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [])
 
+  
+  const closeAlert = () => {
+    setOpenAlert(false);
+  };
+
+  const showAlert = (message: string, alertType: AlertColor) => {
+    setAlertMessage(message);
+    setAlertType(alertType);
+    setOpenAlert(true);
+  };
+
   async function signIn({ email, password }: SignInCredentials) {
     try {
       const response = await api.post('authenticate', {
@@ -111,7 +143,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user }}>
+    <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user, openAlert, alertMessage, alertType, showAlert, closeAlert }}>
       {children}
     </AuthContext.Provider>
   )
