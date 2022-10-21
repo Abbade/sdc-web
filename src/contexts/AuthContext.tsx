@@ -45,8 +45,8 @@ export function signOut() {
 let messageOutSide = "";
 export function showAlert(msg: string) {
   console.log("chegou alert 1");
-  console.log(msg);
-  messageOutSide = msg;
+  // console.log(msg);
+  // messageOutSide = msg;
   authChannel.postMessage("snackalert");
 }
 
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           break;
         case "snackalert":
             console.log("chegou alert 2");
-            showAlert(messageOutSide, "error");
+            showAlert(message.data, "error");
   
             break;
         default:
