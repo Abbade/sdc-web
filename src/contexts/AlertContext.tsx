@@ -35,7 +35,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
       switch (message.data) {
         case "snackalert":
           console.log("chegou alert 2");
-          showAlert(messageOutSide, "error");
+          showAlert(message.data, "error");
 
           break;
         default:
