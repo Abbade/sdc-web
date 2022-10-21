@@ -37,7 +37,13 @@ export default function Nursery() {
 
 
   const get = async (name : string, page: number, pageSize: number) => {
-    var response = await api.get("/lote");
+    var response = await api.get("/lote",  {
+      params: {
+        name: name,
+        page: page,
+        limit: pageSize
+      },
+    });
     setLotes(response.data.itens);
     setRowCount(response.data.total);
   };

@@ -45,8 +45,8 @@ export function signOut() {
 let messageOutSide = "";
 export function showAlert(msg: string) {
   console.log("chegou alert 1");
-  // console.log(msg);
-  // messageOutSide = msg;
+   console.log(msg);
+   messageOutSide = msg;
   authChannel.postMessage("snackalert");
 }
 
@@ -76,6 +76,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     }
   }, [])
+
+  useEffect(() => {
+    authChannel = new BroadcastChannel('auth')
+    console.log("teste")
+    authChannel.onmessage = (message) => {
+      switch (message.data) {
+        case "snackalert":
+            console.log("chegou alert 2");
+            showAlert(message.data, "error");
+  
+            break;
+        default:
+          break;
+      }
+    }
+  }, [messageOutSide])
 
   useEffect(() => {
     const { 'nextauth.token': token } = parseCookies()
