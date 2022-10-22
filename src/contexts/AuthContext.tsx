@@ -59,11 +59,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChannel = new BroadcastChannel('auth')
 
     authChannel.onmessage = (message) => {
+      console.log("snack yumi")
       switch (message.data) {
         case 'signOut':
           setUser(null);         
         
           break;
+          case "snackalert":
+
+            showAlert(messageOutSide, "error");
+  
+            break;
         default:
           break;
       }
@@ -72,7 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     authChannel = new BroadcastChannel('auth')
-
+    console.log("snack yumi2")
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case "snackalert":
