@@ -19,7 +19,11 @@ let alertChannel: BroadcastChannel;
 
 let messageOutSide = "";
 
-
+export function showAlert(msg: string) {
+  console.log("chegou alert 1");
+  messageOutSide = msg;
+  alertChannel.postMessage("snackalert");
+}
 
 export function AlertProvider({ children }: AlertProviderProps) {
   const [openAlert, setOpenAlert] = useState<boolean>(false);
@@ -35,7 +39,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
       switch (message.data) {
         case "snackalert":
           console.log("chegou alert 2");
-          showAlert(message.data, "error");
+          showAlert(messageOutSide, "error");
 
           break;
         default:
