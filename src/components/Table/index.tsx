@@ -18,9 +18,9 @@ export interface TableIndexInterface {
   url: string;
   rowCount: number;
   page: number;
-  pageSize: number;
   onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
   onPageChange: (page: number, details: GridCallbackDetails) => void;
+  onFastSearchChange : (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   //onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -30,9 +30,9 @@ export default function Table({
   searchName,
   url,
   onPageChange,
-  pageSize,
   page,
   onPageSizeChange,
+  onFastSearchChange,
   rowCount,
 }: TableIndexInterface) {
   return (
@@ -50,6 +50,7 @@ export default function Table({
               id="standard-basic"
               label={searchName}
               variant="standard"
+              onChange={(event) => onFastSearchChange(event)}
               fullWidth
             />
           </Grid>
@@ -69,8 +70,8 @@ export default function Table({
           columns={columns}
           rows={rows}
           onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
           page={page}
-          pageSize={pageSize}
           rowCount={rowCount}
 
         />

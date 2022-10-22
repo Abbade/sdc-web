@@ -44,8 +44,6 @@ export function signOut() {
 }
 let messageOutSide = "";
 export function showAlert(msg: string) {
-  console.log("chegou alert 1");
-   console.log(msg);
    messageOutSide = msg;
   authChannel.postMessage("snackalert");
 }
@@ -59,18 +57,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     authChannel = new BroadcastChannel('auth')
-    console.log("teste")
+
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case 'signOut':
           setUser(null);         
         
           break;
-        case "snackalert":
-            console.log("chegou alert 2");
-            showAlert(message.data, "error");
-  
-            break;
         default:
           break;
       }
@@ -79,12 +72,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     authChannel = new BroadcastChannel('auth')
-    console.log("teste")
+
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case "snackalert":
-            console.log("chegou alert 2");
-            showAlert(message.data, "error");
+
+            showAlert(messageOutSide, "error");
   
             break;
         default:

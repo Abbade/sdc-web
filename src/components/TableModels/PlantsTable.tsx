@@ -13,7 +13,7 @@ export default function PlantsTable({ id }) {
 
   const [fastSearch, setFastSearch] = useState('');
   const [pageSize, setPageSize] = useState(100);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [rowCount, setRowCount] = useState(0);
 
   useEffect(() => {
@@ -67,10 +67,10 @@ export default function PlantsTable({ id }) {
         url="/nursery/create-lote"
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
+        onFastSearchChange={onFastSearchChange}
         page={page}
-        pageSize={pageSize}
         rowCount={rowCount}
-        searchName={""}
+        searchName={"Procurar plantas"}
       />
       {/* <Can permissions={["lote.list"]}>
         <div>Métricas</div>

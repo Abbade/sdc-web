@@ -15,14 +15,13 @@ export default function LoteDashboard() {
 
 
   useEffect(() => {
-    api.get('/me')
-      .then(response => console.log(response))
+
   }, [])
 
   return (
     <>
     <Typography component="h1" variant="h4" sx={{pt: 1, pb: 1}}>
-      Buscar no berçário
+      Buscar Plantas
     </Typography>
 
 

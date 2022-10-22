@@ -8,12 +8,11 @@ export interface DataTableInterface {
   rows: any[];
   rowCount: number;
   page: number;
-  pageSize: number;
   onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
   onPageChange : (page: number, details: GridCallbackDetails) => void;
 }
 
-export default function DataTable({columns, rows, onPageChange, pageSize, page, onPageSizeChange, rowCount} : DataTableInterface) {
+export default function DataTable({columns, rows, onPageChange, page, onPageSizeChange, rowCount} : DataTableInterface) {
 
 
   return (
@@ -23,11 +22,12 @@ export default function DataTable({columns, rows, onPageChange, pageSize, page, 
         columns={columns}
         onPageChange={onPageChange}
         page={page}
-        pageSize={pageSize}
+
         rowCount={rowCount}
         onPageSizeChange={onPageSizeChange}
         paginationMode="server"
-        rowsPerPageOptions={[10,20,40]}
+        rowsPerPageOptions={[10,50,100, 200]}
+
         //checkboxSelection
       />
     </div>

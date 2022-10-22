@@ -23,20 +23,24 @@ export default function Nursery() {
   const [total, setTotal] = useState({} as number);
 
   const [fastSearch, setFastSearch] = useState('');
-  const [pageSize, setPageSize] = useState(100);
-  const [page, setPage] = useState(0);
-  const [rowCount, setRowCount] = useState(0);
+  const [pageSize, setPageSize] = useState(20);
+  const [page, setPage] = useState(1);
+  const [rowCount, setRowCount] = useState(1);
 
   useEffect(() => {
-    get('', 1, 100);
+    console.log("aaaa")
+    get('', page, pageSize);
   }, []);
 
   useEffect(() => {
+    console.log("bvbbbb");
+
     get(fastSearch, page, pageSize);
   }, [pageSize, page, fastSearch]);
 
 
   const get = async (name : string, page: number, pageSize: number) => {
+
     var response = await api.get("/lote",  {
       params: {
         name: name,
@@ -49,11 +53,13 @@ export default function Nursery() {
   };
 
   const onPageSizeChange = async (pageSize: number, details: GridCallbackDetails)  => {
+    console.log("ASJKDJDKSASDAJK")
     setPageSize(pageSize);
   };
 
   const onPageChange = async (page: number, details: GridCallbackDetails)  => {
     setPage(page);
+    console.log("page change")
   };
 
   const onFastSearchChange = (event : React.ChangeEvent<HTMLInputElement>) => {
@@ -131,11 +137,10 @@ export default function Nursery() {
       <Table
         columns={columns}
         rows={lotes}
-
+        onFastSearchChange={onFastSearchChange}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
         page={page}
-        pageSize={pageSize}
         rowCount={rowCount}
 
         searchName="Procurar Lotes"

@@ -71,8 +71,8 @@ export default function TrashedLoteTable({ id }) {
         searchName={""}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
+        onFastSearchChange={onFastSearchChange}
         page={page}
-        pageSize={pageSize}
         rowCount={rowCount}
         
 

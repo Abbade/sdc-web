@@ -58,7 +58,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-const AnchorLink = styled(Link)({
+export const AnchorLink = styled(Link)({
   textDecoration: "none",
   color: "inherit",
 });
@@ -264,7 +264,7 @@ export default function Layout({ children }: LayoutProps) {
             />
                <CustomLink
               keylink="clone_link"
-              linkstr="/plants"
+              linkstr="/params/cultivation"
               name="Parâmetros"
               open={open}
               icon={<SettingsIcon />}
