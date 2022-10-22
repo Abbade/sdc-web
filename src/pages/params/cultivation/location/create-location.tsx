@@ -4,8 +4,8 @@ import {
 
 
 
-import CreateGeneticProfileForm from "../../../components/Forms/params/CreateGeneticProfileForm";
-import CreateLocationForm from "../../../components/Forms/params/CreateLocationForm";
+import CreateGeneticProfileForm from "../../../../components/Forms/params/CreateGeneticProfileForm";
+import CreateLocationForm from "../../../../components/Forms/params/CreateLocationForm";
 
 
 const theme = createTheme();

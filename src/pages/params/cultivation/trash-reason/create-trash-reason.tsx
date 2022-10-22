@@ -2,7 +2,7 @@ import {
   Container, createTheme, Typography
 } from "@mui/material";
 import React from "react";
-import CreateTrashReasonForm from "../../../components/Forms/params/CreateTrashReasonForm";
+import CreateTrashReasonForm from "../../../../components/Forms/params/CreateTrashReasonForm";
 
 
 

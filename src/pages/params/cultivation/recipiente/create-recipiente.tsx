@@ -1,7 +1,7 @@
 import {
   Container, createTheme, Typography
 } from "@mui/material";
-import CreateRecipienteForm from "../../../components/Forms/params/CreateRecipienteForm";
+import CreateRecipienteForm from "../../../../components/Forms/params/CreateRecipienteForm";
 
 
 

@@ -29,7 +29,7 @@ export default function Nursery() {
 
   useEffect(() => {
     console.log("aaaa")
-    get('', page, pageSize);
+    get('', 1, 50);
   }, []);
 
   useEffect(() => {

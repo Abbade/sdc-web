@@ -1,7 +1,7 @@
 import {
   Container, createTheme, Typography
 } from "@mui/material";
-import CreateGeneticForm from "../../../components/Forms/params/CreateGeneticForm";
+import CreateGeneticForm from "../../../../components/Forms/params/CreateGeneticForm";
 
 
 

@@ -4,7 +4,7 @@ import {
 
 
 
-import CreateSectionForm from "../../../components/Forms/params/CreateSectionForm";
+import CreateSectionForm from "../../../../components/Forms/params/CreateSectionForm";
 
 
 const theme = createTheme();
