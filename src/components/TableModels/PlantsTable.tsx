@@ -13,33 +13,38 @@ export default function PlantsTable({ id }) {
 
   const [fastSearch, setFastSearch] = useState('');
   const [pageSize, setPageSize] = useState(100);
-  const [page, setPage] = useState(1);
-  const [rowCount, setRowCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowCount, setRowCount] = useState(1);
+
+  // useEffect(() => {
+  //   const get = async (name : string, page: number, pageSize: number) => {
+  //     var response = await api.get("/plant", {
+  //       params: {
+  //         id: id,
+  //         page: page,
+  //         limit: pageSize
+  //       },
+  //     });
+  //     setLotes(response.data.itens);
+  //     setRowCount(response.data.total);
+  //   };
+  //   get('', 0, 100);
+  // }, []);
 
   useEffect(() => {
     const get = async (name : string, page: number, pageSize: number) => {
       var response = await api.get("/plant", {
         params: {
           id: id,
+          page: page,
+          limit: pageSize,
+          name: fastSearch
         },
       });
       setLotes(response.data.itens);
       setRowCount(response.data.total);
     };
-    get('', 1, 100);
-  }, []);
-
-  useEffect(() => {
-    const get = async (name : string, page: number, pageSize: number) => {
-      var response = await api.get("/plant", {
-        params: {
-          id: id,
-        },
-      });
-      setLotes(response.data.itens);
-      setRowCount(response.data.total);
-    };
-    get(fastSearch, page, pageSize);
+    get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
 
  

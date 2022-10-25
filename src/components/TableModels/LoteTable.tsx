@@ -24,18 +24,18 @@ export default function Nursery() {
 
   const [fastSearch, setFastSearch] = useState('');
   const [pageSize, setPageSize] = useState(20);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(1);
 
-  useEffect(() => {
-    console.log("aaaa")
-    get('', 1, 50);
-  }, []);
+  // useEffect(() => {
+  //   console.log("aaaa")
+  //   get('', 1, 50);
+  // }, []);
 
   useEffect(() => {
-    console.log("bvbbbb");
+    console.log(page);
 
-    get(fastSearch, page, pageSize);
+    get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
 
 
