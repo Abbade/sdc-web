@@ -56,7 +56,7 @@ export default function CreateLoteForm() {
   useEffect(() => {
     const getPropagationTypes = async () => {
       var response = await api.get("/propagation-type");
-      setPropagationType(response.data);
+      setPropagationType(response.data.itens);
     };
 
     getPropagationTypes();

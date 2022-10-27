@@ -264,7 +264,7 @@ export default function Layout({ children }: LayoutProps) {
             />
                <CustomLink
               keylink="clone_link"
-              linkstr="/params/cultivation"
+              linkstr="/params/cultivation/propagation-type"
               name="Parâmetros"
               open={open}
               icon={<SettingsIcon />}

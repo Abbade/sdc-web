@@ -23,18 +23,13 @@ export default function Nursery() {
   const [total, setTotal] = useState({} as number);
 
   const [fastSearch, setFastSearch] = useState('');
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(1);
 
-  // useEffect(() => {
-  //   console.log("aaaa")
-  //   get('', 1, 50);
-  // }, []);
+ 
 
   useEffect(() => {
-    console.log(page);
-
     get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
 
@@ -53,13 +48,12 @@ export default function Nursery() {
   };
 
   const onPageSizeChange = async (pageSize: number, details: GridCallbackDetails)  => {
-    console.log("ASJKDJDKSASDAJK")
+
     setPageSize(pageSize);
   };
 
   const onPageChange = async (page: number, details: GridCallbackDetails)  => {
     setPage(page);
-    console.log("page change")
   };
 
   const onFastSearchChange = (event : React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +136,7 @@ export default function Nursery() {
         onPageSizeChange={onPageSizeChange}
         page={page}
         rowCount={rowCount}
-
+        pageSize={pageSize}
         searchName="Procurar Lotes"
         url="/nursery/create-lote"
       />

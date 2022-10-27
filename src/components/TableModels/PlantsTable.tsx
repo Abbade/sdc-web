@@ -32,6 +32,7 @@ export default function PlantsTable({ id }) {
   // }, []);
 
   useEffect(() => {
+    console.log("render");
     const get = async (name : string, page: number, pageSize: number) => {
       var response = await api.get("/plant", {
         params: {
@@ -75,6 +76,7 @@ export default function PlantsTable({ id }) {
         onFastSearchChange={onFastSearchChange}
         page={page}
         rowCount={rowCount}
+        pageSize={pageSize}
         searchName={"Procurar plantas"}
       />
       {/* <Can permissions={["lote.list"]}>
@@ -112,7 +114,6 @@ const columns: GridColDef[] = [
     headerName: "Genética",
     width: 130,
     renderCell: (params) => {
-      console.log(params.row.genetic.nick);
       return (
         <div className="MuiDataGrid-cellContent">{params.row.genetic.nick}</div>
       );
@@ -124,7 +125,6 @@ const columns: GridColDef[] = [
     headerName: "Fase",
     width: 130,
     renderCell: (params) => {
-      console.log(params.row.faseCultivo.name);
       return (
         <div className="MuiDataGrid-cellContent">
           {params.row.faseCultivo.name}
@@ -139,7 +139,6 @@ const columns: GridColDef[] = [
     headerName: "Recipiente",
     width: 130,
     renderCell: (params) => {
-      console.log(params.row.recipiente.name);
       return (
         <div className="MuiDataGrid-cellContent">
           {params.row.recipiente.name}
@@ -152,7 +151,6 @@ const columns: GridColDef[] = [
     headerName: "Local",
     width: 130,
     renderCell: (params) => {
-      console.log(params.row.location.name);
       return (
         <div className="MuiDataGrid-cellContent">
           {params.row.location.name}

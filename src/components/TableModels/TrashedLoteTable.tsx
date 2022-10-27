@@ -65,6 +65,7 @@ export default function TrashedLoteTable({ id }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Table
+      pageSize={pageSize}
         columns={columns}
         rows={lotes}
         url="/nursery/create-lote"

@@ -59,7 +59,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChannel = new BroadcastChannel('auth')
 
     authChannel.onmessage = (message) => {
-      console.log("snack yumi")
       switch (message.data) {
         case 'signOut':
           setUser(null);         
@@ -78,7 +77,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     authChannel = new BroadcastChannel('auth')
-    console.log("snack yumi2")
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case "snackalert":
@@ -94,11 +92,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const { 'nextauth.token': token } = parseCookies()
-    console.log("abbade bonitao mesmo")
     if (token) {
       api.get('/me')
         .then(response => {
-          console.log(response);
           const { email, permissions, roles } = response.data
 
           setUser({ email, permissions, roles })
@@ -113,9 +109,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           signOut();
         })
     }
-    else{
-      console.log("abbade bonitao")
-    }
+ 
   }, [])
 
   
@@ -150,7 +144,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       })
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
-      console.log("foi");
+
       Router.push('/dashboard');
     } catch (err) {
       console.log(err);

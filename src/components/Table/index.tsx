@@ -18,6 +18,7 @@ export interface TableIndexInterface {
   url: string;
   rowCount: number;
   page: number;
+  pageSize: number;
   onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
   onPageChange: (page: number, details: GridCallbackDetails) => void;
   onFastSearchChange : (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -34,6 +35,7 @@ export default function Table({
   onPageSizeChange,
   onFastSearchChange,
   rowCount,
+  pageSize
 }: TableIndexInterface) {
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -72,6 +74,7 @@ export default function Table({
           onPageChange={onPageChange}
           onPageSizeChange={onPageSizeChange}
           page={page}
+          pageSize={pageSize}
           rowCount={rowCount}
 
         />

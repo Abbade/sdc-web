@@ -10,12 +10,7 @@ import {
 import { api } from "../../../../services/apiClient";
 import { withSSRAuth } from "../../../../utils/withSSRAuth";
 
-const InitialLoteDetailsProps = {
-  id: 0,
-  name: "",
-} as PropagationType;
-
-export default function PropagationTypeIndex() {
+export default function FaseCultivoIndex() {
   const [itens, setItens] = useState([] as PropagationType[]);
 
   const [fastSearch, setFastSearch] = useState("");
@@ -25,7 +20,7 @@ export default function PropagationTypeIndex() {
 
   useEffect(() => {
     const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/propagation-type", {
+      var response = await api.get("/fase-cultivo", {
         params: {
           name: name,
           page: page,
@@ -61,7 +56,7 @@ export default function PropagationTypeIndex() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <NurseryConfigTab index={0} />
+      <NurseryConfigTab index={1} />
       <Table
         columns={columns}
         rows={itens}
@@ -71,8 +66,8 @@ export default function PropagationTypeIndex() {
         page={page}
         pageSize={pageSize}
         rowCount={rowCount}
-        searchName="Procurar Tipo Propagação"
-        url="/params/cultivation/propagation-type/create-propagation-type"
+        searchName="Procurar fase cultivo"
+        url="/params/cultivation/propagation-type/fase-cultivo/create"
       />
     </Box>
   );
