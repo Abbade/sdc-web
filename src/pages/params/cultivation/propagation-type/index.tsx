@@ -1,19 +1,16 @@
+import EditIcon from '@mui/icons-material/Edit';
 import Box from "@mui/material/Box";
-import { GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
-import { useEffect, useMemo, useState } from "react";
+import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
+import Router from "next/router";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import NurseryConfigTab from "../../../../components/NurseryConfigTab";
 import Table from "../../../../components/Table";
 import {
-  LoteInterface,
-  PropagationType,
+  PropagationType
 } from "../../../../interfaces/LoteInterface";
 import { api } from "../../../../services/apiClient";
 import { withSSRAuth } from "../../../../utils/withSSRAuth";
 
-const InitialLoteDetailsProps = {
-  id: 0,
-  name: "",
-} as PropagationType;
 
 export default function PropagationTypeIndex() {
   const [itens, setItens] = useState([] as PropagationType[]);
@@ -51,10 +48,30 @@ export default function PropagationTypeIndex() {
     setFastSearch(event.target.value);
   };
 
-  const columns = useMemo<GridColumns<LoteInterface>>(
+  const handleOpenDetails = useCallback(
+    (item: PropagationType) => () => {
+      Router.push('/params/cultivation/propagation-type/create-propagation-type?id=' + item.id)
+    },
+    []
+  );
+
+  const columns = useMemo<GridColumns<PropagationType>>(
     () => [
       { field: "id", headerName: "ID", width: 70 },
       { field: "name", headerName: "Nome", width: 130 },
+      {
+        field: "actions",
+        type: "actions",
+        width: 80,
+        getActions: (params) => [
+          <GridActionsCellItem
+            key="detail"
+            icon={<EditIcon />}
+            label="Editar"
+            onClick={handleOpenDetails(params.row)}
+          />
+        ],
+      },
     ],
     []
   );

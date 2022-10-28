@@ -1,52 +1,73 @@
 import {
-    Box, Button, createTheme, Grid
-  } from "@mui/material";
-  import * as yup from "yup";
+  Box, Button, createTheme, Grid
+} from "@mui/material";
+import * as yup from "yup";
   
   import Router from "next/router";
-  import { useEffect, useState } from "react";
-  import { api } from "../../../services/apiClient";
+import { useContext, useEffect } from "react";
+import { api } from "../../../services/apiClient";
   
   import { yupResolver } from "@hookform/resolvers/yup";
-  import {
-    FieldError,
-    SubmitHandler,
-    useForm
-  } from "react-hook-form";
-  import {
-    Genetic, PropagationType
-  } from "../../../interfaces/LoteInterface";
-  import BasicDatePicker from "../../Inputs/BasicDatePicker";
-  import BasicSelect from "../../Inputs/BasicSelect";
-  import BasicTextField from "../../Inputs/BasicTextField";
+import {
+  FieldError,
+  SubmitHandler,
+  useForm
+} from "react-hook-form";
+import { AlertContext } from "../../../contexts/AlertContext";
+import { EditInterface } from "../../../interfaces/EditInterface";
+import BasicTextField from "../../Inputs/BasicTextField";
   
   type CreatePropagationTypeFormData = {
    name: string;
    description: string;
+   id?: number;
   };
   
   const createObjFormSchema = yup.object().shape({
+    id: yup.number(),
     name: yup.string().required("Nome é obrigatório"),
     description: yup.string().required("Descrição é obrigatório"),
   });
   
   const theme = createTheme();
   
-  export default function CreatePropagationTypeForm() {
+  export default function CreatePropagationTypeForm({ id } : EditInterface) {
     const {
       register,
       handleSubmit,
       control,
+      setValue,
       formState: { errors, isSubmitting },
     } = useForm({ resolver: yupResolver(createObjFormSchema) });
-  
-  
+
+    const { showAlert } = useContext(AlertContext);
+
+    useEffect(() => {
+      const get = async (id) =>{
+        if(id > 0){
+          const item = await api.get(`propagation-type/${id}`);
+          setValue('name', item.data.name);
+          setValue('description', item.data.description);
+          setValue('id', item.data.id);
+        }
+      
+      }
+      get(id);
+    }, [id]);
+
     const handleLoteSubmit: SubmitHandler<CreatePropagationTypeFormData> = async (
       formData
     ) => {
       try {
-    
-        const user = await api.post("propagation-type", formData);
+        if(formData.id > 0){
+          const item = await api.put("propagation-type", formData);
+          showAlert('Tipo de Propagação editada com sucesso.', 'success');
+        }
+        else{
+          const item = await api.post("propagation-type", formData);
+          showAlert('Tipo de Propagação cadastrada com sucesso.', 'success');
+        }
+     
         Router.back();
       } catch (error) {
         const errorOficial = error as Error;
@@ -54,9 +75,7 @@ import {
       }
     };
   
-    return (
-  
-          
+    return (         
           <Box
             component="form"
             noValidate
@@ -82,13 +101,15 @@ import {
                 />
               </Grid>
             </Grid>
+            
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Cadastrar Forma de Propagação
+
+              {id > 0 ? "Editar" : "Cadastrar"} Forma de Propagação
             </Button>
           </Box>
   

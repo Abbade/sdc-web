@@ -1,10 +1,9 @@
-import * as React from 'react';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
+import * as React from 'react';
 
-import { AuthContext } from '../contexts/AuthContext';
+import { AlertContext } from '../contexts/AlertContext';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -14,10 +13,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 export default function SnackbarAlert() {
-  const { openAlert, alertType, alertMessage, closeAlert } = React.useContext(AuthContext);
-  const [open, setOpen] = React.useState(false);
-
- 
+  const { openAlert, alertType, alertMessage, closeAlert } = React.useContext(AlertContext);
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -28,7 +24,7 @@ export default function SnackbarAlert() {
 
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
-      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={openAlert} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
           {alertMessage}
         </Alert>
