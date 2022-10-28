@@ -216,6 +216,7 @@ export default function Layout({ children }: LayoutProps) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
+                <MenuItem ><AnchorLink href={"/roles"}>Configurações</AnchorLink></MenuItem>
                 <MenuItem onClick={signOut}>Sair</MenuItem>
               </Menu>
             </div>

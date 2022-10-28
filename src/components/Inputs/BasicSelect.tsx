@@ -1,18 +1,10 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import {
-  FieldError,
-  FieldErrorsImpl,
-  Merge,
-  Controller,
-  FieldValues,
-  Control,
-} from "react-hook-form";
-import FormHelperText from "@mui/material/FormHelperText";
+import Select from "@mui/material/Select";
+import { Control, Controller, FieldError, FieldValues } from "react-hook-form";
 
 interface selectParams {
   label: string;
@@ -28,14 +20,13 @@ export default function BasicSelect({
   values,
   control,
   error = null,
-
 }: selectParams) {
   return (
     <Box sx={{ minWidth: 120 }}>
       <Controller
         control={control}
         name={name}
-        render={({ field: { onChange, value = '' } }) => (
+        render={({ field: { onChange, value = "" } }) => (
           <FormControl fullWidth error={!!error}>
             <InputLabel id={label}>{label}</InputLabel>
             <Select
@@ -45,11 +36,13 @@ export default function BasicSelect({
               label={name}
               name={name}
               onChange={onChange}
-
             >
               {values?.map((selectValue) => {
                 return (
-                  <MenuItem key={selectValue.id.toString()} value={selectValue.id.toString()}>
+                  <MenuItem
+                    key={selectValue.id.toString()}
+                    value={selectValue.id.toString()}
+                  >
                     {selectValue.name}
                   </MenuItem>
                 );

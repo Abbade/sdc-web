@@ -17,7 +17,7 @@ export default function DataTable({columns, rows, onPageChange, page, onPageSize
 
 
   return (
-    <div style={{ height: 'calc(100vh - 200px)', width: '100%' }}>
+    <div style={{ height: 'calc(100vh - 300px)', width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}

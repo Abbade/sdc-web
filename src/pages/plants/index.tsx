@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import  Typography  from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { Can } from "../../components/Can";
