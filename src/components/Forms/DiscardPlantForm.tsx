@@ -13,33 +13,44 @@ import {
   useForm
 } from "react-hook-form";
 import {
-  TrashReason
+  FaseCultivo,
+  Location, Recipiente, TrashReason
 } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
+import { PlantaInterface } from "../../interfaces/PlantaInterface";
+
+const postmanJson = {
+  "transplantDate": "2012-04-30T18:25:43.511Z",
+  "plants": [1, 2, 3, 4],
+  "id_recipiente": 1,
+  "id_location": 1,
+  "id_faseCultivo": 2,
 
 
+  "obs": "Ae"
+  }
 
-type TrashLoteFormData = {
-  idLote: number;
+
+type TransplantPlantFormData = {
+  plants: number[];
   id_trashReason: number;
-  qtTrash: number;
   obs: string;
-  trashDate: Date;
-};
+}
 
 const createObjFormSchema = yup.object().shape({
+  // id_lote: yup.number().required("Genética é obrigatório"),
+
   trashDate: yup.date().required("Data obrigatória"),
   obs: yup.string().required("Observação obrigatória"),
   id_trashReason: yup.number().required("Genética é obrigatório"),
-  qtTrash: yup.number().required("Quantidade total é obrigatória"),
 });
 const theme = createTheme();
 
 
-export default function TrashLoteForm(selectedLote) {
- 
+export default function TrashPlantForm(plants) {
+
   const {
     register,
     handleSubmit,
@@ -48,42 +59,64 @@ export default function TrashLoteForm(selectedLote) {
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
   
-  const [idLote, setIdLote] = useState(0)
 
-  const [trashReason, setTrashReason] = useState(
+  const [idPlants, setIdPlants] = useState([] as number[])
+
+  const [trashReasons, setTrashReasons] = useState(
     [] as TrashReason[]
   );
 
   useEffect(() => {
     const getTrashReasons = async () => {
       var response = await api.get("/trash-reason");
-      setTrashReason(response.data);
+      setTrashReasons(response.data);
     };
     getTrashReasons();
   }, []);
 
+  // const [location, setLocation] = useState(
+  //   [] as Location[]
+  // );
+
+  // useEffect(() => {
+  //   const getLocations = async () => {
+  //     var response = await api.get("/location");
+  //     setLocation(response.data);
+  //   };
+  //   getLocations();
+  // }, []);
+
+
+ 
+
   useEffect(() => {
-    setIdLote(selectedLote.selectedLote.id)
+    console.log(plants.plants)
+    if(plants.plants.length > 0) {
+      setIdPlants(plants.plants.map((plant) => {
+        return plant.id
+      }))
+  
+    }
+    
+
+  }, [plants])
 
 
-  },[selectedLote])
 
-
-
-  const handleLoteSubmit: SubmitHandler<TrashLoteFormData> = async (
+  const handleLoteSubmit: SubmitHandler<TransplantPlantFormData> = async (
     formData
   ) => {
     try {
-      formData.idLote = idLote;
-      console.log(formData)
+      formData.plants = idPlants
 
-      const lote = await api.put("trash-lote", formData);
+
+      const lote = await api.post("trash-plant", formData);
       // Router.push('/nursery/'+selectedLote.id)
 
-      
+
     } catch (error) {
       const errorOficial = error as Error;
-      console.log(error as Error);
+
     }
   };
 
@@ -97,7 +130,7 @@ export default function TrashLoteForm(selectedLote) {
           alignItems: "center",
         }}
       >
-        
+
         <Box
           component="form"
           noValidate
@@ -115,23 +148,25 @@ export default function TrashLoteForm(selectedLote) {
             </Grid>
 
             <Grid item xs={12} sm={12}>
-              <BasicTextField
-                label={"Quantidade  (" + selectedLote.selectedLote.qtProp + " Disponíveis)"}
-                name={"qtTrash"}
-                control={control}
-                error={errors.qtTrash as FieldError}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
               <BasicSelect
                 label={"Trash Reason"}
                 name={"id_trashReason"}
-                values={trashReason}
+                values={trashReasons}
                 control={control}
                 error={errors.id_trashReason as FieldError}
               />
             </Grid>
+{/* 
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Location"}
+                name={"id_location"}
+                values={location}
+                control={control}
+                error={errors.id_location as FieldError}
+              />
+            </Grid> */}
+        
             <Grid item xs={12} sm={12}>
               <BasicTextField
                 label={"obs"}

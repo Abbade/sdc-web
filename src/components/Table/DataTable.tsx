@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { DataGrid, GridCallbackDetails, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridCallbackDetails, GridColDef, GridSelectionModel } from '@mui/x-data-grid';
 
 let pageSize = 10
 
@@ -11,9 +10,11 @@ export interface DataTableInterface {
   pageSize: number;
   onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
   onPageChange : (page: number, details: GridCallbackDetails) => void;
+  onCheckboxSelection?: (selectionModel: GridSelectionModel, details: GridCallbackDetails<any>) => void;
+
 }
 
-export default function DataTable({columns, rows, onPageChange, page, onPageSizeChange, rowCount, pageSize} : DataTableInterface) {
+export default function DataTable({columns, rows, onPageChange, page, onPageSizeChange, onCheckboxSelection,rowCount, pageSize} : DataTableInterface) {
 
 
   return (
@@ -23,14 +24,14 @@ export default function DataTable({columns, rows, onPageChange, page, onPageSize
         columns={columns}
         onPageChange={onPageChange}
         page={page}
-
         rowCount={rowCount}
         onPageSizeChange={onPageSizeChange}
         paginationMode="server"
         rowsPerPageOptions={[200,100, 50, 10]}
         pageSize={pageSize}
-
-        //checkboxSelection
+        onSelectionModelChange={onCheckboxSelection}
+        checkboxSelection
+        disableSelectionOnClick
       />
     </div>
   );

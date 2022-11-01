@@ -7,7 +7,7 @@ import DataTable, { DataTableInterface } from "./DataTable";
 import TextField from "@mui/material/TextField";
 import { Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { GridCallbackDetails, GridColDef } from "@mui/x-data-grid";
+import { GridCallbackDetails, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import Modal from "@mui/material/Modal";
 import Link from "../Link";
 
@@ -21,6 +21,7 @@ export interface TableIndexInterface {
   pageSize: number;
   onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
   onPageChange: (page: number, details: GridCallbackDetails) => void;
+  onCheckboxSelection?: (selectionModel: GridSelectionModel, details: GridCallbackDetails<any>) => void;
   onFastSearchChange : (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   //onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -34,6 +35,7 @@ export default function Table({
   page,
   onPageSizeChange,
   onFastSearchChange,
+  onCheckboxSelection,
   rowCount,
   pageSize
 }: TableIndexInterface) {
@@ -73,6 +75,7 @@ export default function Table({
           rows={rows}
           onPageChange={onPageChange}
           onPageSizeChange={onPageSizeChange}
+          onCheckboxSelection={onCheckboxSelection}
           page={page}
           pageSize={pageSize}
           rowCount={rowCount}

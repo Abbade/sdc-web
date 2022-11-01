@@ -17,7 +17,6 @@ const InitialLoteDetailsProps = {
 } as LoteInterface;
 
 export default function Nursery() {
-  const [open, setOpen] = useState(false);
   const [lote, setLote] = useState(InitialLoteDetailsProps);
   const [lotes, setLotes] = useState([] as LoteInterface[]);
   const [total, setTotal] = useState({} as number);
@@ -60,6 +59,7 @@ export default function Nursery() {
     setFastSearch(event.target.value);
    // get(event.target.value, page, pageSize);
   };
+  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpen(false);

@@ -1,4 +1,5 @@
 export interface PlantaInterface {
+    id: number;
     id_lote: number;
     aclimatationDate: Date;
     qtPlant: number;
