@@ -43,13 +43,15 @@ export default function RoleForm({ id }: EditInterface) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  const { showAlert } = useContext(AlertContext);
+  const { showAlert, showLoading, closeLoading } = useContext(AlertContext);
   const [permissions, setPermissions] = useState([] as PermissoesData[]);
 
   useEffect(() => {
     const get = async () => {
+      showLoading();
       const permissions = await api.get("/permissions");
       setPermissions(permissions.data.itens);
+      closeLoading();
     };
 
     get();
@@ -57,11 +59,13 @@ export default function RoleForm({ id }: EditInterface) {
 
   useEffect(() => {
     const get = async (id) => {
+      showLoading();
       if (id > 0) {
         const item = await api.get(`roles/${id}`);
         setValue("name", item.data.name);
         setValue("id", item.data.id);
         setValue("permissions", item.data.permissions);
+        closeLoading();
       }
     };
 

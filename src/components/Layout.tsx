@@ -216,7 +216,11 @@ export default function Layout({ children }: LayoutProps) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem ><AnchorLink href={"/roles"}>Configurações</AnchorLink></MenuItem>
+                <MenuItem>
+                  <AnchorLink onClick={() => handleClose()} href={"/roles"}>
+                    Configurações
+                  </AnchorLink>
+                </MenuItem>
                 <MenuItem onClick={signOut}>Sair</MenuItem>
               </Menu>
             </div>
@@ -235,44 +239,42 @@ export default function Layout({ children }: LayoutProps) {
         </DrawerHeader>
         <Divider />
         <List>
-        <CustomMenu
+          <CustomMenu
             keylink="cultio_link"
             name="Cultivo"
             open={open}
             icon={<ForestIcon />}
           >
             <>
-            <CustomLink
-              keylink="clone_link"
-              linkstr="/nursery"
-              name="Berçario"
-              open={open}
-              icon={<GrassIcon />}
-            />
-            <CustomLink
-              keylink="clone_link"
-              linkstr="/plants"
-              name="Plantas"
-              open={open}
-              icon={<ForestIcon />}
-            />
-            <CustomLink
-              keylink="clone_link"
-              linkstr="/plants"
-              name="Relatórios"
-              open={open}
-              icon={<TrendingUpIcon />}
-            />
-               <CustomLink
-              keylink="clone_link"
-              linkstr="/params/cultivation/propagation-type"
-              name="Parâmetros"
-              open={open}
-              icon={<SettingsIcon />}
-            />
+              <CustomLink
+                keylink="clone_link"
+                linkstr="/nursery"
+                name="Berçario"
+                open={open}
+                icon={<GrassIcon />}
+              />
+              <CustomLink
+                keylink="clone_link"
+                linkstr="/plants"
+                name="Plantas"
+                open={open}
+                icon={<ForestIcon />}
+              />
+              <CustomLink
+                keylink="clone_link"
+                linkstr="/plants"
+                name="Relatórios"
+                open={open}
+                icon={<TrendingUpIcon />}
+              />
+              <CustomLink
+                keylink="clone_link"
+                linkstr="/params/cultivation/propagation-type"
+                name="Parâmetros"
+                open={open}
+                icon={<SettingsIcon />}
+              />
             </>
-       
-            
           </CustomMenu>
 
           {/* <CustomLink keylink='audit_lkb' linkstr='apr' name='Auditorias' open={open} icon={<PageviewIcon />} /> */}

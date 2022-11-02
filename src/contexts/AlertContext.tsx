@@ -7,6 +7,9 @@ type AlertContextData = {
   alertType: AlertColor;
   alertMessage: string;
   closeAlert: () => void;
+  showLoading: () => void;
+  closeLoading: () => void;
+  openLoading: boolean;
 };
 
 type AlertProviderProps = {
@@ -29,6 +32,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [alertType, setAlertType] = useState<AlertColor>("success");
+  const [openLoading, setOpenLoading] = useState(false);
 
   useEffect(() => {
     alertChannel = new BroadcastChannel("alertSnack");
@@ -47,6 +51,14 @@ export function AlertProvider({ children }: AlertProviderProps) {
     };
   }, []);
 
+  const closeLoading = () => {
+    setOpenLoading(false);
+  };
+
+  const showLoading = () => {
+    setOpenLoading(true);
+  };
+
   const closeAlert = () => {
     setOpenAlert(false);
   };
@@ -59,7 +71,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
 
   return (
     <AlertContext.Provider
-      value={{ openAlert, alertMessage, alertType, showAlert, closeAlert }}
+      value={{ openAlert, alertMessage, alertType, showAlert, closeAlert, showLoading, closeLoading, openLoading }}
     >
       {children}
     </AlertContext.Provider>
