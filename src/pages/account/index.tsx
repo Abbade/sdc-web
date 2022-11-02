@@ -5,15 +5,17 @@ import Router from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import GeneralConfigTab from '../../components/GeneralConfigsTab';
 import Table from "../../components/Table";
-import {
-  PropagationType
-} from "../../interfaces/LoteInterface";
 import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 
+interface Users{
+  id: number;
+  name: string;
+  email: string;
+}
 
-export default function RolesIndex() {
-  const [itens, setItens] = useState([] as PropagationType[]);
+export default function AccountIndex() {
+  const [itens, setItens] = useState([] as Users[]);
 
   const [fastSearch, setFastSearch] = useState("");
   const [pageSize, setPageSize] = useState(10);
@@ -22,7 +24,7 @@ export default function RolesIndex() {
 
   useEffect(() => {
     const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/roles", {
+      var response = await api.get("/user", {
         params: {
           name: name,
           page: page,
@@ -48,16 +50,17 @@ export default function RolesIndex() {
   };
 
   const handleOpenEdit = useCallback(
-    (item: PropagationType) => () => {
-      Router.push('/roles/create?id=' + item.id)
+    (item: Users) => () => {
+      Router.push('/account/create?id=' + item.id)
     },
     []
   );
 
-  const columns = useMemo<GridColumns<PropagationType>>(
+  const columns = useMemo<GridColumns<Users>>(
     () => [
       { field: "id", headerName: "ID", width: 70 },
       { field: "name", headerName: "Nome", width: 130 },
+      { field: "email", headerName: "E-mail", width: 130 },
       {
         field: "actions",
         type: "actions",
@@ -77,7 +80,7 @@ export default function RolesIndex() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <GeneralConfigTab index={2} />
+      <GeneralConfigTab index={1} />
       <Table
         columns={columns}
         rows={itens}
@@ -87,8 +90,8 @@ export default function RolesIndex() {
         page={page}
         pageSize={pageSize}
         rowCount={rowCount}
-        searchName="Procurar Perfil"
-        url="/roles/create"
+        searchName="Procurar Usuário"
+        url="/account/create"
       />
     </Box>
   );
@@ -98,4 +101,6 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
   return {
     props: {},
   };
+}, {
+  permissions: ['user.list'],
 });

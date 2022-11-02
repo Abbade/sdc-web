@@ -53,7 +53,7 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
     
         return {
           redirect: {
-            destination: '/',
+            destination: '/login',
             permanent: false,
           }
         }

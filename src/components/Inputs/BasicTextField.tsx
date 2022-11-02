@@ -9,12 +9,16 @@ interface selectParams {
   name: string;
   error?: FieldError;
   control?: Control<FieldValues, any>;
+  type?: string;
+  disabled?: boolean;
 }
 export default function BasicTextField({
   name,
   label,
   control,
   error = null,
+  type = "text",
+  disabled = false,
 }: selectParams) {
   return (
     <Box sx={{ minWidth: 120 }}>
@@ -22,6 +26,7 @@ export default function BasicTextField({
         <Controller
           name={name}
           control={control}
+     
           render={({ field: { onChange, value = '' } }) => (
             <TextField
               onChange={onChange}
@@ -29,6 +34,8 @@ export default function BasicTextField({
               label={label}
               error={!!error}
               helperText={error?.message}
+              type={type}
+              disabled={disabled}
             />
           )}
         />
