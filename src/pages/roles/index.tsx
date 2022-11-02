@@ -33,7 +33,6 @@ export default function RolesIndex() {
       });
       setItens(response.data.itens);
       setRowCount(response.data.total);
-      console.log(pageSize);
     };
     get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
