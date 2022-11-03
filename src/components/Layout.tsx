@@ -217,7 +217,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClose={handleClose}
               >
                 <MenuItem>
-                  <AnchorLink onClick={() => handleClose()} href={"/roles"}>
+                  <AnchorLink onClick={() => handleClose()} href={"/company"}>
                     Configurações
                   </AnchorLink>
                 </MenuItem>

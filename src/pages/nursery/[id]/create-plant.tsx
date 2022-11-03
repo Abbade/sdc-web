@@ -1,49 +1,21 @@
-import { ThemeProvider } from "@emotion/react";
 import {
-  Typography,
-  createTheme,
-  Container,
-  CssBaseline,
-  Box,
-  Avatar,
-  Grid,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  TextFieldProps,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
+  Box, Container, createTheme, Typography
 } from "@mui/material";
-import Link from "next/link";
+import { useRouter } from 'next/router';
 import * as yup from "yup";
-import { useRouter } from 'next/router'
 
+import { useEffect, useState } from "react";
 import { api } from "../../../services/apiClient";
-import Router from "next/router";
-import React, { useEffect, useState } from "react";
 
-import BasicDatePicker from "../../../components/Inputs/BasicDatePicker";
-import BasicSelect from "../../../components/Inputs/BasicSelect";
-import BasicTextField from "../../../components/Inputs/BasicTextField";
-import {
-  Genetic,
-  LoteInterface,
-  PropagationType,
-  TrashReason,
-} from "../../../interfaces/LoteInterface";
-import {
-  Controller,
-  FieldError,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import TrashLoteForm from "../../../components/Forms/TrashLoteForm";
-import { withSSRAuth } from "../../../utils/withSSRAuth";
+import {
+  useForm
+} from "react-hook-form";
 import CreatePlantForm from "../../../components/Forms/CreatePlantForm";
+import {
+  LoteInterface, TrashReason
+} from "../../../interfaces/LoteInterface";
+import { withSSRAuth } from "../../../utils/withSSRAuth";
 
 type TrashLoteFormData = {
   idLote: number;

@@ -1,15 +1,21 @@
-import Box from "@mui/material/Box";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
-import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
+import Box from "@mui/material/Box";
+import {
+  GridActionsCellItem,
+  GridCallbackDetails,
+  GridColumns,
+} from "@mui/x-data-grid";
+import Router from "next/router";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { LoteInterface } from "../../interfaces/LoteInterface";
 import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import FormDialog from "../Dialogs/Dialog";
+import CreatePlantForm from "../Forms/CreatePlantForm";
 import TrashLoteForm from "../Forms/TrashLoteForm";
 import Table from "../Table";
-import Router from "next/router";
+import ParkIcon from '@mui/icons-material/Park';
 
 const InitialLoteDetailsProps = {
   id: 0,
@@ -19,50 +25,53 @@ const InitialLoteDetailsProps = {
 export default function Nursery() {
   const [lote, setLote] = useState(InitialLoteDetailsProps);
   const [lotes, setLotes] = useState([] as LoteInterface[]);
-  const [total, setTotal] = useState({} as number);
 
-  const [fastSearch, setFastSearch] = useState('');
+  const [fastSearch, setFastSearch] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(1);
 
- 
+  const [open, setOpen] = useState(false);
+  const [openTransplante, setOpenTransplante] = useState(false);
 
   useEffect(() => {
     get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
 
-
-  const get = async (name : string, page: number, pageSize: number) => {
-
-    var response = await api.get("/lote",  {
+  const get = async (name: string, page: number, pageSize: number) => {
+    var response = await api.get("/lote", {
       params: {
         name: name,
         page: page,
-        limit: pageSize
+        limit: pageSize,
       },
     });
     setLotes(response.data.itens);
     setRowCount(response.data.total);
   };
 
-  const onPageSizeChange = async (pageSize: number, details: GridCallbackDetails)  => {
-
+  const onPageSizeChange = async (
+    pageSize: number,
+    details: GridCallbackDetails
+  ) => {
     setPageSize(pageSize);
   };
 
-  const onPageChange = async (page: number, details: GridCallbackDetails)  => {
+  const onPageChange = async (page: number, details: GridCallbackDetails) => {
     setPage(page);
   };
 
-  const onFastSearchChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+  const onFastSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFastSearch(event.target.value);
-   // get(event.target.value, page, pageSize);
+    // get(event.target.value, page, pageSize);
   };
-  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleTransplanteClose = () => {
+    setOpenTransplante(false);
   };
 
   const handleOpenTrashLote = useCallback(
@@ -73,10 +82,18 @@ export default function Nursery() {
     []
   );
 
+  const handleOpenTransplante = useCallback(
+    (lote: LoteInterface) => () => {
+      setLote(lote);
+      setOpenTransplante(true);
+    },
+    []
+  );
+
   const handleOpenDetails = useCallback(
     (lote: LoteInterface) => () => {
       setLote(lote);
-      Router.push('/nursery/' + lote.id)
+      Router.push("/nursery/" + lote.id);
       console.log(lote);
     },
     []
@@ -106,7 +123,7 @@ export default function Nursery() {
       {
         field: "actions",
         type: "actions",
-        width: 80,
+        width: 100,
         getActions: (params) => [
           <GridActionsCellItem
             key="detail"
@@ -115,15 +132,23 @@ export default function Nursery() {
             onClick={handleOpenDetails(params.row)}
           />,
           <GridActionsCellItem
+            key="transpl"
+            icon={<ParkIcon />}
+            label="Transplante"
+            title="Transplantar"
+            onClick={handleOpenTransplante(params.row)}
+          />,
+          <GridActionsCellItem
             key="delete"
             icon={<DeleteIcon />}
             label="Delete"
+            title="Descartar"
             onClick={handleOpenTrashLote(params.row)}
           />,
         ],
       },
     ],
-    [handleOpenTrashLote, handleOpenDetails]
+    [handleOpenTrashLote, handleOpenDetails, handleOpenTransplante]
   );
 
   return (
@@ -146,6 +171,13 @@ export default function Nursery() {
         title={"Descartar Lote " + lote?.name}
       >
         <TrashLoteForm selectedLote={lote}></TrashLoteForm>
+      </FormDialog>
+      <FormDialog
+        onClose={handleTransplanteClose}
+        open={openTransplante}
+        title={"Transplantar " + lote?.name}
+      >
+        <CreatePlantForm selectedLote={lote}></CreatePlantForm>
       </FormDialog>
     </Box>
   );
