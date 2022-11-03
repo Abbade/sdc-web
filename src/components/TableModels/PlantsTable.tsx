@@ -12,6 +12,7 @@ import FormDialog from "../Dialogs/Dialog";
 import TrashPlantForm from "../Forms/DiscardPlantForm";
 import TransplantPlantForm from "../Forms/TransplantPlantForm";
 import Table from "../Table";
+import { format } from 'date-fns'
 
 export default function PlantsTable({ id }) {
   const [plants, setPlantas] = useState([] as PlantaInterface[]);
@@ -172,13 +173,78 @@ export default function PlantsTable({ id }) {
         );
       },
     },
-
-    { field: "lastTransplant", headerName: "Ultimo Transplante", width: 200 },
-    { field: "aclimatationDate", headerName: "Data Aclimatação", width: 200 },
-    { field: "vegetationDate", headerName: "Data Vegetação", width: 200 },
-    { field: "floweringDate", headerName: "Data Floração", width: 200 },
-    { field: "harvestDate", headerName: "Data de Colheita", width: 200 },
-    { field: "trashDate", headerName: "Data de Descarte", width: 200 },
+    {
+      field: "lastTransplant",
+      headerName: "Ultimo Transplante",
+      width: 140,
+      renderCell: (params) => {
+        return (
+          <div className="MuiDataGrid-cellContent">
+            {format(new Date(params.row.lastTransplant), 'dd/MM/yyyy')}
+          </div>
+        );
+      },
+    },
+    {
+      field: "aclimatationDate",
+      headerName: "Data Aclimatação",
+      width: 130,
+      renderCell: (params) => {
+        return (
+          <div className="MuiDataGrid-cellContent">
+            {format(new Date(params.row.aclimatationDate), 'dd/MM/yyyy')}
+          </div>
+        );
+      },
+    },
+    {
+      field: "vegetationDate",
+      headerName: "Data Vegetação",
+      width: 130,
+      renderCell: (params) => {
+        return (
+          <div className="MuiDataGrid-cellContent">
+            {format(new Date(params.row.vegetationDate), 'dd/MM/yyyy')}
+          </div>
+        );
+      },
+    },
+    {
+      field: "floweringDate",
+      headerName: "Data Floração",
+      width: 130,
+      renderCell: (params) => {
+        return (
+          <div className="MuiDataGrid-cellContent">
+            {format(new Date(params.row.floweringDate), 'dd/MM/yyyy')}
+          </div>
+        );
+      },
+    },
+    {
+      field: "harvestDate",
+      headerName: "Data Colheita",
+      width: 130,
+      renderCell: (params) => {
+        return (
+          <div className="MuiDataGrid-cellContent">
+            {params.row.harvestDate ? format(new Date(params.row.harvestDate), 'dd/MM/yyyy') : ""}
+          </div>
+        );
+      },
+    },
+    {
+      field: "trashDate",
+      headerName: "Data Descarte",
+      width: 130,
+      renderCell: (params) => {
+        return (
+          <div className="MuiDataGrid-cellContent">
+            {format(new Date(params.row.trashDate), 'dd/MM/yyyy')}
+          </div>
+        );
+      },
+    },
     {
       field: "+",
       width: 200,
