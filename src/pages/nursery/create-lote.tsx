@@ -20,7 +20,7 @@ import {
 import CreateLoteForm from "../../components/Forms/CreateLoteForm";
 
 
-const theme = createTheme();
+
 
 export default function CreateLote() {
   

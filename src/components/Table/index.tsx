@@ -46,7 +46,7 @@ export default function Table({
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Paper elevation={0} sx={{ p: 2 }}>
+      <Paper elevation={1} sx={{ p: 2 }}>
         <Grid
           container
           direction="row"

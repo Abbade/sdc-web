@@ -1,23 +1,22 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@mui/material";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import IconButton from '@mui/material/IconButton';
+import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
-import GeneralConfigTab from "../../components/GeneralConfigsTab";
 import BasicTextField from "../../components/Inputs/BasicTextField";
 import { AlertContext } from "../../contexts/AlertContext";
 import { api } from "../../services/apiClient";
+import { ColorModeContext } from "../../styles/Theme";
 import { withSSRAuth } from "../../utils/withSSRAuth";
-import * as React from 'react';
-import IconButton from '@mui/material/IconButton';
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 type CreateFormData = {
   name: string;
@@ -34,7 +33,7 @@ const createObjFormSchema = yup.object().shape({
     .email("Digite um e-mail válido"),
 });
 
-export default function CompanyUpdate() {
+export default function MyAccount() {
   const router = useRouter();
   const {
     register,
@@ -46,17 +45,20 @@ export default function CompanyUpdate() {
 
   const { showAlert, showLoading, closeLoading } = useContext(AlertContext);
 
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+
   useEffect(() => {
     console.log("render ");
     const get = async () => {
-
       showLoading();
 
-      const item = await api.get(`company/${1}`);
+      const item = await api.get(`/me`);
+      console.log(item.data);
       setValue("name", item.data.name);
       setValue("id", item.data.id);
       setValue("email", item.data.email);
-      
+
       closeLoading();
     };
 
@@ -65,12 +67,10 @@ export default function CompanyUpdate() {
 
   const handleLoteSubmit: SubmitHandler<CreateFormData> = async (formData) => {
     try {
-
       showLoading();
-      const item = await api.put("company", formData);
+      const item = await api.put("user", formData);
       closeLoading();
-      showAlert("Empresa Editada com sucesso.", "success");
-
+      showAlert("Conta Editada com sucesso.", "success");
     } catch (error) {
       closeLoading();
       showAlert(error.response.data.message, "error");
@@ -79,19 +79,42 @@ export default function CompanyUpdate() {
 
   return (
     <>
-      <GeneralConfigTab index={0} />
       <Container component="main" maxWidth="xs">
- 
         <Typography component="h1" variant="h4">
-          Empresa
+          Minha Conta
         </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: "background.default",
+            color: "text.primary",
+            borderRadius: 1,
+            p: 3,
+          }}
+        >
+          {theme.palette.mode} mode
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={colorMode.toggleColorMode}
+            color="inherit"
+          >
+            {theme.palette.mode === "dark" ? (
+              <Brightness7Icon />
+            ) : (
+              <Brightness4Icon />
+            )}
+          </IconButton>
+        </Box>
         <Box
           component="form"
           noValidate
           onSubmit={handleSubmit(handleLoteSubmit)}
           sx={{ mt: 3 }}
         >
-          <Grid container spacing={2} >
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <BasicTextField
                 label={"Nome"}
@@ -116,12 +139,11 @@ export default function CompanyUpdate() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Editar Empresa
+            Editar Conta
           </Button>
         </Box>
       </Container>
     </>
-    
   );
 }
 export const getServerSideProps = withSSRAuth(
@@ -129,8 +151,9 @@ export const getServerSideProps = withSSRAuth(
     return {
       props: {},
     };
-  },
-  {
-    permissions: ["user.create"],
   }
+  // ,
+  // {
+  //   permissions: ["user.create"],
+  // }
 );

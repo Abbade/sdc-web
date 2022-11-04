@@ -38,7 +38,7 @@ const createObjFormSchema = yup.object().shape({
   qtTotal: yup.number().required("Quantidade total é obrigatória"),
 });
 
-const theme = createTheme();
+
 
 export default function CreateLoteForm() {
   const {

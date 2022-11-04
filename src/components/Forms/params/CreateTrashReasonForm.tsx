@@ -24,7 +24,7 @@ import BasicTextField from "../../Inputs/BasicTextField";
     description: yup.string().required("Descrição é obrigatório"),
   });
   
-  const theme = createTheme();
+
   
   export default function CreateTrashReasonForm() {
     const {

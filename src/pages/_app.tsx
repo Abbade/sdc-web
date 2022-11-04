@@ -1,16 +1,14 @@
 import { AuthProvider } from "../contexts/AuthContext";
 
-import * as React from "react";
-import Head from "next/head";
-import { AppProps } from "next/app";
-import { ThemeProvider } from "@mui/material/styles";
+import { EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { CacheProvider, EmotionCache } from "@emotion/react";
-import theme from "../styles/theme";
-import createEmotionCache from "../styles/createEmotionCache";
+import { AppProps } from "next/app";
+import Head from "next/head";
+import * as React from "react";
 import Layout from "../components/Layout";
-import { AlertProvider } from "../contexts/AlertContext";
 import SnackbarAlert from "../components/SnackbarAlert";
+import { AlertProvider } from "../contexts/AlertContext";
+import Theme from "../styles/Theme";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 
@@ -31,15 +29,15 @@ const LayoutComponent = isLayoutNeeded ? Layout : React.Fragment;
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-
+      <Theme>
+          <CssBaseline />
           <SnackbarAlert />
           <CssBaseline />
           <LayoutComponent>
             <Component {...pageProps} />
           </LayoutComponent>
   
-      </ThemeProvider>
+      </Theme>
       </AlertProvider>
     </AuthProvider>
   );

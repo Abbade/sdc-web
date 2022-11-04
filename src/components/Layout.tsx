@@ -217,10 +217,16 @@ export default function Layout({ children }: LayoutProps) {
                 onClose={handleClose}
               >
                 <MenuItem>
+                  <AnchorLink onClick={() => handleClose()} href={"/myaccount"}>
+                    Minha Conta
+                  </AnchorLink>
+                </MenuItem>
+                <MenuItem>
                   <AnchorLink onClick={() => handleClose()} href={"/company"}>
                     Configurações
                   </AnchorLink>
                 </MenuItem>
+                
                 <MenuItem onClick={signOut}>Sair</MenuItem>
               </Menu>
             </div>

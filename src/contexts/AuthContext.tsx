@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import Router from 'next/router'
 
@@ -21,6 +21,8 @@ type AuthContextData = {
   signOut: () => void;
   user: User;
   isAuthenticated: boolean;
+  changeMode : () => void;
+  mode : "light" | "dark";
 };
 
 type AuthProviderProps = {
@@ -44,7 +46,9 @@ export function showAlert(msg: string) {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+
   const [user, setUser] = useState<User>();
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
   const isAuthenticated = !!user;
 
   useEffect(() => {
@@ -62,22 +66,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [])
 
+  
 
+  const changeMode = () => {
+    setCookie(undefined, 'sdc.darkmode', mode === 'light' ? 'dark' : 'light', {
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: '/'
+    })
+    setMode(mode === 'light' ? 'dark' : 'light');
+  }
 
   useEffect(() => {
     const { 'nextauth.token': token } = parseCookies()
+    
     if (token) {
       api.get('/me')
         .then(response => {
           const { email, permissions, roles } = response.data
-
           setUser({ email, permissions, roles })
-
-
         })
         .catch(() => {
           signOut();
         })
+    }
+    const { 'sdc.darkmode': modeCookie1 } = parseCookies();
+    let chooseMode = modeCookie1 as 'dark' | 'light';
+    
+    if(chooseMode){
+      if(chooseMode !== mode){
+        setMode(chooseMode);
+      }
     }
  
   }, [])
@@ -114,7 +132,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user }}>
+    <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user, changeMode, mode }}>
       {children}
     </AuthContext.Provider>
   )
