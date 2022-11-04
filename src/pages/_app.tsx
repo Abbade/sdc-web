@@ -9,6 +9,7 @@ import Layout from "../components/Layout";
 import SnackbarAlert from "../components/SnackbarAlert";
 import { AlertProvider } from "../contexts/AlertContext";
 import Theme from "../styles/Theme";
+import ThemeColor from "../styles/ThemeColor";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 
@@ -25,11 +26,13 @@ function MyApp(props: MyAppProps) {
 const LayoutComponent = isLayoutNeeded ? Layout : React.Fragment;
   return (
     <AuthProvider>
+      <Theme >
       <AlertProvider>
       <Head>
+        <ThemeColor />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <Theme>
+   
           <CssBaseline />
           <SnackbarAlert />
           <CssBaseline />
@@ -37,8 +40,9 @@ const LayoutComponent = isLayoutNeeded ? Layout : React.Fragment;
             <Component {...pageProps} />
           </LayoutComponent>
   
-      </Theme>
+
       </AlertProvider>
+      </Theme>
     </AuthProvider>
   );
 }

@@ -2,12 +2,15 @@ import * as React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
 import createEmotionCache from '../styles/createEmotionCache';
+import ThemeColor from '../styles/ThemeColor';
 
 export default class MyDocument extends Document {
+
   render() {
     return (
       <Html lang="en">
         <Head>
+        <ThemeColor />
           {/* PWA primary color */}
           {/* <meta name="theme-color" content={theme.palette.primary.main} /> */}
           <link rel="shortcut icon" href="/favicon.ico" />
@@ -53,6 +56,8 @@ MyDocument.getInitialProps = async (ctx) => {
   // 4. page.render
 
   const originalRenderPage = ctx.renderPage;
+
+
 
   // You can consider sharing the same Emotion cache between all the SSR requests to speed up performance.
   // However, be aware that it can have global side effects.
