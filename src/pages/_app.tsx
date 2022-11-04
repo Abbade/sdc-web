@@ -29,7 +29,6 @@ const LayoutComponent = isLayoutNeeded ? Layout : React.Fragment;
       <Theme >
       <AlertProvider>
       <Head>
-        <ThemeColor />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
    
