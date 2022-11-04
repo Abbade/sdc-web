@@ -20,7 +20,7 @@ export default function Theme({ children}: ThemeType) {
         changeMode();
       },
     }),
-    [],
+    [changeMode],
   );
 
   const theme = React.useMemo(
