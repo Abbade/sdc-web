@@ -155,7 +155,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" color="primary" open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
