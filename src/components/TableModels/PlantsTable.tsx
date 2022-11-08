@@ -9,10 +9,12 @@ import { useEffect, useState } from "react";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
 import { api } from "../../services/apiClient";
 import FormDialog from "../Dialogs/Dialog";
-import TrashPlantForm from "../Forms/DiscardPlantForm";
+import TrashPlantForm from "../Forms/TrashPlantForm";
 import TransplantPlantForm from "../Forms/TransplantPlantForm";
 import Table from "../Table";
 import { format } from 'date-fns'
+import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherFOrm";
+import MovePlantForm from "../Forms/MovePlantForm";
 
 export default function PlantsTable({ id }) {
   const [plants, setPlantas] = useState([] as PlantaInterface[]);
@@ -33,6 +35,7 @@ export default function PlantsTable({ id }) {
           page: page,
           limit: pageSize,
           name: fastSearch,
+        
         },
       });
       setPlantas(response.data.itens);
@@ -68,13 +71,33 @@ export default function PlantsTable({ id }) {
     //get(event.target.value, page, pageSize);
   };
 
-  const [open, setOpen] = useState(false);
+  const [openTrash, setOpenTrash] = useState(false);
+  const [openTransplant, setOpenTransplant] = useState(false);
+  const [openMove, setOpenMove] = useState(false);
+  const [openMother, setOpenMother] = useState(false);
 
-  const handleOpenTransplantPlant = () => {
-    setOpen(true);
+  const handleOpen = (type) => {
+    // setOpen(true);
+    console.log(type)
   };
   const handleClose = () => {
-    setOpen(false);
+    setOpenTrash(false);
+    setOpenTransplant(false);
+    setOpenMove(false);
+    setOpenMother(false);
+    const get = async (name: string, page: number, pageSize: number) => {
+      var response = await api.get("/plant", {
+        params: {
+          id: id,
+          page: page,
+          limit: pageSize,
+          name: fastSearch,
+        },
+      });
+      setPlantas(response.data.itens);
+      setRowCount(response.data.total);
+    };
+    get(fastSearch, page + 1, pageSize);
   };
 
   const transplantIndividualPlantButton = (params) => {
@@ -88,7 +111,7 @@ export default function PlantsTable({ id }) {
           onClick={() => {
             console.log([params.row]);
             setSelectedPlants([params.row]);
-            handleOpenTransplantPlant();
+            handleOpen(setOpenTransplant(true));
             // Router.push("nursery/" + params.row.id + "/trash-lote");
           }}
         >
@@ -109,7 +132,7 @@ export default function PlantsTable({ id }) {
           onClick={() => {
             console.log([params.row]);
             setSelectedPlants([params.row]);
-            handleOpenTransplantPlant();
+            handleOpen(setOpenTrash(true));
             // Router.push("nursery/" + params.row.id + "/trash-lote");
           }}
         >
@@ -119,9 +142,53 @@ export default function PlantsTable({ id }) {
     );
   };
 
+  const movePlantButton = (params) => {
+    return (
+      <strong>
+        <Button
+          variant="contained"
+          color="success"
+          size="small"
+          // style={{ marginLeft: 16 }}
+          onClick={() => {
+            console.log([params.row]);
+            setSelectedPlants([params.row]);
+            handleOpen(setOpenMove(true));
+            // Router.push("nursery/" + params.row.id + "/trash-lote");
+          }}
+        >
+          Mover
+        </Button>
+      </strong>
+    );
+  };
+
+  const transformPlantIntoMotherButton = (params) => {
+    return (
+      <strong>
+        <Button
+          variant="contained"
+          color="success"
+          size="small"
+          // style={{ marginLeft: 16 }}
+          onClick={() => {
+            console.log([params.row]);
+            setSelectedPlants([params.row]);
+            handleOpen(setOpenMother(true));
+            // Router.push("nursery/" + params.row.id + "/trash-lote");
+          }}
+        >
+          Nova Mãe
+        </Button>
+      </strong>
+    );
+  };
+  
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Codigo", width: 200 },
+    { field: "isMotherPlant", headerName: "Matriz", width: 200 },
+    
 
     {
       field: "genetic.nick",
@@ -246,20 +313,33 @@ export default function PlantsTable({ id }) {
       },
     },
     {
-      field: "+",
+      field: "Transplantar",
       width: 200,
       renderCell: (params) => {
         return transplantIndividualPlantButton(params);
       },
     },
     {
-      field: "-",
+      field: "Descartar",
       width: 200,
       renderCell: (params) => {
         return trashIndividualPlantButton(params);
       },
     },
-
+    {
+      field: "Mover",
+      width: 200,
+      renderCell: (params) => {
+        return movePlantButton(params);
+      },
+    },
+    {
+      field: "Matriz",
+      width: 200,
+      renderCell: (params) => {
+        return transformPlantIntoMotherButton(params);
+      },
+    },
     // { field: "qtTotal", headerName: "Total", width: 90 },
     // { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
   ];
@@ -279,11 +359,17 @@ export default function PlantsTable({ id }) {
         pageSize={pageSize}
         searchName={"Procurar plantas"}
       />
-      <FormDialog onClose={handleClose} open={open} title={"Transplantar"}>
+      <FormDialog onClose={handleClose} open={openTransplant} title={"Transplantar"}>
         <TransplantPlantForm plants={selectedPlants}></TransplantPlantForm>
       </FormDialog>
-      <FormDialog onClose={handleClose} open={open} title={"Descartar"}>
+      <FormDialog onClose={handleClose} open={openTrash} title={"Descartar"}>
         <TrashPlantForm plants={selectedPlants}></TrashPlantForm>
+      </FormDialog>
+      <FormDialog onClose={handleClose} open={openMother} title={"Nova Mãe"}>
+        <TransformPlantIntoMotherForm plants={selectedPlants}></TransformPlantIntoMotherForm>
+      </FormDialog>
+      <FormDialog onClose={handleClose} open={openMove} title={"Mover"}>
+        <MovePlantForm plants={selectedPlants}></MovePlantForm>
       </FormDialog>
     </Box>
   );
