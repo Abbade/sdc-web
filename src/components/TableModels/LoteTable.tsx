@@ -16,6 +16,7 @@ import CreatePlantForm from "../Forms/CreatePlantForm";
 import TrashLoteForm from "../Forms/TrashLoteForm";
 import Table from "../Table";
 import ParkIcon from '@mui/icons-material/Park';
+import CreateLoteForm from "../Forms/CreateLoteForm";
 
 const InitialLoteDetailsProps = {
   id: 0,
@@ -33,6 +34,8 @@ export default function Nursery() {
 
   const [open, setOpen] = useState(false);
   const [openTransplante, setOpenTransplante] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
+  
 
   useEffect(() => {
     get(fastSearch, page + 1, pageSize);
@@ -70,9 +73,20 @@ export default function Nursery() {
     setOpen(false);
   };
 
+
+
   const handleTransplanteClose = () => {
     setOpenTransplante(false);
   };
+
+  const handleOpenCreate = () => {
+      setOpenCreate(true);
+    };
+
+    const handleCloseCreate = () => {
+      setOpenCreate(false)
+    };
+
 
   const handleOpenTrashLote = useCallback(
     (lote: LoteInterface) => () => {
@@ -98,6 +112,10 @@ export default function Nursery() {
     },
     []
   );
+
+  const optionsImport = [
+    { title: 'Criar Novo Lote', action: handleOpenCreate },
+  ]
 
   const columns = useMemo<GridColumns<LoteInterface>>(
     () => [
@@ -163,7 +181,9 @@ export default function Nursery() {
         rowCount={rowCount}
         pageSize={pageSize}
         searchName="Procurar Lotes"
-        url="/nursery/create-lote"
+        optionsImport={optionsImport}
+        // url="/nursery/create-lote"
+
       />
       <FormDialog
         onClose={handleClose}
@@ -178,6 +198,13 @@ export default function Nursery() {
         title={"Transplantar " + lote?.name}
       >
         <CreatePlantForm selectedLote={lote}></CreatePlantForm>
+      </FormDialog>
+      <FormDialog
+        onClose={handleCloseCreate}
+        open={openCreate}
+        title={"Novo Lote " + lote?.name}
+      >
+        <CreateLoteForm ></CreateLoteForm>
       </FormDialog>
     </Box>
   );

@@ -5,18 +5,19 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import DataTable, { DataTableInterface } from "./DataTable";
 import TextField from "@mui/material/TextField";
-import { Button, Typography, useMediaQuery } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { Button, ButtonGroup, Typography, useMediaQuery } from "@mui/material";
+import AddIcon  from "@mui/icons-material/Add";
 import { GridCallbackDetails, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import Modal from "@mui/material/Modal";
 import Link from "../Link";
 import IconButton from '@mui/material/IconButton';
+import SplitButton from "../SplitButton";
 
 export interface TableIndexInterface {
   columns: GridColDef[];
   rows: any[];
   searchName: string;
-  url: string;
+  // url: string;
   rowCount: number;
   page: number;
   pageSize: number;
@@ -24,6 +25,7 @@ export interface TableIndexInterface {
   onPageChange: (page: number, details: GridCallbackDetails) => void;
   onCheckboxSelection?: (selectionModel: GridSelectionModel, details: GridCallbackDetails<any>) => void;
   onFastSearchChange : (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  optionsImport: any
   //onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -31,18 +33,22 @@ export default function Table({
   columns,
   rows,
   searchName,
-  url,
+  // url,
   onPageChange,
   page,
   onPageSizeChange,
   onFastSearchChange,
   onCheckboxSelection,
   rowCount,
-  pageSize
+  pageSize,
+  optionsImport,
+
 }: TableIndexInterface) {
   const theme = useTheme();
   const isSmallOrLess = 
   useMediaQuery(theme.breakpoints.up('sm'));
+
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -63,7 +69,7 @@ export default function Table({
               fullWidth
             />
           </Grid>
-          <Grid item sm={2} xs={2} textAlign="end">
+          {/* <Grid item sm={2} xs={2} textAlign="end">
             <Link href={url}>
             {isSmallOrLess ? (
                   <Button
@@ -83,7 +89,11 @@ export default function Table({
               )}
               
             </Link>
+          </Grid> */}
+          <Grid>
+            <SplitButton optionsImport={optionsImport}></SplitButton>
           </Grid>
+       
         </Grid>
         <DataTable
           columns={columns}

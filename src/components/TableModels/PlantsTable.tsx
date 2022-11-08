@@ -5,6 +5,8 @@ import {
   GridColDef,
   GridSelectionModel,
 } from "@mui/x-data-grid";
+import  ArrowDropDownIcon  from "@mui/icons-material/ArrowDropDown";
+
 import { useEffect, useState } from "react";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
 import { api } from "../../services/apiClient";
@@ -15,6 +17,7 @@ import Table from "../Table";
 import { format } from 'date-fns'
 import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherFOrm";
 import MovePlantForm from "../Forms/MovePlantForm";
+import React from "react";
 
 export default function PlantsTable({ id }) {
   const [plants, setPlantas] = useState([] as PlantaInterface[]);
@@ -75,7 +78,12 @@ export default function PlantsTable({ id }) {
   const [openTransplant, setOpenTransplant] = useState(false);
   const [openMove, setOpenMove] = useState(false);
   const [openMother, setOpenMother] = useState(false);
-
+  const optionsImport = [
+    { title: 'Transplante', icon: <ArrowDropDownIcon />, action: setOpenTransplant },
+    { title: 'Descarte', icon: <ArrowDropDownIcon />, action: setOpenTrash },
+    { title: 'Mover', icon: <ArrowDropDownIcon /> , action: setOpenMove },
+    { title: 'Matriz', icon: <ArrowDropDownIcon />, action: setOpenMother },
+  ]
   const handleOpen = (type) => {
     // setOpen(true);
     console.log(type)
@@ -312,34 +320,34 @@ export default function PlantsTable({ id }) {
         );
       },
     },
-    {
-      field: "Transplantar",
-      width: 200,
-      renderCell: (params) => {
-        return transplantIndividualPlantButton(params);
-      },
-    },
-    {
-      field: "Descartar",
-      width: 200,
-      renderCell: (params) => {
-        return trashIndividualPlantButton(params);
-      },
-    },
-    {
-      field: "Mover",
-      width: 200,
-      renderCell: (params) => {
-        return movePlantButton(params);
-      },
-    },
-    {
-      field: "Matriz",
-      width: 200,
-      renderCell: (params) => {
-        return transformPlantIntoMotherButton(params);
-      },
-    },
+    // {
+    //   field: "Transplantar",
+    //   width: 200,
+    //   renderCell: (params) => {
+    //     return transplantIndividualPlantButton(params);
+    //   },
+    // },
+    // {
+    //   field: "Descartar",
+    //   width: 200,
+    //   renderCell: (params) => {
+    //     return trashIndividualPlantButton(params);
+    //   },
+    // },
+    // {
+    //   field: "Mover",
+    //   width: 200,
+    //   renderCell: (params) => {
+    //     return movePlantButton(params);
+    //   },
+    // },
+    // {
+    //   field: "Matriz",
+    //   width: 200,
+    //   renderCell: (params) => {
+    //     return transformPlantIntoMotherButton(params);
+    //   },
+    // },
     // { field: "qtTotal", headerName: "Total", width: 90 },
     // { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
   ];
@@ -349,7 +357,7 @@ export default function PlantsTable({ id }) {
       <Table
         columns={columns}
         rows={plants}
-        url="/nursery/create-lote"
+        // url="/nursery/create-lote"
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
         onFastSearchChange={onFastSearchChange}
@@ -358,6 +366,7 @@ export default function PlantsTable({ id }) {
         rowCount={rowCount}
         pageSize={pageSize}
         searchName={"Procurar plantas"}
+        optionsImport={optionsImport}
       />
       <FormDialog onClose={handleClose} open={openTransplant} title={"Transplantar"}>
         <TransplantPlantForm plants={selectedPlants}></TransplantPlantForm>
