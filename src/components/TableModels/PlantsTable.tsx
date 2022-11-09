@@ -15,7 +15,7 @@ import TrashPlantForm from "../Forms/TrashPlantForm";
 import TransplantPlantForm from "../Forms/TransplantPlantForm";
 import Table from "../Table";
 import { format } from 'date-fns'
-import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherFOrm";
+import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherForm";
 import MovePlantForm from "../Forms/MovePlantForm";
 import React from "react";
 
