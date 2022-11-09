@@ -18,6 +18,7 @@ import { format } from 'date-fns'
 import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherForm";
 import MovePlantForm from "../Forms/MovePlantForm";
 import React from "react";
+import ChangePlantStageForm from "../Forms/ChangePlantStageForm";
 
 export default function PlantsTable({ id }) {
   const [plants, setPlantas] = useState([] as PlantaInterface[]);
@@ -75,6 +76,7 @@ export default function PlantsTable({ id }) {
   };
 
   const [openTrash, setOpenTrash] = useState(false);
+  const [openChangeStage, setChangeStage] = useState(false);
   const [openTransplant, setOpenTransplant] = useState(false);
   const [openMove, setOpenMove] = useState(false);
   const [openMother, setOpenMother] = useState(false);
@@ -83,6 +85,7 @@ export default function PlantsTable({ id }) {
     { title: 'Descarte', icon: <ArrowDropDownIcon />, action: setOpenTrash },
     { title: 'Mover', icon: <ArrowDropDownIcon /> , action: setOpenMove },
     { title: 'Matriz', icon: <ArrowDropDownIcon />, action: setOpenMother },
+    { title: 'Fase de Cultivo', icon: <ArrowDropDownIcon />, action: setChangeStage },
   ]
   const handleOpen = (type) => {
     // setOpen(true);
@@ -90,6 +93,7 @@ export default function PlantsTable({ id }) {
   };
   const handleClose = () => {
     setOpenTrash(false);
+    setChangeStage(false);
     setOpenTransplant(false);
     setOpenMove(false);
     setOpenMother(false);
@@ -379,6 +383,9 @@ export default function PlantsTable({ id }) {
       </FormDialog>
       <FormDialog onClose={handleClose} open={openMove} title={"Mover"}>
         <MovePlantForm plants={selectedPlants}></MovePlantForm>
+      </FormDialog>
+      <FormDialog onClose={handleClose} open={openChangeStage} title={"Fase de Cultivo"}>
+        <ChangePlantStageForm plants={selectedPlants}></ChangePlantStageForm>
       </FormDialog>
     </Box>
   );
