@@ -68,7 +68,6 @@ export default function TrashedLoteTable({ id }) {
       pageSize={pageSize}
         columns={columns}
         rows={lotes}
-        url="/nursery/create-lote"
         searchName={""}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}

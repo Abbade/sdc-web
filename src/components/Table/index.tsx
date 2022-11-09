@@ -17,7 +17,7 @@ export interface TableIndexInterface {
   columns: GridColDef[];
   rows: any[];
   searchName: string;
-  // url: string;
+  url?: string;
   rowCount: number;
   page: number;
   pageSize: number;
@@ -25,7 +25,7 @@ export interface TableIndexInterface {
   onPageChange: (page: number, details: GridCallbackDetails) => void;
   onCheckboxSelection?: (selectionModel: GridSelectionModel, details: GridCallbackDetails<any>) => void;
   onFastSearchChange : (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  optionsImport: any
+  optionsImport?: any
   //onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -33,7 +33,7 @@ export default function Table({
   columns,
   rows,
   searchName,
-  // url,
+  url,
   onPageChange,
   page,
   onPageSizeChange,
