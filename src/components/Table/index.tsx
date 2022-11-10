@@ -6,11 +6,15 @@ import Grid from "@mui/material/Grid";
 import DataTable, { DataTableInterface } from "./DataTable";
 import TextField from "@mui/material/TextField";
 import { Button, ButtonGroup, Typography, useMediaQuery } from "@mui/material";
-import AddIcon  from "@mui/icons-material/Add";
-import { GridCallbackDetails, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
+import AddIcon from "@mui/icons-material/Add";
+import {
+  GridCallbackDetails,
+  GridColDef,
+  GridSelectionModel,
+} from "@mui/x-data-grid";
 import Modal from "@mui/material/Modal";
 import Link from "../Link";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import SplitButton from "../SplitButton";
 
 export interface TableIndexInterface {
@@ -23,9 +27,15 @@ export interface TableIndexInterface {
   pageSize: number;
   onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
   onPageChange: (page: number, details: GridCallbackDetails) => void;
-  onCheckboxSelection?: (selectionModel: GridSelectionModel, details: GridCallbackDetails<any>) => void;
-  onFastSearchChange : (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  optionsImport?: any
+  onCheckboxSelection?: (
+    selectionModel: GridSelectionModel,
+    details: GridCallbackDetails<any>
+  ) => void;
+  onFastSearchChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  optionsImport?: any;
+  onAdd?: () => void;
   //onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -42,13 +52,10 @@ export default function Table({
   rowCount,
   pageSize,
   optionsImport,
-
+  onAdd,
 }: TableIndexInterface) {
   const theme = useTheme();
-  const isSmallOrLess = 
-  useMediaQuery(theme.breakpoints.up('sm'));
-
-
+  const isSmallOrLess = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -58,6 +65,7 @@ export default function Table({
           direction="row"
           justifyContent="space-between"
           alignItems="flex-end"
+          gap={2}
           pb={3}
         >
           <Grid item sm={3} xs={6}>
@@ -69,31 +77,41 @@ export default function Table({
               fullWidth
             />
           </Grid>
-          {/* <Grid item sm={2} xs={2} textAlign="end">
-            <Link href={url}>
+
+          <Grid item sm={6} md={4} xs={4} textAlign="end" gap={1}>
             {isSmallOrLess ? (
-                  <Button
+              <>
+                
+                  <SplitButton optionsImport={optionsImport}></SplitButton>
+             
+                {onAdd !== undefined && (
+                <Button
+                  sx={{ ml: 1 }}
                   variant="contained"
                   disableElevation
+                  onClick={onAdd}
                   startIcon={<AddIcon />}
                 >
                   Adicionar
                 </Button>
-                )
-              :
-              (
-              <IconButton color="primary" aria-label="upload picture" component="label">
-              
-                      <AddIcon />
-                    </IconButton>
+                   )}
+              </>
+            ) : (
+              <>
+             
+              {onAdd !== undefined && (
+              <IconButton
+                color="primary"
+                aria-label="upload picture"
+                component="label"
+                onClick={onAdd}
+              >
+                <AddIcon />
+              </IconButton>
               )}
-              
-            </Link>
-          </Grid> */}
-          <Grid>
-            <SplitButton optionsImport={optionsImport}></SplitButton>
+               </>
+            )}
           </Grid>
-       
         </Grid>
         <DataTable
           columns={columns}
@@ -104,7 +122,6 @@ export default function Table({
           page={page}
           pageSize={pageSize}
           rowCount={rowCount}
-
         />
       </Paper>
     </Box>

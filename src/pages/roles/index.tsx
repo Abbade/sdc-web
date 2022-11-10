@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
 import Router from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import FormDialog from '../../components/Dialogs/Dialog';
+import RoleForm from '../../components/Forms/RoleForm';
 import GeneralConfigTab from '../../components/GeneralConfigsTab';
 import Table from "../../components/Table";
 import {
@@ -19,6 +21,8 @@ export default function RolesIndex() {
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
+  const [openForm, setOpenForm] = useState(false);
+  const [idItem, setIdItem] = useState(0);
 
   useEffect(() => {
     const get = async (name: string, page: number, pageSize: number) => {
@@ -47,12 +51,21 @@ export default function RolesIndex() {
     setFastSearch(event.target.value);
   };
 
+  
+
   const handleOpenEdit = useCallback(
     (item: PropagationType) => () => {
-      Router.push('/roles/create?id=' + item.id)
+      setIdItem(item.id);
+      setOpenForm(true);
     },
     []
   );
+
+  const onAdd = () => {
+    console.log("oi")
+    setIdItem(0);
+    setOpenForm(true);
+  }
 
   const columns = useMemo<GridColumns<PropagationType>>(
     () => [
@@ -89,7 +102,12 @@ export default function RolesIndex() {
         rowCount={rowCount}
         searchName="Procurar Perfil"
         url="/roles/create"
+        onAdd={onAdd}
       />
+      <FormDialog onClose={() => { setOpenForm(false)}} open={openForm} title='Perfil'
+      >
+        <RoleForm id={idItem} onClose={() => { setOpenForm(false)}} />
+      </FormDialog>
     </Box>
   );
 }

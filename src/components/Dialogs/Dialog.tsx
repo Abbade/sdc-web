@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 export interface DialogProps {
   open: boolean;
-  onClose: (value: string) => void;
+  onClose: (value: any) => void;
   title: string;
   children: ReactJSXElement;
 }

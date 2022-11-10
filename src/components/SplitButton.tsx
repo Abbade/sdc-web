@@ -20,7 +20,7 @@ export default function SplitButton(optionsImport) {
   
   useEffect(() => {
     setButtonMenuList(optionsImport)
-    console.log(optionsImport.optionsImport)
+
   }, [optionsImport]);
 
 
@@ -32,8 +32,7 @@ export default function SplitButton(optionsImport) {
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number,
   ) => {
-    console.log(index)
-    console.log(event)
+
     setSelectedIndex(index);
     optionsImport.optionsImport[index].action(true)
     // setOpen(false);
@@ -55,57 +54,69 @@ export default function SplitButton(optionsImport) {
   };
 
   return (
-    <><ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-      <Button onClick={handleClick}>
-        {/* {optionsImport.optionsImport[selectedIndex].title} */}
-        Ações
-        </Button>
-      <Button
-        size="small"
-        aria-controls={open ? 'split-button-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
-        aria-label="select merge strategy"
-        aria-haspopup="menu"
-        onClick={handleToggle}
-      >
-        <ArrowDropDownIcon />
-      </Button>
-    </ButtonGroup><Popper
-      sx={{
-        zIndex: 1,
-      }}
-      open={open}
-      anchorEl={anchorRef.current}
-      role={undefined}
-      transition
-      disablePortal
-    >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
+    <>
+
+    { optionsImport != undefined && optionsImport.optionsImport != undefined ? (
+        <>
+        <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
+          <Button onClick={handleClick}>
+            {/* {optionsImport.optionsImport[selectedIndex].title} */}
+            Ações
+            </Button>
+          <Button
+            size="small"
+            aria-controls={open ? 'split-button-menu' : undefined}
+            aria-expanded={open ? 'true' : undefined}
+            aria-label="select merge strategy"
+            aria-haspopup="menu"
+            onClick={handleToggle}
           >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu" autoFocusItem>
-                  {optionsImport.optionsImport.map((option, index) => (
-                    <MenuItem
-                      key={option.key}
-                      // disabled={index === 2}
-                      // selected={index === selectedIndex}
-                      onClick={(event) => handleMenuItemClick(event, index)}
-                    >
-                      {option.title}
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper></>
+            <ArrowDropDownIcon />
+          </Button>
+        </ButtonGroup><Popper
+          sx={{
+            zIndex: 1,
+          }}
+          open={open}
+          anchorEl={anchorRef.current}
+          role={undefined}
+          transition
+          disablePortal
+        >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList id="split-button-menu" autoFocusItem>
+                      { optionsImport.optionsImport.map((option, index) => (
+                        <MenuItem
+                          key={option.key}
+                          // disabled={index === 2}
+                          // selected={index === selectedIndex}
+                          onClick={(event) => handleMenuItemClick(event, index)}
+                        >
+                          {option.title}
+                        </MenuItem>
+                      ))}
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+          </>
+      )
+      : (
+        <></>
+      )
+    }
+    </>
+
   )
 
 }

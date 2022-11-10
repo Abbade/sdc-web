@@ -75,7 +75,7 @@ export default function AccountIndex() {
         ],
       },
     ],
-    []
+    [handleOpenEdit]
   );
 
   return (

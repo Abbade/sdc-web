@@ -32,7 +32,7 @@ const createObjFormSchema = yup.object().shape({
     .min(1, "Permissão é Obrigatória"),
 });
 
-export default function RoleForm({ id }: EditInterface) {
+export default function RoleForm({ id, onClose }: EditInterface) {
   const {
     register,
     handleSubmit,
@@ -44,18 +44,18 @@ export default function RoleForm({ id }: EditInterface) {
   const { showAlert, showLoading, closeLoading } = useContext(AlertContext);
   const [permissions, setPermissions] = useState([] as PermissoesData[]);
 
+
   useEffect(() => {
-    const get = async () => {
+    console.log("render nao vazio");
+    const getPerm = async () => {
       showLoading();
       const permissions = await api.get("/permissions");
       setPermissions(permissions.data.itens);
       closeLoading();
     };
 
-    get();
-  }, []);
+    getPerm();
 
-  useEffect(() => {
     const get = async (id) => {
       showLoading();
       if (id > 0) {
@@ -68,19 +68,24 @@ export default function RoleForm({ id }: EditInterface) {
     };
 
     get(id);
-  }, [id]);
+  }, [id, closeLoading, setValue, showLoading]);
 
   const handleLoteSubmit: SubmitHandler<CreateFormData> = async (formData) => {
     try {
+      showLoading();
       if (formData.id > 0) {
         const item = await api.put("roles", formData);
+        closeLoading();
         showAlert("Perfil editado com sucesso.", "success");
       } else {
         const item = await api.post("roles", formData);
+        closeLoading();
         showAlert("Perfil cadastrado com sucesso.", "success");
       }
-      Router.back();
+
+      onClose();
     } catch (error) {
+      closeLoading();
       showAlert(error.response.data.message, "error");
     }
   };

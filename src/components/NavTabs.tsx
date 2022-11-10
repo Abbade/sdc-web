@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { breakpoints } from '@mui/system';
+import {AnchorLink} from '../components/Layout'
 
 interface LinkTabProps {
   label?: string;
@@ -19,13 +20,12 @@ interface NavTabProps{
 
 function LinkTab(props: LinkTabProps) {
   return (
-    <Tab
-      component="a"
-      // onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      //   event.preventDefault();
-      // }}
-      {...props}
-    />
+    <AnchorLink href={props.href}>
+        <Tab
+          label={props.label}
+        />
+    </AnchorLink>
+
   );
 }
 
