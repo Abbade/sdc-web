@@ -1,53 +1,44 @@
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
-import Box from "@mui/material/Box";
 import { AuthContext } from "../../../contexts/AuthContext";
-import { setupAPIClient } from "../../../services/api";
 import { api } from "../../../services/apiClient";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
 
+import { Grid } from "@mui/material";
 import { Can } from "../../../components/Can";
-import Table from "../../../components/Table";
-import { Button, Container, Grid, Typography } from "@mui/material";
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { LoteInterface } from "../../../interfaces/LoteInterface";
-import TrashedLoteTable from "../../../components/TableModels/TrashedLoteTable";
 import PlantsTable from "../../../components/TableModels/PlantsTable";
+import TrashedLoteTable from "../../../components/TableModels/TrashedLoteTable";
+import { LoteInterface } from "../../../interfaces/LoteInterface";
 export default function LoteDetail() {
-  const { user, signOut, isAuthenticated } = useContext(AuthContext)
+  const { user, signOut, isAuthenticated } = useContext(AuthContext);
 
+  const routing = useRouter();
+  const [idLote, setIdLote] = useState(
+    Number.parseInt(routing.asPath.split("/")[2])
+  );
 
-  const routing = useRouter()
-  const [idLote, setIdLote] = useState(Number.parseInt(routing.asPath.split("/")[2]))
-
-  const [selectedLote, setSelectedLote] = useState({} as LoteInterface)
-
-
-
-
-
-
+  const [selectedLote, setSelectedLote] = useState({} as LoteInterface);
 
   useEffect(() => {
-    console.log(idLote)
+    console.log(idLote);
 
     const getLotes = async () => {
-      var response = await api.get("/lote", idLote ? { params: { id: idLote } } : {});
-      console.log(response.data)
-      console.log(response.data.itens[0])
+      var response = await api.get(
+        "/lote",
+        idLote ? { params: { id: idLote } } : {}
+      );
+      console.log(response.data);
+      console.log(response.data.itens[0]);
       setSelectedLote(response.data.itens[0]);
-      setIdLote(Number.parseInt(routing.asPath.split("/")[2]))
+      setIdLote(Number.parseInt(routing.asPath.split("/")[2]));
     };
-    
-    getLotes()
 
+    getLotes();
   }, [routing.asPath, routing.isReady]);
 
-
   useEffect(() => {
-    api.get('/me')
-      .then(response => console.log(response))
-  }, [])
+    api.get("/me").then((response) => console.log(response));
+  }, []);
 
   return (
     <>
@@ -69,21 +60,15 @@ export default function LoteDetail() {
       <PlantsTable id={idLote}></PlantsTable>
       <h3>Descartes</h3>
       <TrashedLoteTable id={idLote}></TrashedLoteTable>
-      <Can permissions={['lote.list']}>
+      <Can permissions={["lote.list"]}>
         <div>Métricas</div>
       </Can>
     </>
-  )
+  );
 }
 
-
-
 export const getServerSideProps = withSSRAuth(async (ctx) => {
-
   return {
-    props: {
-
-    }
-  }
-})
-
+    props: {},
+  };
+});

@@ -1,4 +1,5 @@
 import { DataGrid, GridCallbackDetails, GridColDef, GridSelectionModel } from '@mui/x-data-grid';
+import LinearProgress from '@mui/material/LinearProgress';
 
 let pageSize = 10
 
@@ -11,10 +12,10 @@ export interface DataTableInterface {
   onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
   onPageChange : (page: number, details: GridCallbackDetails) => void;
   onCheckboxSelection?: (selectionModel: GridSelectionModel, details: GridCallbackDetails<any>) => void;
-
+  loading?: boolean;
 }
 
-export default function DataTable({columns, rows, onPageChange, page, onPageSizeChange, onCheckboxSelection,rowCount, pageSize} : DataTableInterface) {
+export default function DataTable({columns, rows, onPageChange, page, onPageSizeChange, onCheckboxSelection,rowCount, pageSize, loading} : DataTableInterface) {
 
 
   return (
@@ -32,6 +33,10 @@ export default function DataTable({columns, rows, onPageChange, page, onPageSize
         onSelectionModelChange={onCheckboxSelection}
         checkboxSelection
         disableSelectionOnClick
+        components={{
+          LoadingOverlay: LinearProgress,
+        }}
+        loading={loading}
       />
     </div>
   );

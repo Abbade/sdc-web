@@ -7,7 +7,7 @@ import {
 } from "@mui/x-data-grid";
 import  ArrowDropDownIcon  from "@mui/icons-material/ArrowDropDown";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
 import { api } from "../../services/apiClient";
 import FormDialog from "../Dialogs/Dialog";
@@ -19,34 +19,25 @@ import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherForm"
 import MovePlantForm from "../Forms/MovePlantForm";
 import React from "react";
 import ChangePlantStageForm from "../Forms/ChangePlantStageForm";
+import { FilterProp, PlantsContext } from "../../contexts/PlantsContext";
+import FilterPlantForm from "../Forms/FilterPlantForm";
 
 export default function PlantsTable({ id }) {
-  const [plants, setPlantas] = useState([] as PlantaInterface[]);
+
   const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
+  const {plants = [], fastSearch, setFastSearch, pageSize = 10, setPageSize, page = 0, setPage, rowCount = 1, setRowCount, setFilter, filter, loadingTable} = useContext(PlantsContext);
 
-  const [fastSearch, setFastSearch] = useState("");
-  const [pageSize, setPageSize] = useState(10);
-  const [page, setPage] = useState(0);
-  const [rowCount, setRowCount] = useState(1);
 
+
+  // useEffect(() => {
+  //   // if(id > 0)
+  //   //   setFilter({idLote: id} as FilterProp);
+  // }, [id]);
 
   useEffect(() => {
-    console.log("render");
-    const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/plant", {
-        params: {
-          id: id,
-          page: page,
-          limit: pageSize,
-          name: fastSearch,
-        
-        },
-      });
-      setPlantas(response.data.itens);
-      setRowCount(response.data.total);
-    };
-    get(fastSearch, page + 1, pageSize);
-  }, [pageSize, page, fastSearch]);
+    console.log("filter");
+    console.log(filter);
+  }, [filter])
 
   const onPageSizeChange = async (
     pageSize: number,
@@ -80,6 +71,10 @@ export default function PlantsTable({ id }) {
   const [openTransplant, setOpenTransplant] = useState(false);
   const [openMove, setOpenMove] = useState(false);
   const [openMother, setOpenMother] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
+
+ 
+
   const optionsImport = [
     { title: 'Transplante', icon: <ArrowDropDownIcon />, action: setOpenTransplant },
     { title: 'Descarte', icon: <ArrowDropDownIcon />, action: setOpenTrash },
@@ -97,19 +92,6 @@ export default function PlantsTable({ id }) {
     setOpenTransplant(false);
     setOpenMove(false);
     setOpenMother(false);
-    const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/plant", {
-        params: {
-          id: id,
-          page: page,
-          limit: pageSize,
-          name: fastSearch,
-        },
-      });
-      setPlantas(response.data.itens);
-      setRowCount(response.data.total);
-    };
-    get(fastSearch, page + 1, pageSize);
   };
 
   const transplantIndividualPlantButton = (params) => {
@@ -121,7 +103,7 @@ export default function PlantsTable({ id }) {
           size="small"
           // style={{ marginLeft: 16 }}
           onClick={() => {
-            console.log([params.row]);
+     
             setSelectedPlants([params.row]);
             handleOpen(setOpenTransplant(true));
             // Router.push("nursery/" + params.row.id + "/trash-lote");
@@ -142,7 +124,7 @@ export default function PlantsTable({ id }) {
           size="small"
           // style={{ marginLeft: 16 }}
           onClick={() => {
-            console.log([params.row]);
+        
             setSelectedPlants([params.row]);
             handleOpen(setOpenTrash(true));
             // Router.push("nursery/" + params.row.id + "/trash-lote");
@@ -163,7 +145,7 @@ export default function PlantsTable({ id }) {
           size="small"
           // style={{ marginLeft: 16 }}
           onClick={() => {
-            console.log([params.row]);
+
             setSelectedPlants([params.row]);
             handleOpen(setOpenMove(true));
             // Router.push("nursery/" + params.row.id + "/trash-lote");
@@ -184,7 +166,6 @@ export default function PlantsTable({ id }) {
           size="small"
           // style={{ marginLeft: 16 }}
           onClick={() => {
-            console.log([params.row]);
             setSelectedPlants([params.row]);
             handleOpen(setOpenMother(true));
             // Router.push("nursery/" + params.row.id + "/trash-lote");
@@ -324,36 +305,6 @@ export default function PlantsTable({ id }) {
         );
       },
     },
-    // {
-    //   field: "Transplantar",
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return transplantIndividualPlantButton(params);
-    //   },
-    // },
-    // {
-    //   field: "Descartar",
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return trashIndividualPlantButton(params);
-    //   },
-    // },
-    // {
-    //   field: "Mover",
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return movePlantButton(params);
-    //   },
-    // },
-    // {
-    //   field: "Matriz",
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return transformPlantIntoMotherButton(params);
-    //   },
-    // },
-    // { field: "qtTotal", headerName: "Total", width: 90 },
-    // { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
   ];
 
   return (
@@ -362,6 +313,7 @@ export default function PlantsTable({ id }) {
         columns={columns}
         rows={plants}
         // url="/nursery/create-lote"
+        loading={loadingTable}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
         onFastSearchChange={onFastSearchChange}
@@ -371,7 +323,12 @@ export default function PlantsTable({ id }) {
         pageSize={pageSize}
         searchName={"Procurar plantas"}
         optionsImport={optionsImport}
+        onFilter={() => {console.log("teste");setOpenFilter(true);}}
+        totalFilter={filter?.totalFilter}
       />
+      <FormDialog onClose={() => setOpenFilter(false)} open={openFilter} title={"Filtro"}>
+        <FilterPlantForm onClose={() => setOpenFilter(false)} ></FilterPlantForm>
+      </FormDialog>
       <FormDialog onClose={handleClose} open={openTransplant} title={"Transplantar"}>
         <TransplantPlantForm plants={selectedPlants}></TransplantPlantForm>
       </FormDialog>

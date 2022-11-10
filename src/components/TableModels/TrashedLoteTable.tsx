@@ -12,7 +12,7 @@ export default function TrashedLoteTable({ id }) {
   const [total, setTotal] = useState({} as number);
 
   const [fastSearch, setFastSearch] = useState("");
-  const [pageSize, setPageSize] = useState(100);
+  const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
 
@@ -110,7 +110,6 @@ const columns: GridColDef[] = [
     headerName: "Motivo",
     width: 130,
     renderCell: (params) => {
-      console.log(params.row.trashReason.name);
       return (
         <div className="MuiDataGrid-cellContent">
           {params.row.trashReason.name}
