@@ -68,7 +68,7 @@ export default function RoleForm({ id, onClose }: EditInterface) {
     };
 
     get(id);
-  }, [id, closeLoading, setValue, showLoading]);
+  }, [id]);
 
   const handleLoteSubmit: SubmitHandler<CreateFormData> = async (formData) => {
     try {
