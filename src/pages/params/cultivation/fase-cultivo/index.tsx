@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
-import { GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
-import { useEffect, useMemo, useState } from "react";
+import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import NurseryConfigTab from "../../../../components/NurseryConfigTab";
 import Table from "../../../../components/Table";
 import {
@@ -9,6 +9,9 @@ import {
 } from "../../../../interfaces/LoteInterface";
 import { api } from "../../../../services/apiClient";
 import { withSSRAuth } from "../../../../utils/withSSRAuth";
+import EditIcon from '@mui/icons-material/Edit';
+import FormDialog from "../../../../components/Dialogs/Dialog";
+import CreateFaseCultivoForm from "../../../../components/Forms/params/CreateFaseCultivoForm";
 
 export default function FaseCultivoIndex() {
   const [itens, setItens] = useState([] as PropagationType[]);
@@ -18,19 +21,23 @@ export default function FaseCultivoIndex() {
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
 
+  const [idItem, setIdItem] = useState(0);
+  const [openForm, setOpenForm] = useState(false);
+
+  const get = async (name: string, page: number, pageSize: number) => {
+    var response = await api.get("/fase-cultivo", {
+      params: {
+        name: name,
+        page: page,
+        limit: pageSize,
+      },
+    });
+    setItens(response.data.itens);
+    setRowCount(response.data.total);
+  };
+
   useEffect(() => {
-    const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/fase-cultivo", {
-        params: {
-          name: name,
-          page: page,
-          limit: pageSize,
-        },
-      });
-      setItens(response.data.itens);
-      setRowCount(response.data.total);
-      console.log(pageSize);
-    };
+    
     get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
 
@@ -46,10 +53,43 @@ export default function FaseCultivoIndex() {
     setFastSearch(event.target.value);
   };
 
+  const onAdd = () => {
+    setIdItem(0);
+    setOpenForm(true);
+    
+  }
+  const onClose = (refresh: any) => {
+    if(refresh){
+      get(fastSearch, page + 1, pageSize);
+    }
+    setOpenForm(false);
+  }
+
+  const handleOpenEdit = useCallback(
+    (item: LoteInterface) => () => {
+      setIdItem(item.id);
+      setOpenForm(true);
+    },
+    []
+  );
+
   const columns = useMemo<GridColumns<LoteInterface>>(
     () => [
       { field: "id", headerName: "ID", width: 70 },
       { field: "name", headerName: "Nome", width: 130 },
+      {
+        field: "actions",
+        type: "actions",
+        width: 80,
+        getActions: (params) => [
+          <GridActionsCellItem
+            key="detail"
+            icon={<EditIcon />}
+            label="Editar"
+            onClick={handleOpenEdit(params.row)}
+          />
+        ],
+      },
     ],
     []
   );
@@ -68,7 +108,12 @@ export default function FaseCultivoIndex() {
         rowCount={rowCount}
         searchName="Procurar fase cultivo"
         url="/params/cultivation/propagation-type/fase-cultivo/create"
+        onAdd={onAdd}
       />
+      <FormDialog onClose={onClose} open={openForm} title='Usuário'
+      >
+        <CreateFaseCultivoForm id={idItem} onClose={onClose} />
+      </FormDialog>
     </Box>
   );
 }

@@ -41,51 +41,51 @@ export default function RoleForm({ id, onClose }: EditInterface) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  const { showAlert, showLoading, closeLoading } = useContext(AlertContext);
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
   const [permissions, setPermissions] = useState([] as PermissoesData[]);
 
 
   useEffect(() => {
     console.log("render nao vazio");
     const getPerm = async () => {
-      showLoading();
+      setOpenLoading(true);
       const permissions = await api.get("/permissions");
       setPermissions(permissions.data.itens);
-      closeLoading();
+      setOpenLoading(false);
     };
 
     getPerm();
 
     const get = async (id) => {
-      showLoading();
+      setOpenLoading(true);
       if (id > 0) {
         const item = await api.get(`roles/${id}`);
         setValue("name", item.data.name);
         setValue("id", item.data.id);
         setValue("permissions", item.data.permissions);
-        closeLoading();
+        setOpenLoading(false);
       }
     };
 
     get(id);
-  }, [id]);
+  }, [id, setOpenLoading, setValue]);
 
   const handleLoteSubmit: SubmitHandler<CreateFormData> = async (formData) => {
     try {
-      showLoading();
+      setOpenLoading(true);
       if (formData.id > 0) {
         const item = await api.put("roles", formData);
-        closeLoading();
+        setOpenLoading(false);
         showAlert("Perfil editado com sucesso.", "success");
       } else {
         const item = await api.post("roles", formData);
-        closeLoading();
+        setOpenLoading(false);
         showAlert("Perfil cadastrado com sucesso.", "success");
       }
 
-      onClose();
+      onClose(true);
     } catch (error) {
-      closeLoading();
+      setOpenLoading(false);
       showAlert(error.response.data.message, "error");
     }
   };

@@ -1,15 +1,15 @@
 import { AlertColor } from "@mui/material";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, SetStateAction, useEffect, useState } from "react";
 
 type AlertContextData = {
-  showAlert: (message: string, alertType: AlertColor) => void;
+  showAlert: (message: SetStateAction<string>, alertType: SetStateAction<AlertColor>) => void;
   openAlert: boolean;
   alertType: AlertColor;
   alertMessage: string;
   closeAlert: () => void;
-  showLoading: () => void;
-  closeLoading: () => void;
+
   openLoading: boolean;
+  setOpenLoading: (value: SetStateAction<boolean>) => void;
 };
 
 type AlertProviderProps = {
@@ -51,19 +51,14 @@ export function AlertProvider({ children }: AlertProviderProps) {
     };
   }, []);
 
-  const closeLoading = () => {
-    setOpenLoading(false);
-  };
 
-  const showLoading = () => {
-    setOpenLoading(true);
-  };
 
+ 
   const closeAlert = () => {
     setOpenAlert(false);
   };
 
-  const showAlert = (message: string, alertType: AlertColor) => {
+  const showAlert = (message: SetStateAction<string>, alertType: SetStateAction<AlertColor>) => {
     setAlertMessage(message);
     setAlertType(alertType);
     setOpenAlert(true);
@@ -71,7 +66,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
 
   return (
     <AlertContext.Provider
-      value={{ openAlert, alertMessage, alertType, showAlert, closeAlert, showLoading, closeLoading, openLoading }}
+      value={{ openAlert, alertMessage, alertType, showAlert, closeAlert, openLoading, setOpenLoading }}
     >
       {children}
     </AlertContext.Provider>

@@ -1,7 +1,12 @@
-import { DataGrid, GridCallbackDetails, GridColDef, GridSelectionModel } from '@mui/x-data-grid';
-import LinearProgress from '@mui/material/LinearProgress';
+import {
+  DataGrid,
+  GridCallbackDetails,
+  GridColDef,
+  GridSelectionModel,
+} from "@mui/x-data-grid";
+import LinearProgress from "@mui/material/LinearProgress";
 
-let pageSize = 10
+let pageSize = 10;
 
 export interface DataTableInterface {
   columns: GridColDef[];
@@ -10,16 +15,29 @@ export interface DataTableInterface {
   page: number;
   pageSize: number;
   onPageSizeChange?: (pageSize: number, details: GridCallbackDetails) => void;
-  onPageChange : (page: number, details: GridCallbackDetails) => void;
-  onCheckboxSelection?: (selectionModel: GridSelectionModel, details: GridCallbackDetails<any>) => void;
+  onPageChange: (page: number, details: GridCallbackDetails) => void;
+  onCheckboxSelection?: (
+    selectionModel: GridSelectionModel,
+    details: GridCallbackDetails<any>
+  ) => void;
   loading?: boolean;
+  useCheckBox: boolean;
 }
 
-export default function DataTable({columns, rows, onPageChange, page, onPageSizeChange, onCheckboxSelection,rowCount, pageSize, loading} : DataTableInterface) {
-
-
+export default function DataTable({
+  columns,
+  rows,
+  onPageChange,
+  page,
+  onPageSizeChange,
+  onCheckboxSelection,
+  rowCount,
+  pageSize,
+  loading,
+  useCheckBox
+}: DataTableInterface) {
   return (
-    <div style={{ height: 'calc(100vh - 300px)', width: '100%' }}>
+    <div style={{ height: "calc(100vh - 300px)", width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -28,10 +46,10 @@ export default function DataTable({columns, rows, onPageChange, page, onPageSize
         rowCount={rowCount}
         onPageSizeChange={onPageSizeChange}
         paginationMode="server"
-        rowsPerPageOptions={[200,100, 50, 10]}
+        rowsPerPageOptions={[200, 100, 50, 10]}
         pageSize={pageSize}
         onSelectionModelChange={onCheckboxSelection}
-        checkboxSelection
+        checkboxSelection={useCheckBox}
         disableSelectionOnClick
         components={{
           LoadingOverlay: LinearProgress,

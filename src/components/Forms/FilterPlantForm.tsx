@@ -37,33 +37,33 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
   const [recipiente, setRecipiente] = useState([] as Recipiente[]);
   const [location, setLocation] = useState([] as Location[]);
   const { filter, setFilter} = useContext(PlantsContext);
-  const {showLoading, closeLoading} = useContext(AlertContext);
+  const { setOpenLoading} = useContext(AlertContext);
 
   useEffect(() => {
-
+    console.log("render planta");
     const getRecipientes = async () => {
-      showLoading();
+      setOpenLoading(true);
       var response = await api.get("/recipiente");
       setRecipiente(response.data);
       if(filter?.idRecipiente > 0){
         setValue("idRecipiente", filter.idRecipiente);
       }
-      closeLoading();
+      setOpenLoading(false);
     };
     const getLocations = async () => {
-      showLoading();
+      setOpenLoading(true);
       var response = await api.get("/location");
       setLocation(response.data);
       if(filter?.idLocation > 0){
         setValue("idLocation", filter.idLocation);
       }
-      closeLoading();
+      setOpenLoading(false);
     };
 
     getRecipientes();
     getLocations();
 
-  }, [filter]);
+  }, [filter, setOpenLoading, setValue]);
 
   const handleLoteSubmit: SubmitHandler<FilterProp> = async (formData) => {
     try {

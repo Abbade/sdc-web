@@ -1,22 +1,20 @@
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import DataTable, { DataTableInterface } from "./DataTable";
-import TextField from "@mui/material/TextField";
-import { Badge, Button, ButtonGroup, Typography, useMediaQuery } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import { Badge, Button, useMediaQuery } from "@mui/material";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
 import {
   GridCallbackDetails,
   GridColDef,
   GridSelectionModel,
 } from "@mui/x-data-grid";
-import Modal from "@mui/material/Modal";
-import Link from "../Link";
-import IconButton from "@mui/material/IconButton";
+import * as React from "react";
 import SplitButton from "../SplitButton";
-import FilterListIcon from '@mui/icons-material/FilterList';
+import DataTable from "./DataTable";
 
 export interface TableIndexInterface {
   columns: GridColDef[];
@@ -59,7 +57,7 @@ export default function Table({
   onAdd,
   onFilter,
   totalFilter,
-  loading
+  loading,
 }: TableIndexInterface) {
   const theme = useTheme();
   const isSmallOrLess = useMediaQuery(theme.breakpoints.up("sm"));
@@ -85,58 +83,64 @@ export default function Table({
             />
           </Grid>
 
-          <Grid item sm={6} md={4} xs={4} textAlign="end" gap={1}>
-            <Grid container          direction="row" justifyContent="flex-end"    gap={1}>
-            {isSmallOrLess ? (
-              <>
-                {onFilter !== undefined && (
+          <Grid item xs={5} textAlign="end" gap={1}>
+            <Grid container direction="row" justifyContent="flex-end" gap={1}>
+              {isSmallOrLess ? (
+                <>
+                  {onFilter !== undefined && (
                     <Grid item xs={2} textAlign={"end"}>
-                     <IconButton  aria-label="filter" onClick={onFilter}>
-                     <Badge badgeContent={totalFilter} color="warning">
-                       <FilterListIcon />
-                     </Badge>
-                   </IconButton>
-                   </Grid>
-                )}
-                 <Grid item xs={3} textAlign={"end"}>
-                <SplitButton sx={{ ml: 1 }} optionsImport={optionsImport}></SplitButton>
-                </Grid>
-          
-                {onAdd !== undefined && (
-                  <Button
-                    sx={{ ml: 1 }}
-                    variant="contained"
-                    disableElevation
-                    onClick={onAdd}
-                    startIcon={<AddIcon />}
-                  >
-                    Adicionar
-                  </Button>
-                )}
-              </>
-            ) : (
-              <>
-                {onFilter !== undefined && (
-                     <IconButton aria-label="filter" onClick={onFilter}>
-                     <Badge badgeContent={totalFilter}  max={99} color="warning">
-                       <FilterListIcon />
-                     </Badge>
-                   </IconButton>
-                )}
-                {onAdd !== undefined && (
-                  <IconButton
-                    color="primary"
-                    aria-label="upload picture"
-                    component="label"
-                    onClick={onAdd}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                )}
-              </>
-            )}
-            </Grid>
+                      <IconButton aria-label="filter" onClick={onFilter}>
+                        <Badge badgeContent={totalFilter} color="warning">
+                          <FilterListIcon />
+                        </Badge>
+                      </IconButton>
+                    </Grid>
+                  )}
+                  <Grid item xs={3} md={3} xl={2} textAlign={"end"}>
+                    <SplitButton
+                      sx={{ ml: 1 }}
+                      optionsImport={optionsImport}
+                    ></SplitButton>
+                  </Grid>
 
+                  {onAdd !== undefined && (
+                    <Button
+                      sx={{ ml: 1 }}
+                      variant="contained"
+                      disableElevation
+                      onClick={onAdd}
+                      startIcon={<AddIcon />}
+                    >
+                      Adicionar
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <>
+                  {onFilter !== undefined && (
+                    <IconButton aria-label="filter" onClick={onFilter}>
+                      <Badge
+                        badgeContent={totalFilter}
+                        max={99}
+                        color="warning"
+                      >
+                        <FilterListIcon />
+                      </Badge>
+                    </IconButton>
+                  )}
+                  {onAdd !== undefined && (
+                    <IconButton
+                      color="primary"
+                      aria-label="upload picture"
+                      component="label"
+                      onClick={onAdd}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  )}
+                </>
+              )}
+            </Grid>
           </Grid>
         </Grid>
         <DataTable
@@ -149,6 +153,7 @@ export default function Table({
           pageSize={pageSize}
           rowCount={rowCount}
           loading={loading}
+          useCheckBox={optionsImport != undefined}
         />
       </Paper>
     </Box>

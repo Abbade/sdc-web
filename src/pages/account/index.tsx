@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
 import Router from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import FormDialog from '../../components/Dialogs/Dialog';
+import AccountForm from '../../components/Forms/AccountForm';
 import GeneralConfigTab from '../../components/GeneralConfigsTab';
 import Table from "../../components/Table";
 import { api } from "../../services/apiClient";
@@ -22,18 +24,23 @@ export default function AccountIndex() {
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
 
+  const [idItem, setIdItem] = useState(0);
+  const [openForm, setOpenForm] = useState(false);
+
+  const get = async (name: string, page: number, pageSize: number) => {
+    var response = await api.get("/user", {
+      params: {
+        name: name,
+        page: page,
+        limit: pageSize,
+      },
+    });
+    setItens(response.data.itens);
+    setRowCount(response.data.total);
+  };
+
   useEffect(() => {
-    const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/user", {
-        params: {
-          name: name,
-          page: page,
-          limit: pageSize,
-        },
-      });
-      setItens(response.data.itens);
-      setRowCount(response.data.total);
-    };
+
     get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
 
@@ -51,10 +58,24 @@ export default function AccountIndex() {
 
   const handleOpenEdit = useCallback(
     (item: Users) => () => {
-      Router.push('/account/create?id=' + item.id)
+      setIdItem(item.id);
+      setOpenForm(true);
     },
     []
   );
+
+
+  const onAdd = () => {
+    setIdItem(0);
+    setOpenForm(true);
+    
+  }
+  const onClose = (refresh: any) => {
+    if(refresh){
+      get(fastSearch, page + 1, pageSize);
+    }
+    setOpenForm(false);
+  }
 
   const columns = useMemo<GridColumns<Users>>(
     () => [
@@ -91,8 +112,12 @@ export default function AccountIndex() {
         pageSize={pageSize}
         rowCount={rowCount}
         searchName="Procurar Usuário"
-        url="/account/create"
+        onAdd={onAdd}
       />
+      <FormDialog onClose={onClose} open={openForm} title='Usuário'
+      >
+        <AccountForm id={idItem} onClose={onClose} />
+      </FormDialog>
     </Box>
   );
 }

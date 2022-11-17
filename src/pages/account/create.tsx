@@ -15,6 +15,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import BasicSelect from "../../components/Inputs/BasicSelect";
+import AccountForm from "../../components/Forms/AccountForm";
 
 type CreateFormData = {
   name: string;
@@ -42,117 +43,10 @@ const createObjFormSchema = yup.object().shape({
 export default function CreateAccount() {
   const router = useRouter();
   const { id } = router.query;
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(createObjFormSchema) });
-
-  const { showAlert, showLoading, closeLoading } = useContext(AlertContext);
-  const [roles, setRoles] = useState([] as RoleData[]);
-
-  useEffect(() => {
-    console.log("render edit " + id);
-    const get = async (id) => {
-      showLoading();
-      const rls = await api.get('roles');
-      console.log(rls.data)
-      setRoles(rls.data.itens);
-      if (id != undefined) {
-        const item = await api.get(`user/${id}`);
-        setValue("name", item.data.name);
-        setValue("id", item.data.id);
-        setValue("email", item.data.email);
-        setValue("id_role", item.data.id_role);
-        setValue("password", "******");
-       
-      }
-      closeLoading();
-    };
-   
-    get(id);
-  }, [id]);
-
-  const handleLoteSubmit: SubmitHandler<CreateFormData> = async (formData) => {
-    try {
-      showLoading();
-      if (formData.id > 0) {
-        const item = await api.put("user", formData);
-        closeLoading();
-        showAlert("Perfil editado com sucesso.", "success");
-      } else {
-        const item = await api.post("user", formData);
-        closeLoading();
-        showAlert("Perfil cadastrado com sucesso.", "success");
-      }
-      Router.back();
-    } catch (error) {
-      closeLoading();
-      showAlert(error.response.data.message, "error");
-    }
-  };
 
   return (
     <Container component="main" maxWidth="xs">
-      <Typography component="h1" variant="h4">
-      {id != undefined ? "Editar" : "Cadastrar"} Usuário
-      </Typography>
-      <Box
-        component="form"
-        noValidate
-        onSubmit={handleSubmit(handleLoteSubmit)}
-        sx={{ mt: 3 }}
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12}>
-            <BasicTextField
-              label={"Nome"}
-              name={"name"}
-              control={control}
-              error={errors.name as FieldError}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <BasicTextField
-              label={"E=mail"}
-              name={"email"}
-              control={control}
-              error={errors.email as FieldError}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Perfil"}
-                name={"id_role"}
-                values={roles}
-                control={control}
-                error={errors.id_role as FieldError}
-              />
-            </Grid>
-          <Grid item xs={12} sm={12}>
-            <BasicTextField
-              label={"Senha"}
-              name={"password"}
-              control={control}
-              type={"password"}
-              disabled={id != undefined}
-              error={errors.password as FieldError}
-           
-            />
-          </Grid>
-        </Grid>
-
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          {id != undefined ? "Editar" : "Cadastrar"} Usuário
-        </Button>
-      </Box>
+      <AccountForm id={!isNaN(Number.parseInt(id.toString())) ? Number.parseInt(id.toString()) : undefined} onClose={() => router.back()}></AccountForm>
     </Container>
   );
 }

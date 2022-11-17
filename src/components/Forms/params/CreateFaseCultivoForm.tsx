@@ -1,24 +1,20 @@
 import {
-    Box, Button, createTheme, Grid
-  } from "@mui/material";
-  import * as yup from "yup";
+  Box, Button, createTheme, Grid
+} from "@mui/material";
+import * as yup from "yup";
   
-  import Router from "next/router";
-  import { useEffect, useState } from "react";
-  import { api } from "../../../services/apiClient";
+  import { useContext, useEffect } from "react";
+import { api } from "../../../services/apiClient";
   
   import { yupResolver } from "@hookform/resolvers/yup";
-  import {
-    FieldError,
-    SubmitHandler,
-    useForm
-  } from "react-hook-form";
-  import {
-    Genetic, PropagationType
-  } from "../../../interfaces/LoteInterface";
-  import BasicDatePicker from "../../Inputs/BasicDatePicker";
-  import BasicSelect from "../../Inputs/BasicSelect";
-  import BasicTextField from "../../Inputs/BasicTextField";
+import {
+  FieldError,
+  SubmitHandler,
+  useForm
+} from "react-hook-form";
+import { AlertContext } from "../../../contexts/AlertContext";
+import { EditInterface } from "../../../interfaces/EditInterface";
+import BasicTextField from "../../Inputs/BasicTextField";
   
   type CreateFaseCultivoForm = {
    name: string;
@@ -34,22 +30,51 @@ import {
   
   const theme = createTheme();
   
-  export default function CreateFaseCultivoForm() {
+  export default function CreateFaseCultivoForm({ id, onClose }: EditInterface) {
     const {
       register,
       handleSubmit,
       control,
+      setValue,
       formState: { errors, isSubmitting },
     } = useForm({ resolver: yupResolver(createObjFormSchema) });
+
+    const { showAlert, setOpenLoading } = useContext(AlertContext);
   
-  
+    useEffect(() => {
+      console.log("render edit " + id);
+      try{
+        const get = async (id) => {
+          setOpenLoading(true);
+          if (id > 0 ) {
+            try {
+              const item = await api.get(`fase-cultivo/${id}`);
+              setValue("name", item.data.name);
+              setValue("id", item.data.id);
+              setOpenLoading(false);
+            } catch (error) {
+              console.log("CAIU");
+              //showAlert(error.message, 'error');
+              setOpenLoading(false);
+            }         
+          }
+          setOpenLoading(false);
+
+        };
+    
+        get(id);
+      }catch(err){
+
+      }
+    
+    }, [id, setValue, setOpenLoading]);
     const handleLoteSubmit: SubmitHandler<CreateFaseCultivoForm> = async (
       formData
     ) => {
       try {
     
-        const user = await api.post("fase-cultivo", formData);
-        Router.back();
+        const item = await api.post("fase-cultivo", formData);
+        onClose(true);
       } catch (error) {
         const errorOficial = error as Error;
    

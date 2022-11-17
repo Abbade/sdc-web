@@ -1,4 +1,4 @@
 export interface EditInterface {
     id?: number;
-    onClose?: () => void;
+    onClose?: (refresh? : boolean) => void;
 }

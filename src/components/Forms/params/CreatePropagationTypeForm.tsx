@@ -23,7 +23,7 @@ const createObjFormSchema = yup.object().shape({
 
 const theme = createTheme();
 
-export default function CreatePropagationTypeForm({ id }: EditInterface) {
+export default function CreatePropagationTypeForm({ id, onClose }: EditInterface) {
   const {
     register,
     handleSubmit,
@@ -32,19 +32,21 @@ export default function CreatePropagationTypeForm({ id }: EditInterface) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  const { showAlert } = useContext(AlertContext);
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
 
   useEffect(() => {
     const get = async (id) => {
       if (id > 0) {
+        setOpenLoading(true);
         const item = await api.get(`propagation-type/${id}`);
         setValue("name", item.data.name);
         setValue("description", item.data.description);
         setValue("id", item.data.id);
+        setOpenLoading(false);
       }
     };
     get(id);
-  }, [id]);
+  }, [id, setValue, setOpenLoading]);
 
   const handleLoteSubmit: SubmitHandler<CreatePropagationTypeFormData> = async (
     formData
@@ -57,12 +59,15 @@ export default function CreatePropagationTypeForm({ id }: EditInterface) {
         const item = await api.post("propagation-type", formData);
         showAlert("Tipo de Propagação cadastrada com sucesso.", "success");
       }
-
-      Router.back();
+      setOpenLoading(false);
+      onClose(true);
     } catch (error) {
+      setOpenLoading(false);
       const errorOficial = error as Error;
     }
   };
+
+
 
   return (
     <Box

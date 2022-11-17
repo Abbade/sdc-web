@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 export interface DialogProps {
   open: boolean;
-  onClose: (value: any) => void;
+  onClose: (refresh: any) => void;
   title: string;
   children: ReactJSXElement;
 }
@@ -14,7 +14,7 @@ export interface DialogProps {
 export default function FormDialog(props: DialogProps) {
 
   const handleClose = () => {
-    props.onClose("");
+    props.onClose(false);
   };
 
   return (

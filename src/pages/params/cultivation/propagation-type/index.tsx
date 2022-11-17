@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
 import Router from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import FormDialog from '../../../../components/Dialogs/Dialog';
+import CreatePropagationTypeForm from '../../../../components/Forms/params/CreatePropagationTypeForm';
 import NurseryConfigTab from "../../../../components/NurseryConfigTab";
 import Table from "../../../../components/Table";
 import {
@@ -20,19 +22,24 @@ export default function PropagationTypeIndex() {
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
 
+  const [idItem, setIdItem] = useState(0);
+  const [openForm, setOpenForm] = useState(false);
+
+  const get = async (name: string, page: number, pageSize: number) => {
+    var response = await api.get("/propagation-type", {
+      params: {
+        name: name,
+        page: page,
+        limit: pageSize,
+      },
+    });
+    setItens(response.data.itens);
+    setRowCount(response.data.total);
+    console.log(pageSize);
+  };
+
   useEffect(() => {
-    const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/propagation-type", {
-        params: {
-          name: name,
-          page: page,
-          limit: pageSize,
-        },
-      });
-      setItens(response.data.itens);
-      setRowCount(response.data.total);
-      console.log(pageSize);
-    };
+    
     get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
 
@@ -50,10 +57,23 @@ export default function PropagationTypeIndex() {
 
   const handleOpenDetails = useCallback(
     (item: PropagationType) => () => {
-      Router.push('/params/cultivation/propagation-type/create-propagation-type?id=' + item.id)
+      setIdItem(item.id);
+      setOpenForm(true);
     },
     []
   );
+
+  const onAdd = () => {
+    setIdItem(0);
+    setOpenForm(true);
+    
+  }
+  const onClose = (refresh: any) => {
+    if(refresh){
+      get(fastSearch, page + 1, pageSize);
+    }
+    setOpenForm(false);
+  }
 
   const columns = useMemo<GridColumns<PropagationType>>(
     () => [
@@ -73,7 +93,7 @@ export default function PropagationTypeIndex() {
         ],
       },
     ],
-    []
+    [handleOpenDetails]
   );
 
   return (
@@ -90,7 +110,12 @@ export default function PropagationTypeIndex() {
         rowCount={rowCount}
         searchName="Procurar Tipo Propagação"
         url="/params/cultivation/propagation-type/create-propagation-type"
+        onAdd={onAdd}
       />
+      <FormDialog onClose={onClose} open={openForm} title='Tipo de Propagação'
+      >
+        <CreatePropagationTypeForm id={idItem} onClose={onClose} />
+      </FormDialog>
     </Box>
   );
 }

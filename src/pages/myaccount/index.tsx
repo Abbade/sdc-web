@@ -43,7 +43,7 @@ export default function MyAccount() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  const { showAlert, showLoading, closeLoading } = useContext(AlertContext);
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
 
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
@@ -51,7 +51,7 @@ export default function MyAccount() {
   useEffect(() => {
     console.log("render ");
     const get = async () => {
-      showLoading();
+      setOpenLoading(true);
 
       const item = await api.get(`/me`);
       console.log(item.data);
@@ -59,20 +59,20 @@ export default function MyAccount() {
       setValue("id", item.data.id);
       setValue("email", item.data.email);
 
-      closeLoading();
+      setOpenLoading(false);
     };
 
     get();
-  }, []);
+  }, [setOpenLoading, setValue]);
 
   const handleLoteSubmit: SubmitHandler<CreateFormData> = async (formData) => {
     try {
-      showLoading();
+      setOpenLoading(true);
       const item = await api.put("user", formData);
-      closeLoading();
+      setOpenLoading(false);
       showAlert("Conta Editada com sucesso.", "success");
     } catch (error) {
-      closeLoading();
+      setOpenLoading(false);
       showAlert(error.response.data.message, "error");
     }
   };

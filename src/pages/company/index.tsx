@@ -44,35 +44,35 @@ export default function CompanyUpdate() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  const { showAlert, showLoading, closeLoading } = useContext(AlertContext);
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
 
   useEffect(() => {
     console.log("render ");
     const get = async () => {
 
-      showLoading();
+      setOpenLoading(true);
 
       const item = await api.get(`company/${1}`);
       setValue("name", item.data.name);
       setValue("id", item.data.id);
       setValue("email", item.data.email);
       
-      closeLoading();
+      setOpenLoading(false);
     };
 
     get();
-  }, []);
+  }, [setOpenLoading, setValue]);
 
   const handleLoteSubmit: SubmitHandler<CreateFormData> = async (formData) => {
     try {
 
-      showLoading();
+      setOpenLoading(true);
       const item = await api.put("company", formData);
-      closeLoading();
+      setOpenLoading(false);
       showAlert("Empresa Editada com sucesso.", "success");
 
     } catch (error) {
-      closeLoading();
+      setOpenLoading(false);
       showAlert(error.response.data.message, "error");
     }
   };

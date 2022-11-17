@@ -21,21 +21,25 @@ export default function RolesIndex() {
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
+  
   const [openForm, setOpenForm] = useState(false);
   const [idItem, setIdItem] = useState(0);
 
+
+  const get = async (name: string, page: number, pageSize: number) => {
+    var response = await api.get("/roles", {
+      params: {
+        name: name,
+        page: page,
+        limit: pageSize,
+      },
+    });
+    setItens(response.data.itens);
+    setRowCount(response.data.total);
+  };
+
   useEffect(() => {
-    const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/roles", {
-        params: {
-          name: name,
-          page: page,
-          limit: pageSize,
-        },
-      });
-      setItens(response.data.itens);
-      setRowCount(response.data.total);
-    };
+ 
     get(fastSearch, page + 1, pageSize);
   }, [pageSize, page, fastSearch]);
 
@@ -61,8 +65,14 @@ export default function RolesIndex() {
     []
   );
 
+  const onClose = (refresh: any) => {
+    if(refresh){
+      get(fastSearch, page + 1, pageSize);
+    }
+    setOpenForm(false);
+  }
+
   const onAdd = () => {
-    console.log("oi")
     setIdItem(0);
     setOpenForm(true);
   }
@@ -85,7 +95,7 @@ export default function RolesIndex() {
         ],
       },
     ],
-    []
+    [handleOpenEdit]
   );
 
   return (
@@ -104,9 +114,9 @@ export default function RolesIndex() {
         url="/roles/create"
         onAdd={onAdd}
       />
-      <FormDialog onClose={() => { setOpenForm(false)}} open={openForm} title='Perfil'
+      <FormDialog onClose={onClose} open={openForm} title='Perfil'
       >
-        <RoleForm id={idItem} onClose={() => { setOpenForm(false)}} />
+        <RoleForm id={idItem} onClose={onClose} />
       </FormDialog>
     </Box>
   );
