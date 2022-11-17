@@ -60,7 +60,7 @@ import {
     useEffect(() => {
       const getFasesCultivo = async () => {
         var response = await api.get("/fase-cultivo");
-        setFasesCultivo(response.data);
+        setFasesCultivo(response.data.itens);
       };
   
       getFasesCultivo();
