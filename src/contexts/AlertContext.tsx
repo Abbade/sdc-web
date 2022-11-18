@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { BroadcastChannel } from 'broadcast-channel';
 
 type AlertContextData = {
   openLoading: boolean;
@@ -32,7 +33,7 @@ type AlertProviderProps = {
 
 export const AlertContext = createContext({} as AlertContextData);
 
-let alertChannel: BroadcastChannel;
+let alertChannel = new BroadcastChannel("alertSnack");
 
 let messageOutSide = "";
 
@@ -46,7 +47,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
   const [openLoading, setOpenLoading] = useState(false);
 
   useEffect(() => {
-    alertChannel = new BroadcastChannel("alertSnack");
+ 
 
     alertChannel.onmessage = (message) => {
       console.log("caiu alert")
