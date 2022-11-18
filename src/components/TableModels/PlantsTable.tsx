@@ -1,3 +1,4 @@
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import {
@@ -5,39 +6,43 @@ import {
   GridColDef,
   GridSelectionModel,
 } from "@mui/x-data-grid";
-import  ArrowDropDownIcon  from "@mui/icons-material/ArrowDropDown";
 
-import { useContext, useEffect, useState } from "react";
+import { format } from "date-fns";
+import React, { useContext, useEffect, useState } from "react";
+import { PlantsContext } from "../../contexts/PlantsContext";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
-import { api } from "../../services/apiClient";
 import FormDialog from "../Dialogs/Dialog";
-import TrashPlantForm from "../Forms/TrashPlantForm";
-import TransplantPlantForm from "../Forms/TransplantPlantForm";
-import Table from "../Table";
-import { format } from 'date-fns'
-import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherForm";
-import MovePlantForm from "../Forms/MovePlantForm";
-import React from "react";
 import ChangePlantStageForm from "../Forms/ChangePlantStageForm";
-import { FilterProp, PlantsContext } from "../../contexts/PlantsContext";
 import FilterPlantForm from "../Forms/FilterPlantForm";
+import MovePlantForm from "../Forms/MovePlantForm";
+import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherForm";
+import TransplantPlantForm from "../Forms/TransplantPlantForm";
+import TrashPlantForm from "../Forms/TrashPlantForm";
+import Table from "../Table";
 
 export default function PlantsTable({ id }) {
-
   const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
-  const {plants = [], fastSearch, setFastSearch, pageSize = 10, setPageSize, page = 0, setPage, rowCount = 1, setRowCount, setFilter, filter, loadingTable} = useContext(PlantsContext);
-
-
+  const {
+    plants = [],
+    fastSearch,
+    setFastSearch,
+    pageSize = 10,
+    setPageSize,
+    page = 0,
+    setPage,
+    rowCount = 1,
+    setRowCount,
+    setFilter,
+    filter,
+    loadingTable,
+  } = useContext(PlantsContext);
 
   // useEffect(() => {
   //   // if(id > 0)
   //   //   setFilter({idLote: id} as FilterProp);
   // }, [id]);
 
-  useEffect(() => {
-    console.log("filter");
-    console.log(filter);
-  }, [filter])
+
 
   const onPageSizeChange = async (
     pageSize: number,
@@ -73,19 +78,22 @@ export default function PlantsTable({ id }) {
   const [openMother, setOpenMother] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
- 
-
   const optionsImport = [
-    { title: 'Transplante', icon: <ArrowDropDownIcon />, action: setOpenTransplant },
-    { title: 'Descarte', icon: <ArrowDropDownIcon />, action: setOpenTrash },
-    { title: 'Mover', icon: <ArrowDropDownIcon /> , action: setOpenMove },
-    { title: 'Matriz', icon: <ArrowDropDownIcon />, action: setOpenMother },
-    { title: 'Fase de Cultivo', icon: <ArrowDropDownIcon />, action: setChangeStage },
-  ]
-  const handleOpen = (type) => {
-    // setOpen(true);
-    console.log(type)
-  };
+    {
+      title: "Transplante",
+      icon: <ArrowDropDownIcon />,
+      action: setOpenTransplant,
+    },
+    { title: "Descarte", icon: <ArrowDropDownIcon />, action: setOpenTrash },
+    { title: "Mover", icon: <ArrowDropDownIcon />, action: setOpenMove },
+    { title: "Matriz", icon: <ArrowDropDownIcon />, action: setOpenMother },
+    {
+      title: "Fase de Cultivo",
+      icon: <ArrowDropDownIcon />,
+      action: setChangeStage,
+    },
+  ];
+
   const handleClose = () => {
     setOpenTrash(false);
     setChangeStage(false);
@@ -94,94 +102,10 @@ export default function PlantsTable({ id }) {
     setOpenMother(false);
   };
 
-  const transplantIndividualPlantButton = (params) => {
-    return (
-      <strong>
-        <Button
-          variant="contained"
-          color="success"
-          size="small"
-          // style={{ marginLeft: 16 }}
-          onClick={() => {
-     
-            setSelectedPlants([params.row]);
-            handleOpen(setOpenTransplant(true));
-            // Router.push("nursery/" + params.row.id + "/trash-lote");
-          }}
-        >
-          Transplantar
-        </Button>
-      </strong>
-    );
-  };
-
-  const trashIndividualPlantButton = (params) => {
-    return (
-      <strong>
-        <Button
-          variant="contained"
-          color="success"
-          size="small"
-          // style={{ marginLeft: 16 }}
-          onClick={() => {
-        
-            setSelectedPlants([params.row]);
-            handleOpen(setOpenTrash(true));
-            // Router.push("nursery/" + params.row.id + "/trash-lote");
-          }}
-        >
-          Descartar
-        </Button>
-      </strong>
-    );
-  };
-
-  const movePlantButton = (params) => {
-    return (
-      <strong>
-        <Button
-          variant="contained"
-          color="success"
-          size="small"
-          // style={{ marginLeft: 16 }}
-          onClick={() => {
-
-            setSelectedPlants([params.row]);
-            handleOpen(setOpenMove(true));
-            // Router.push("nursery/" + params.row.id + "/trash-lote");
-          }}
-        >
-          Mover
-        </Button>
-      </strong>
-    );
-  };
-
-  const transformPlantIntoMotherButton = (params) => {
-    return (
-      <strong>
-        <Button
-          variant="contained"
-          color="success"
-          size="small"
-          // style={{ marginLeft: 16 }}
-          onClick={() => {
-            setSelectedPlants([params.row]);
-            handleOpen(setOpenMother(true));
-            // Router.push("nursery/" + params.row.id + "/trash-lote");
-          }}
-        >
-          Nova Mãe
-        </Button>
-      </strong>
-    );
-  };
-  
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Codigo", width: 200 },
     { field: "isMotherPlant", headerName: "Matriz", width: 200 },
-    
 
     {
       field: "genetic.nick",
@@ -240,7 +164,7 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.lastTransplant), 'dd/MM/yyyy')}
+            {format(new Date(params.row.lastTransplant), "dd/MM/yyyy")}
           </div>
         );
       },
@@ -252,7 +176,7 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.aclimatationDate), 'dd/MM/yyyy')}
+            {format(new Date(params.row.aclimatationDate), "dd/MM/yyyy")}
           </div>
         );
       },
@@ -264,7 +188,7 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.vegetationDate), 'dd/MM/yyyy')}
+            {format(new Date(params.row.vegetationDate), "dd/MM/yyyy")}
           </div>
         );
       },
@@ -276,7 +200,7 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.floweringDate), 'dd/MM/yyyy')}
+            {format(new Date(params.row.floweringDate), "dd/MM/yyyy")}
           </div>
         );
       },
@@ -288,7 +212,9 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {params.row.harvestDate ? format(new Date(params.row.harvestDate), 'dd/MM/yyyy') : ""}
+            {params.row.harvestDate
+              ? format(new Date(params.row.harvestDate), "dd/MM/yyyy")
+              : ""}
           </div>
         );
       },
@@ -300,7 +226,7 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.trashDate), 'dd/MM/yyyy')}
+            {format(new Date(params.row.trashDate), "dd/MM/yyyy")}
           </div>
         );
       },
@@ -323,25 +249,42 @@ export default function PlantsTable({ id }) {
         pageSize={pageSize}
         searchName={"Procurar plantas"}
         optionsImport={optionsImport}
-        onFilter={() => {console.log("teste");setOpenFilter(true);}}
+        onFilter={() => {
+          console.log("teste");
+          setOpenFilter(true);
+        }}
         totalFilter={filter?.totalFilter}
       />
-      <FormDialog onClose={() => setOpenFilter(false)} open={openFilter} title={"Filtro"}>
-        <FilterPlantForm onClose={() => setOpenFilter(false)} ></FilterPlantForm>
+      <FormDialog
+        onClose={() => setOpenFilter(false)}
+        open={openFilter}
+        title={"Filtro"}
+      >
+        <FilterPlantForm onClose={() => setOpenFilter(false)}></FilterPlantForm>
       </FormDialog>
-      <FormDialog onClose={handleClose} open={openTransplant} title={"Transplantar"}>
+      <FormDialog
+        onClose={handleClose}
+        open={openTransplant}
+        title={"Transplantar"}
+      >
         <TransplantPlantForm plants={selectedPlants}></TransplantPlantForm>
       </FormDialog>
       <FormDialog onClose={handleClose} open={openTrash} title={"Descartar"}>
         <TrashPlantForm plants={selectedPlants}></TrashPlantForm>
       </FormDialog>
       <FormDialog onClose={handleClose} open={openMother} title={"Nova Mãe"}>
-        <TransformPlantIntoMotherForm plants={selectedPlants}></TransformPlantIntoMotherForm>
+        <TransformPlantIntoMotherForm
+          plants={selectedPlants}
+        ></TransformPlantIntoMotherForm>
       </FormDialog>
       <FormDialog onClose={handleClose} open={openMove} title={"Mover"}>
         <MovePlantForm plants={selectedPlants}></MovePlantForm>
       </FormDialog>
-      <FormDialog onClose={handleClose} open={openChangeStage} title={"Fase de Cultivo"}>
+      <FormDialog
+        onClose={handleClose}
+        open={openChangeStage}
+        title={"Fase de Cultivo"}
+      >
         <ChangePlantStageForm plants={selectedPlants}></ChangePlantStageForm>
       </FormDialog>
     </Box>
