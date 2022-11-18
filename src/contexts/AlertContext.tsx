@@ -47,9 +47,9 @@ export function showAlert(msg: string) {
 export function AlertProvider({ children }: AlertProviderProps) {
   const [alert, setAlert] = useState<AlertProps>(initialAlert);
   const [openLoading, setOpenLoading] = useState(false);
-  alertChannel = new BroadcastChannel("alertSnack");
-  useEffect(() => {
 
+  useEffect(() => {
+    alertChannel = new BroadcastChannel("alertSnack");
 
     alertChannel.onmessage = (message) => {
       console.log("caiu alert")
