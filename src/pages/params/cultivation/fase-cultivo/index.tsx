@@ -91,7 +91,7 @@ export default function FaseCultivoIndex() {
         ],
       },
     ],
-    []
+    [handleOpenEdit]
   );
 
   return (

@@ -41,7 +41,7 @@ export default function RoleForm({ id, onClose }: EditInterface) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  const { showAlert, setOpenLoading } = useContext(AlertContext);
+  const { setAlert, setOpenLoading } = useContext(AlertContext);
   const [permissions, setPermissions] = useState([] as PermissoesData[]);
 
 
@@ -76,17 +76,29 @@ export default function RoleForm({ id, onClose }: EditInterface) {
       if (formData.id > 0) {
         const item = await api.put("roles", formData);
         setOpenLoading(false);
-        showAlert("Perfil editado com sucesso.", "success");
+        setAlert({
+          message: "Perfil editado com sucesso.",
+          alertType: "success",
+          openAlert: true,
+        });
       } else {
         const item = await api.post("roles", formData);
         setOpenLoading(false);
-        showAlert("Perfil cadastrado com sucesso.", "success");
+        setAlert({
+          message: 'Perfil cadastrado com sucesso.',
+          alertType: "success",
+          openAlert: true,
+        });
       }
 
       onClose(true);
     } catch (error) {
       setOpenLoading(false);
-      showAlert(error.response.data.message, "error");
+      setAlert({
+        message: error.response.data.message,
+        alertType: "error",
+        openAlert: true,
+      });
     }
   };
 

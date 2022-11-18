@@ -18,21 +18,21 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export default function SnackbarAlert() {
   const theme = useTheme();
-  const { openAlert, alertType, alertMessage, closeAlert , openLoading} = React.useContext(AlertContext);
+  const {alert, setAlert , openLoading} = React.useContext(AlertContext);
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-    closeAlert();
+    setAlert({...alert, openAlert: false})
   };
 
   return (
     <>
       <Stack spacing={2} sx={{ width: '100%' }}>
-        <Snackbar open={openAlert} autoHideDuration={3000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
-            {alertMessage}
+        <Snackbar open={alert.openAlert} autoHideDuration={3000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity={alert.alertType} sx={{ width: '100%' }}>
+            {alert.message}
           </Alert>
         </Snackbar>
       </Stack>

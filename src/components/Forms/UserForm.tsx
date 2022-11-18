@@ -38,7 +38,7 @@ export default function UserForm({ id }: EditInterface) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  const { showAlert, setOpenLoading } = useContext(AlertContext);
+  const { setAlert, setOpenLoading } = useContext(AlertContext);
 
   useEffect(() => {
     console.log("render edit");
@@ -63,16 +63,28 @@ export default function UserForm({ id }: EditInterface) {
       if (formData.id > 0) {
         const item = await api.put("user", formData);
         setOpenLoading(false);
-        showAlert("Perfil editado com sucesso.", "success");
+        setAlert({
+          message: 'Perfil editado com sucesso.',
+          alertType: "success",
+          openAlert: true,
+        });
       } else {
         const item = await api.post("user", formData);
         setOpenLoading(false);
-        showAlert("Perfil cadastrado com sucesso.", "success");
+        setAlert({
+          message: 'Perfil cadastrado com sucesso.',
+          alertType: "success",
+          openAlert: true,
+        });
       }
       Router.back();
     } catch (error) {
       setOpenLoading(false);
-      showAlert(error.response.data.message, "error");
+      setAlert({
+        message: error.response.data.message,
+        alertType: "error",
+        openAlert: true,
+      });
     }
   };
 

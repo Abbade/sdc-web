@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { parseCookies } from 'nookies';
-import { showAlert } from '../contexts/AuthContext';
+import { showAlert } from '../contexts/AlertContext';
 import { signOut } from '../contexts/AuthContext';
 import { AuthTokenError } from './errors/AuthTokenError';
 
@@ -35,7 +35,7 @@ export function setupAPIClient(ctx = undefined) {
       }
       else if(error.response?.status === 400){
         const data = error.response.data as any;
-        showAlert(data.message as string);
+        showAlert(data.message);
       }
       else{
         showAlert(error.message)

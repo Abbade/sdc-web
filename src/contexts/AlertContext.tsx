@@ -1,16 +1,30 @@
 import { AlertColor } from "@mui/material";
-import { createContext, ReactNode, SetStateAction, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 type AlertContextData = {
-  showAlert: (message: SetStateAction<string>, alertType: SetStateAction<AlertColor>) => void;
-  openAlert: boolean;
-  alertType: AlertColor;
-  alertMessage: string;
-  closeAlert: () => void;
-
   openLoading: boolean;
   setOpenLoading: (value: SetStateAction<boolean>) => void;
+  setAlert: (value: SetStateAction<AlertProps>) => void;
+  alert: AlertProps;
+  showAlert: (message: string, type: AlertColor) => void;
 };
+
+type AlertProps = {
+  message: string;
+  alertType: AlertColor;
+  openAlert: boolean;
+};
+const initialAlert = {
+  message: "",
+  alertType: "success",
+  openAlert: false,
+} as AlertProps;
 
 type AlertProviderProps = {
   children: ReactNode;
@@ -23,26 +37,28 @@ let alertChannel: BroadcastChannel;
 let messageOutSide = "";
 
 export function showAlert(msg: string) {
-
   messageOutSide = msg;
-  alertChannel.postMessage("snackalert");
+  alertChannel.postMessage({ type: "snackalert" , msg: msg});
 }
 
 export function AlertProvider({ children }: AlertProviderProps) {
-  const [openAlert, setOpenAlert] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertType, setAlertType] = useState<AlertColor>("success");
+  const [alert, setAlert] = useState<AlertProps>(initialAlert);
   const [openLoading, setOpenLoading] = useState(false);
 
   useEffect(() => {
     alertChannel = new BroadcastChannel("alertSnack");
 
     alertChannel.onmessage = (message) => {
-
-      switch (message.data) {
+      console.log("caiu alert")
+      console.log(message);
+      switch (message.data.type) {
+  
         case "snackalert":
-
-          showAlert(messageOutSide, "error");
+          setAlert({
+            alertType: "error",
+            openAlert: true,
+            message: message.data.msg,
+          } as AlertProps);
 
           break;
         default:
@@ -51,23 +67,16 @@ export function AlertProvider({ children }: AlertProviderProps) {
     };
   }, []);
 
-
-
- 
-  const closeAlert = () => {
-    setOpenAlert(false);
-  };
-
-  const showAlert = (message: SetStateAction<string>, alertType: SetStateAction<AlertColor>) => {
-    setAlertMessage(message);
-    setAlertType(alertType);
-    setOpenAlert(true);
-  };
+  const showAlert = (message: string, type : AlertColor) => {
+    setAlert({
+      message: message,
+      alertType: type,
+      openAlert: true,
+    });
+  }
 
   return (
-    <AlertContext.Provider
-      value={{ openAlert, alertMessage, alertType, showAlert, closeAlert, openLoading, setOpenLoading }}
-    >
+    <AlertContext.Provider value={{ alert, setAlert, showAlert, openLoading, setOpenLoading }}>
       {children}
     </AlertContext.Provider>
   );

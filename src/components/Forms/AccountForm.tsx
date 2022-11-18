@@ -49,28 +49,40 @@ export default function AccountForm({ id, onClose }: EditInterface) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  const { showAlert, setOpenLoading } = useContext(AlertContext);
+  const { setAlert, setOpenLoading, showAlert } = useContext(AlertContext);
   const [roles, setRoles] = useState([] as RoleData[]);
 
   useEffect(() => {
     console.log("render edit " + id);
     const get = async (id) => {
       setOpenLoading(true);
-      const rls = await api.get("roles");
-      setRoles(rls.data.itens);
-      if (id > 0 ) {
-        const item = await api.get(`user/${id}`);
-        setValue("name", item.data.name);
-        setValue("id", item.data.id);
-        setValue("email", item.data.email);
-        setValue("id_role", item.data.id_role);
-        setValue("password", "******");
+      try {
+        
+        const rls = await api.get("roles");
+        setRoles(rls.data.itens);
+
+        if (id > 0) {
+          // TODO MUDAR DPS TO DO     const item = await api.get(`user/${id}`);
+          const item = await api.get(`user/${0}`);
+          setValue("name", item.data.name);
+          setValue("id", item.data.id);
+          setValue("email", item.data.email);
+          setValue("id_role", item.data.id_role);
+          setValue("password", "******");
+        }
+        setOpenLoading(false);
+      } catch (error) {
+        // setAlert({
+        //   message: error.response.data.message,
+        //   alertType: 'error',
+        //   openAlert: true,
+        // });
+        setOpenLoading(false);
       }
-      setOpenLoading(false);
     };
 
     get(id);
-  }, [id, setValue, setOpenLoading]);
+  }, [id, setValue, setOpenLoading, setAlert]);
 
   const handleLoteSubmit: SubmitHandler<CreateFormData> = async (formData) => {
     try {
@@ -78,16 +90,16 @@ export default function AccountForm({ id, onClose }: EditInterface) {
       if (formData.id > 0) {
         const item = await api.put("user", formData);
         setOpenLoading(false);
-        showAlert("Perfil editado com sucesso.", "success");
+        showAlert('Perfil editado com sucesso.', 'success');
       } else {
         const item = await api.post("user", formData);
         setOpenLoading(false);
-        showAlert("Perfil cadastrado com sucesso.", "success");
+        showAlert('Perfil cadastrado com sucesso.', 'success');
       }
       onClose(true);
     } catch (error) {
       setOpenLoading(false);
-      showAlert(error.response.data.message, "error");
+      showAlert(error.response.data.message, 'error');
     }
   };
 
