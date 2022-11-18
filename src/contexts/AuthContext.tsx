@@ -13,6 +13,7 @@ import { api } from "../services/apiClient";
 import { AlertColor } from "@mui/material/Alert";
 
 type User = {
+  name: string;
   email: string;
   permissions: string[];
   roles: string[];
@@ -82,8 +83,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api
         .get("/me")
         .then((response) => {
-          const { email, permissions, roles } = response.data;
-          setUser({ email, permissions, roles });
+          const { email, permissions, roles, name } = response.data;
+          console.log(name);
+          setUser({ email, permissions, roles, name });
         })
         .catch(() => {
           signOut();
@@ -93,7 +95,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     let chooseMode = modeCookie1 as "dark" | "light";
 
     if (chooseMode) {
-      console.log("changemoed");
       setMode(chooseMode);
     }
   }, []);
@@ -105,7 +106,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       });
 
-      const { token, permissions, roles } = response.data;
+      const { token, permissions, roles, name } = response.data;
 
       setCookie(undefined, "nextauth.token", token, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
@@ -116,6 +117,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
         permissions,
         roles,
+        name
       });
 
       api.defaults.headers["Authorization"] = `Bearer ${token}`;

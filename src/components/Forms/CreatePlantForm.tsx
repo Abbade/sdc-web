@@ -1,20 +1,10 @@
-import {
-  Box, Button, Container, createTheme, Grid
-} from "@mui/material";
+import { Box, Button, Container, createTheme, Grid } from "@mui/material";
 import * as yup from "yup";
-
 import { useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
-
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  FieldError,
-  SubmitHandler,
-  useForm
-} from "react-hook-form";
-import {
-  Location, Recipiente
-} from "../../interfaces/LoteInterface";
+import { FieldError, SubmitHandler, useForm } from "react-hook-form";
+import { Location, Recipiente } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
@@ -26,7 +16,7 @@ type CreatePlantFormData = {
   id_location: number;
   id_recipiente: number;
   obs: string;
-}
+};
 
 const createObjFormSchema = yup.object().shape({
   // id_lote: yup.number().required("Genética é obrigatório"),
@@ -39,22 +29,16 @@ const createObjFormSchema = yup.object().shape({
 });
 const theme = createTheme();
 
-
 export default function CreatePlantForm(selectedLote) {
-
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
+  const [idLote, setIdLote] = useState(0);
 
-  const [idLote, setIdLote] = useState(0)
-
-  const [recipiente, setRecipiente] = useState(
-    [] as Recipiente[]
-  );
+  const [recipiente, setRecipiente] = useState([] as Recipiente[]);
 
   useEffect(() => {
     const getRecipientes = async () => {
@@ -64,9 +48,7 @@ export default function CreatePlantForm(selectedLote) {
     getRecipientes();
   }, []);
 
-  const [location, setLocation] = useState(
-    [] as Location[]
-  );
+  const [location, setLocation] = useState([] as Location[]);
 
   useEffect(() => {
     const getLocations = async () => {
@@ -76,15 +58,9 @@ export default function CreatePlantForm(selectedLote) {
     getLocations();
   }, []);
 
-
-
   useEffect(() => {
-    setIdLote(selectedLote.selectedLote.id)
-
-
-  }, [selectedLote])
-
-
+    setIdLote(selectedLote.selectedLote.id);
+  }, [selectedLote]);
 
   const handleLoteSubmit: SubmitHandler<CreatePlantFormData> = async (
     formData
@@ -92,14 +68,10 @@ export default function CreatePlantForm(selectedLote) {
     try {
       formData.id_lote = idLote;
 
-
       const lote = await api.post("plant", formData);
       // Router.push('/nursery/'+selectedLote.id)
-
-
     } catch (error) {
       const errorOficial = error as Error;
-
     }
   };
 
@@ -113,7 +85,6 @@ export default function CreatePlantForm(selectedLote) {
           alignItems: "center",
         }}
       >
-
         <Box
           component="form"
           noValidate
@@ -132,7 +103,11 @@ export default function CreatePlantForm(selectedLote) {
 
             <Grid item xs={12} sm={12}>
               <BasicTextField
-                label={"Quantidade  (" + selectedLote.selectedLote.qtProp + " Disponíveis)"}
+                label={
+                  "Quantidade  (" +
+                  selectedLote.selectedLote.qtProp +
+                  " Disponíveis)"
+                }
                 name={"qtPlant"}
                 control={control}
                 error={errors.qtPlant as FieldError}
@@ -172,7 +147,7 @@ export default function CreatePlantForm(selectedLote) {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Descartar Estacas
+            Cadastrar Planta
           </Button>
         </Box>
       </Box>

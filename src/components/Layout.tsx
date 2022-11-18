@@ -32,6 +32,9 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Avatar from "@mui/material/Avatar";
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
 
@@ -121,7 +124,7 @@ interface LayoutProps {
 }
 export default function Layout({ children }: LayoutProps) {
   const theme = useTheme();
-  const { isAuthenticated, signOut } = React.useContext(AuthContext);
+  const { isAuthenticated, signOut, user } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElTrans, setAnchorElTrans] = React.useState<null | HTMLElement>(
@@ -151,6 +154,33 @@ export default function Layout({ children }: LayoutProps) {
   const handleCloseTrans = () => {
     setAnchorElTrans(null);
   };
+  function stringAvatar(name: string) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    };
+  }
+  function stringToColor(string: string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -199,13 +229,13 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                     <AccountCircle />
               </IconButton>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: "top",
+                  vertical: "center",
                   horizontal: "right",
                 }}
                 keepMounted
@@ -216,18 +246,28 @@ export default function Layout({ children }: LayoutProps) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem>
-                  <AnchorLink onClick={() => handleClose()} href={"/myaccount"}>
-                    Minha Conta
-                  </AnchorLink>
-                </MenuItem>
-                <MenuItem>
-                  <AnchorLink onClick={() => handleClose()} href={"/company"}>
+                <AnchorLink onClick={() => handleClose()} href={"/myaccount"}>
+                  
+                  <MenuItem>
+                  <ListItemIcon>
+                      <AccountCircle fontSize="small" />
+                    </ListItemIcon>
+                  Minha Conta</MenuItem>
+                </AnchorLink>
+                <AnchorLink onClick={() => handleClose()} href={"/company"}>
+                  <MenuItem>
+                    <ListItemIcon>
+                      <Settings fontSize="small" />
+                    </ListItemIcon>
                     Configurações
-                  </AnchorLink>
+                  </MenuItem>
+                </AnchorLink>
+                <MenuItem onClick={signOut}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Sair
                 </MenuItem>
-                
-                <MenuItem onClick={signOut}>Sair</MenuItem>
               </Menu>
             </div>
           )}
