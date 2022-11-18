@@ -33,7 +33,8 @@ type AlertProviderProps = {
 
 export const AlertContext = createContext({} as AlertContextData);
 
-let alertChannel = new BroadcastChannel("alertSnack");
+let alertChannel: BroadcastChannel;
+
 
 let messageOutSide = "";
 
@@ -47,18 +48,18 @@ export function AlertProvider({ children }: AlertProviderProps) {
   const [openLoading, setOpenLoading] = useState(false);
 
   useEffect(() => {
- 
+    alertChannel = new BroadcastChannel("alertSnack");
 
     alertChannel.onmessage = (message) => {
       console.log("caiu alert")
       console.log(message);
-      switch (message.data.type) {
+      switch (message.type) {
   
         case "snackalert":
           setAlert({
             alertType: "error",
             openAlert: true,
-            message: message.data.msg,
+            message: message.msg,
           } as AlertProps);
 
           break;
