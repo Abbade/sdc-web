@@ -63,7 +63,7 @@ export default function AccountForm({ id, onClose }: EditInterface) {
 
         if (id > 0) {
           // TODO MUDAR DPS TO DO     const item = await api.get(`user/${id}`);
-          const item = await api.get(`user/${0}`);
+          const item = await api.get(`user/${id}`);
           setValue("name", item.data.name);
           setValue("id", item.data.id);
           setValue("email", item.data.email);

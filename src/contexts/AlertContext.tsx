@@ -1,12 +1,11 @@
 import { AlertColor } from "@mui/material";
+import { BroadcastChannel } from 'broadcast-channel';
 import {
   createContext,
   ReactNode,
   SetStateAction,
-  useEffect,
-  useState,
+  useEffect, useState
 } from "react";
-import { BroadcastChannel } from 'broadcast-channel';
 
 type AlertContextData = {
   openLoading: boolean;
@@ -47,6 +46,7 @@ export function showAlert(msg: string) {
 export function AlertProvider({ children }: AlertProviderProps) {
   const [alert, setAlert] = useState<AlertProps>(initialAlert);
   const [openLoading, setOpenLoading] = useState(false);
+
 
   useEffect(() => {
     alertChannel = new BroadcastChannel("alertSnack");
