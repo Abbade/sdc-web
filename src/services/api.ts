@@ -23,8 +23,7 @@ export function setupAPIClient(ctx = undefined) {
   api.interceptors.response.use(response => {
     return response;
   }, (error: AxiosError) => {
-    console.log("deu erro");
-    console.log(error);
+
     if(error.response !== undefined){
       if (error.response?.status === 401) {
         if (process.browser) {
@@ -35,6 +34,8 @@ export function setupAPIClient(ctx = undefined) {
       }
       else if(error.response?.status === 400){
         const data = error.response.data as any;
+        console.log("deu erro");
+        console.log(data);
         showAlert(data.message);
       }
       else{

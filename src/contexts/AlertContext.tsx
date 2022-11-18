@@ -39,6 +39,7 @@ let alertChannel: BroadcastChannel;
 let messageOutSide = "";
 
 export function showAlert(msg: string) {
+  console.log("alert1")
   messageOutSide = msg;
   alertChannel.postMessage({ type: "snackalert" , msg: msg});
 }
