@@ -1,50 +1,44 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import * as React from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { AuthContext } from '../contexts/AuthContext';
+import { ptBR } from "@mui/material/locale";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import * as React from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
-export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = React.createContext({
+  toggleColorMode: () => {},
+});
 
-interface ThemeType{
+interface ThemeType {
   children: React.ReactNode;
 }
 
-export default function Theme({ children}: ThemeType) {
- 
-  const { mode, changeMode} = React.useContext(AuthContext);
+export default function Theme({ children }: ThemeType) {
+  const { mode, changeMode } = React.useContext(AuthContext);
 
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-
         changeMode();
       },
     }),
-    [changeMode],
+    [changeMode]
   );
 
   const theme = React.useMemo(
     () =>
-      createTheme({
-        palette: {
-          mode,
-          // primary: {
-          //   main: '#556cd6',
-          // },
-          // secondary: {
-          //   main: '#19857b',
-          // },
+      createTheme(
+        {
+          palette: {
+            mode,
+          },
         },
-        
-      })
-      ,[mode],
+        ptBR
+      ),
+    [mode]
   );
 
   return (
     <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        {children}
-      </ThemeProvider>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </ColorModeContext.Provider>
   );
 }

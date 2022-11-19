@@ -5,7 +5,7 @@ import NurseryConfigTab from "../../../../components/NurseryConfigTab";
 import Table from "../../../../components/Table";
 import {
   LoteInterface,
-  PropagationType,
+  FaseCultivo,
 } from "../../../../interfaces/LoteInterface";
 import { api } from "../../../../services/apiClient";
 import { withSSRAuth } from "../../../../utils/withSSRAuth";
@@ -14,7 +14,7 @@ import FormDialog from "../../../../components/Dialogs/Dialog";
 import CreateFaseCultivoForm from "../../../../components/Forms/params/CreateFaseCultivoForm";
 
 export default function FaseCultivoIndex() {
-  const [itens, setItens] = useState([] as PropagationType[]);
+  const [itens, setItens] = useState([] as FaseCultivo[]);
 
   const [fastSearch, setFastSearch] = useState("");
   const [pageSize, setPageSize] = useState(10);
@@ -77,6 +77,7 @@ export default function FaseCultivoIndex() {
     () => [
       { field: "id", headerName: "ID", width: 70 },
       { field: "name", headerName: "Nome", width: 130 },
+      { field: "ordem", headerName: "Ordem", width: 70 },
       {
         field: "actions",
         type: "actions",
@@ -107,10 +108,9 @@ export default function FaseCultivoIndex() {
         pageSize={pageSize}
         rowCount={rowCount}
         searchName="Procurar fase cultivo"
-        url="/params/cultivation/propagation-type/fase-cultivo/create"
         onAdd={onAdd}
       />
-      <FormDialog onClose={onClose} open={openForm} title='Usuário'
+      <FormDialog onClose={onClose} open={openForm} title='Fase de Cultivo'
       >
         <CreateFaseCultivoForm id={idItem} onClose={onClose} />
       </FormDialog>

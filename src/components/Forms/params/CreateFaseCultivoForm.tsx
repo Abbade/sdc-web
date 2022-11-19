@@ -17,9 +17,10 @@ import { EditInterface } from "../../../interfaces/EditInterface";
 import BasicTextField from "../../Inputs/BasicTextField";
   
   type CreateFaseCultivoForm = {
+   id?: number;
    name: string;
    description: string;
-   order: number;
+   ordem: number;
   };
   
   const createObjFormSchema = yup.object().shape({
@@ -51,6 +52,9 @@ import BasicTextField from "../../Inputs/BasicTextField";
               const item = await api.get(`fase-cultivo/${id}`);
               setValue("name", item.data.name);
               setValue("id", item.data.id);
+              setValue("description", item.data.description);
+              
+              setValue("ordem", item.data.ordem);
               setOpenLoading(false);
             } catch (error) {
               console.log("CAIU");
@@ -72,11 +76,21 @@ import BasicTextField from "../../Inputs/BasicTextField";
       formData
     ) => {
       try {
-    
-        const item = await api.post("fase-cultivo", formData);
+        setOpenLoading(true);
+        if(formData.id > 0){
+          const item = await api.put("fase-cultivo", formData);
+          showAlert('Fase cadastrada com sucesso.', 'success');
+        }
+        else{
+          const item = await api.post("fase-cultivo", formData);
+          showAlert('Fase editada com sucesso.', 'success');
+        }
+
         onClose(true);
+        setOpenLoading(false);
       } catch (error) {
         const errorOficial = error as Error;
+        showAlert(errorOficial.message, 'error');
    
       }
     };
