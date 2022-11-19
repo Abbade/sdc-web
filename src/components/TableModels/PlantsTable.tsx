@@ -106,8 +106,19 @@ export default function PlantsTable({ id }) {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Codigo", width: 200 },
-    { field: "isMotherPlant", headerName: "Matriz", width: 200 },
-
+    { field: "isMotherPlant", headerName: "Matriz", width: 70 },
+    {
+      field: "isMotherPlant",
+      headerName: "Matriz",
+      width: 130,
+      renderCell: (params) => {
+        return (
+          <div className="MuiDataGrid-cellContent">
+            {params.row.isMotherPlant ? 'Sim' : 'Não'}
+          </div>
+        );
+      },
+    },
     {
       field: "genetic.nick",
       headerName: "Genética",
