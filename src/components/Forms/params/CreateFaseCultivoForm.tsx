@@ -79,11 +79,11 @@ import BasicTextField from "../../Inputs/BasicTextField";
         setOpenLoading(true);
         if(formData.id > 0){
           const item = await api.put("fase-cultivo", formData);
-          showAlert('Fase cadastrada com sucesso.', 'success');
+          showAlert('Fase editada com sucesso.', 'success');
         }
         else{
           const item = await api.post("fase-cultivo", formData);
-          showAlert('Fase editada com sucesso.', 'success');
+          showAlert('Fase cadastrada com sucesso.', 'success');
         }
 
         onClose(true);
