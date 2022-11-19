@@ -18,6 +18,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { PlantProvider } from "../../../contexts/PlantsContext";
 
 export default function LoteDetail() {
   const { setOpenLoading } = useContext(AlertContext);
@@ -95,7 +96,9 @@ export default function LoteDetail() {
           <Typography>Plantas Transplantadas</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <PlantsTable id={id}></PlantsTable>
+          <PlantProvider>
+            <PlantsTable id={id}></PlantsTable>
+          </PlantProvider>
         </AccordionDetails>
       </Accordion>
 

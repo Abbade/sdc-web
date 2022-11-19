@@ -60,7 +60,6 @@ export function PlantProvider({ children}: PlantProviderProps) {
  
 
   useEffect(() => {
-    console.log("render");
     const get = async () => {
       setLoadingTable(true);
       var response = await api.get("/plant", {

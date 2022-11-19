@@ -9,7 +9,7 @@ import {
 
 import { format } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
-import { PlantsContext } from "../../contexts/PlantsContext";
+import { FilterProp, PlantsContext } from "../../contexts/PlantsContext";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
 import FormDialog from "../Dialogs/Dialog";
 import ChangePlantStageForm from "../Forms/ChangePlantStageForm";
@@ -37,10 +37,11 @@ export default function PlantsTable({ id }) {
     loadingTable,
   } = useContext(PlantsContext);
 
-  // useEffect(() => {
-  //   // if(id > 0)
-  //   //   setFilter({idLote: id} as FilterProp);
-  // }, [id]);
+  useEffect(() => {
+
+    if(id > 0 )
+      setFilter({idLote: id} as FilterProp);
+  }, [id, setFilter]);
 
 
 

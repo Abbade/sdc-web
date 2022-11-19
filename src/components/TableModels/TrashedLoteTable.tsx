@@ -9,7 +9,6 @@ import Table from "../Table";
 
 export default function TrashedLoteTable({ id }) {
   const [lotes, setLotes] = useState([] as TrashedLote[]);
-  const [total, setTotal] = useState({} as number);
 
   const [fastSearch, setFastSearch] = useState("");
   const [pageSize, setPageSize] = useState(10);
@@ -17,32 +16,19 @@ export default function TrashedLoteTable({ id }) {
   const [rowCount, setRowCount] = useState(0);
 
   useEffect(() => {
+    console.log("trash render")
     const get = async (name: string, page: number, pageSize: number) => {
       var response = await api.get("/trashed-lote", {
         params: {
           id: id,
         },
       });
-      console.log(response.data);
-      setLotes(response.data.itens);
-      setRowCount(response.data.total);
-    };
-    get('', 1, 100);
-  }, []);
 
-  useEffect(() => {
-    const get = async (name: string, page: number, pageSize: number) => {
-      var response = await api.get("/trashed-lote", {
-        params: {
-          id: id,
-        },
-      });
-      console.log(response.data);
       setLotes(response.data.itens);
       setRowCount(response.data.total);
     };
     get(fastSearch, page, pageSize);
-  }, [pageSize, page, fastSearch]);
+  }, [pageSize, page, fastSearch, id]);
 
   const onPageSizeChange = async (
     pageSize: number,
@@ -57,10 +43,7 @@ export default function TrashedLoteTable({ id }) {
 
   const onFastSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFastSearch(event.target.value);
-   // get(event.target.value, page, pageSize);
   };
-
- 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -68,7 +51,7 @@ export default function TrashedLoteTable({ id }) {
       pageSize={pageSize}
         columns={columns}
         rows={lotes}
-        searchName={""}
+        searchName={"Plantas descartadas"}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
         onFastSearchChange={onFastSearchChange}
@@ -77,30 +60,10 @@ export default function TrashedLoteTable({ id }) {
         
 
       />
-      {/* <Can permissions={["lote.list"]}>
-        <div>Métricas</div>
-      </Can> */}
     </Box>
   );
 }
 
-const renderDetailsButton = (params) => {
-  return (
-    <strong>
-      <Button
-        variant="contained"
-        color="error"
-        size="small"
-        style={{ marginLeft: 16 }}
-        onClick={() => {
-          Router.push("nursery/" + params.row.id + "/trash-lote");
-        }}
-      >
-        Descartar
-      </Button>
-    </strong>
-  );
-};
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
