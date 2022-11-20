@@ -21,11 +21,9 @@ const createObjFormSchema = yup.object().shape({
   description: yup.string().required("Descrição é obrigatório"),
 });
 
-const theme = createTheme();
 
 export default function CreatePropagationTypeForm({ id, onClose }: EditInterface) {
   const {
-    register,
     handleSubmit,
     control,
     setValue,
@@ -66,9 +64,6 @@ export default function CreatePropagationTypeForm({ id, onClose }: EditInterface
       const errorOficial = error as Error;
     }
   };
-
-
-
   return (
     <Box
       component="form"
