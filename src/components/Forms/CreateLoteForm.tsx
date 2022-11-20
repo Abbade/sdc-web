@@ -1,21 +1,11 @@
-import {
-  Box, Button, createTheme, Grid
-} from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import * as yup from "yup";
-
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
-
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  FieldError,
-  SubmitHandler,
-  useForm
-} from "react-hook-form";
-import {
-  Genetic, PropagationType
-} from "../../interfaces/LoteInterface";
+import { FieldError, SubmitHandler, useForm } from "react-hook-form";
+import { Genetic, PropagationType } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
@@ -37,8 +27,6 @@ const createObjFormSchema = yup.object().shape({
   id_location_init: yup.number().required("Localização é obrigatória"),
   qtTotal: yup.number().required("Quantidade total é obrigatória"),
 });
-
-
 
 export default function CreateLoteForm() {
   const {
@@ -67,7 +55,7 @@ export default function CreateLoteForm() {
   useEffect(() => {
     const getGenetics = async () => {
       var response = await api.get("/genetic");
-      setGenetics(response.data);
+      setGenetics(response.data.itens);
     };
 
     getGenetics();
@@ -76,7 +64,7 @@ export default function CreateLoteForm() {
   useEffect(() => {
     const getLocations = async () => {
       var response = await api.get("/location");
-      setLocation(response.data);
+      setLocation(response.data.itens);
     };
 
     getLocations();
@@ -86,97 +74,87 @@ export default function CreateLoteForm() {
     formData
   ) => {
     try {
-  
       const user = await api.post("lote", formData);
       Router.back();
     } catch (error) {
       const errorOficial = error as Error;
- 
     }
   };
 
   return (
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(handleLoteSubmit)}
+      sx={{ mt: 3 }}
+    >
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={12}>
+          <BasicSelect
+            label={"Genética"}
+            name={"id_genetic"}
+            values={genetic}
+            control={control}
+            error={errors.id_genetic as FieldError}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <BasicDatePicker
+            label={"Data de Propagação"}
+            name={"propDate"}
+            control={control}
+            error={errors.propDate as FieldError}
+          />
+        </Grid>
 
-        
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit(handleLoteSubmit)}
-          sx={{ mt: 3 }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Genética"}
-                name={"id_genetic"}
-                values={genetic}
-                control={control}
-                error={errors.id_genetic as FieldError}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <BasicDatePicker
-                label={"Data de Propagação"}
-                name={"propDate"}
-                control={control}
-                error={errors.propDate as FieldError}
-              />
-            </Grid>
+        <Grid item xs={12} sm={12}>
+          <BasicSelect
+            label={"Tipo de Propagação"}
+            name={"id_propagationType"}
+            values={propagationType}
+            control={control}
+            error={errors.id_propagationType as FieldError}
+          />
+        </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Tipo de Propagação"}
-                name={"id_propagationType"}
-                values={propagationType}
-                control={control}
-                error={errors.id_propagationType as FieldError}
-              />
-            </Grid>
+        <Grid item xs={12} sm={12}>
+          <BasicSelect
+            label={"Origem"}
+            control={control}
+            name={"id_origem"}
+            error={errors.id_origem as FieldError}
+          />
+        </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Origem"}
-                control={control}
-                name={"id_origem"}
-                error={errors.id_origem as FieldError}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <BasicSelect
-                label={"Local"}
-                name={"id_location_init"}
-                values={location}
-                control={control}
-                error={errors.id_location_init as FieldError}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <BasicTextField
-                label={"Quantidade"}
-                name={"qtTotal"}
-                control={control}
-                error={errors.qtTotal as FieldError}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <BasicTextField
-                label={"obs"}
-                name={"obs"}
-                control={control}
-                error={errors.obs as FieldError}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Cadastrar Lote
-          </Button>
-        </Box>
-
+        <Grid item xs={12} sm={12}>
+          <BasicSelect
+            label={"Local"}
+            name={"id_location_init"}
+            values={location}
+            control={control}
+            error={errors.id_location_init as FieldError}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <BasicTextField
+            label={"Quantidade"}
+            name={"qtTotal"}
+            control={control}
+            error={errors.qtTotal as FieldError}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <BasicTextField
+            label={"obs"}
+            name={"obs"}
+            control={control}
+            error={errors.obs as FieldError}
+          />
+        </Grid>
+      </Grid>
+      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+        Cadastrar Lote
+      </Button>
+    </Box>
   );
 }
