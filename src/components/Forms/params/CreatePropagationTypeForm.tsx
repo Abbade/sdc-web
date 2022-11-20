@@ -1,12 +1,11 @@
-import { Box, Button, createTheme, Grid } from "@mui/material";
-import * as yup from "yup";
-import Router from "next/router";
-import { useContext, useEffect } from "react";
-import { api } from "../../../services/apiClient";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Box, Button, Grid } from "@mui/material";
+import { useContext, useEffect } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
+import * as yup from "yup";
 import { AlertContext } from "../../../contexts/AlertContext";
 import { EditInterface } from "../../../interfaces/EditInterface";
+import { api } from "../../../services/apiClient";
 import BasicTextField from "../../Inputs/BasicTextField";
 
 type CreatePropagationTypeFormData = {
@@ -50,6 +49,7 @@ export default function CreatePropagationTypeForm({ id, onClose }: EditInterface
     formData
   ) => {
     try {
+      setOpenLoading(true);
       if (formData.id > 0) {
         const item = await api.put("propagation-type", formData);
         showAlert("Tipo de Propagação editada com sucesso.", "success");
@@ -60,8 +60,9 @@ export default function CreatePropagationTypeForm({ id, onClose }: EditInterface
       setOpenLoading(false);
       onClose(true);
     } catch (error) {
-      setOpenLoading(false);
-      const errorOficial = error as Error;
+        const errorOficial = error as Error;
+        setOpenLoading(false);
+        showAlert(errorOficial.message, "error");
     }
   };
   return (

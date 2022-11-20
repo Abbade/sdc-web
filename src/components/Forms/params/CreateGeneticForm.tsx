@@ -1,7 +1,6 @@
 import { Box, Button, createTheme, Grid } from "@mui/material";
 import * as yup from "yup";
 
-import Router from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { api } from "../../../services/apiClient";
 
@@ -43,27 +42,20 @@ export default function CreateGeneticForm({ id, onClose }: EditInterface) {
   const { setAlert, setOpenLoading, showAlert } = useContext(AlertContext);
 
   useEffect(() => {
-    const getProfiles = async () => {
+
+    const get = async (id) => {
       setOpenLoading(true);
       var response = await api.get("/profile");
-      setProfiles(response.data);
-      setOpenLoading(false);
-    };
-
-    getProfiles();
-    const get = async (id) => {
-      
+      setProfiles(response.data.itens);
       if (id > 0) {
-        setOpenLoading(true);
         const item = await api.get(`genetic/${id}`);
         setValue("name", item.data.name);
         setValue("id", item.data.id);
         setValue("nick", item.data.nick);
         setValue("id_profile", item.data.id_profile);
         setValue("description", item.data.description);
-
-        setOpenLoading(false);
       }
+      setOpenLoading(false);
     };
 
     get(id);
@@ -75,8 +67,6 @@ export default function CreateGeneticForm({ id, onClose }: EditInterface) {
     try {
       try {
         setOpenLoading(true);
-        console.log("genetica form pronto")
-        console.log(formData);
         if (formData.id > 0) {
           const item = await api.put("genetic", formData);
           showAlert("Genética editada com sucesso.", "success");
@@ -89,6 +79,7 @@ export default function CreateGeneticForm({ id, onClose }: EditInterface) {
         setOpenLoading(false);
       } catch (error) {
         const errorOficial = error as Error;
+        setOpenLoading(false);
         showAlert(errorOficial.message, "error");
       }
     } catch (error) {

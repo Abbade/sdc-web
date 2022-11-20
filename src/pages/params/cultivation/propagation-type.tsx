@@ -3,15 +3,15 @@ import Box from "@mui/material/Box";
 import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
 import Router from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import FormDialog from '../../../../components/Dialogs/Dialog';
-import CreatePropagationTypeForm from '../../../../components/Forms/params/CreatePropagationTypeForm';
-import NurseryConfigTab from "../../../../components/NurseryConfigTab";
-import Table from "../../../../components/Table";
+import FormDialog from '../../../components/Dialogs/Dialog';
+import CreatePropagationTypeForm from '../../../components/Forms/params/CreatePropagationTypeForm';
+import NurseryConfigTab from "../../../components/NurseryConfigTab";
+import Table from "../../../components/Table";
 import {
   PropagationType
-} from "../../../../interfaces/LoteInterface";
-import { api } from "../../../../services/apiClient";
-import { withSSRAuth } from "../../../../utils/withSSRAuth";
+} from "../../../interfaces/LoteInterface";
+import { api } from "../../../services/apiClient";
+import { withSSRAuth } from "../../../utils/withSSRAuth";
 
 
 export default function PropagationTypeIndex() {

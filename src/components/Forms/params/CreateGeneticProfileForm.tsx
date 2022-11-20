@@ -22,7 +22,6 @@ const createObjFormSchema = yup.object().shape({
 
 export default function CreateGeneticProfileForm({ id, onClose }: EditInterface) {
   const {
-    register,
     handleSubmit,
     control,
     setValue,
@@ -50,6 +49,7 @@ export default function CreateGeneticProfileForm({ id, onClose }: EditInterface)
   ) => {
     try {
       try {
+        setOpenLoading(true);
         if (formData.id > 0) {
           const item = await api.put("profile", formData);
           showAlert("Perfil Genético editada com sucesso.", "success");
@@ -60,8 +60,9 @@ export default function CreateGeneticProfileForm({ id, onClose }: EditInterface)
         setOpenLoading(false);
         onClose(true);
       } catch (error) {
-        setOpenLoading(false);
         const errorOficial = error as Error;
+        setOpenLoading(false);
+        showAlert(errorOficial.message, "error");
       }
     } catch (error) {
       const errorOficial = error as Error;

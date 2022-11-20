@@ -1,7 +1,4 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import NavTabs, { PagesLinksProps } from './NavTabs';
 
 
@@ -52,5 +49,15 @@ const nurseryConfigPages = [
         href: '/params/cultivation/trash-reason',
         label: 'Razão Descarte'
 
-    } as PagesLinksProps
+    } as PagesLinksProps,
+    {
+      href: '/params/cultivation/section',
+      label: 'Seção'
+
+  } as PagesLinksProps,
+  {
+    href: '/params/cultivation/genetic-profile',
+    label: 'Perfil Genético'
+
+} as PagesLinksProps,
 ];

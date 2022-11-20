@@ -1,17 +1,17 @@
 import Box from "@mui/material/Box";
 import { GridActionsCellItem, GridCallbackDetails, GridColumns } from "@mui/x-data-grid";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import NurseryConfigTab from "../../../../components/NurseryConfigTab";
-import Table from "../../../../components/Table";
+import NurseryConfigTab from "../../../components/NurseryConfigTab";
+import Table from "../../../components/Table";
 import {
   LoteInterface,
   FaseCultivo,
-} from "../../../../interfaces/LoteInterface";
-import { api } from "../../../../services/apiClient";
-import { withSSRAuth } from "../../../../utils/withSSRAuth";
+} from "../../../interfaces/LoteInterface";
+import { api } from "../../../services/apiClient";
+import { withSSRAuth } from "../../../utils/withSSRAuth";
 import EditIcon from '@mui/icons-material/Edit';
-import FormDialog from "../../../../components/Dialogs/Dialog";
-import CreateFaseCultivoForm from "../../../../components/Forms/params/CreateFaseCultivoForm";
+import FormDialog from "../../../components/Dialogs/Dialog";
+import CreateFaseCultivoForm from "../../../components/Forms/params/CreateFaseCultivoForm";
 
 export default function FaseCultivoIndex() {
   const [itens, setItens] = useState([] as FaseCultivo[]);
