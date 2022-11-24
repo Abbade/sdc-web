@@ -101,6 +101,11 @@ export default function PlantsTable({ id }) {
     setOpenTransplant(false);
     setOpenMove(false);
     setOpenMother(false);
+
+    //PREGUIÇA DE ATUALIZAR CONTEXT - PENDING  
+    setFastSearch(" ")
+    setFastSearch("")
+    
   };
 
   const columns: GridColDef[] = [

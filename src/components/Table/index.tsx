@@ -96,7 +96,7 @@ export default function Table({
                       </IconButton>
                     </Grid>
                   )}
-                  <Grid item xs={3} md={3} xl={2} textAlign={"end"}>
+                  <Grid item xs={3} md={3} xl={3} textAlign={"end"}>
                     <SplitButton
                       sx={{ ml: 1 }}
                       optionsImport={optionsImport}

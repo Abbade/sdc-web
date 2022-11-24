@@ -1,6 +1,6 @@
 import { Box, Button, Container, createTheme, Grid } from "@mui/material";
 import * as yup from "yup";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import { Location, Recipiente } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
+import { AlertContext } from "../../contexts/AlertContext";
 
 type CreatePlantFormData = {
   id_lote: number;
@@ -43,7 +44,8 @@ export default function CreatePlantForm(selectedLote) {
   useEffect(() => {
     const getRecipientes = async () => {
       var response = await api.get("/recipiente");
-      setRecipiente(response.data);
+      console.log(response.data.itens)
+      setRecipiente(response.data.itens);
     };
     getRecipientes();
   }, []);
@@ -53,7 +55,9 @@ export default function CreatePlantForm(selectedLote) {
   useEffect(() => {
     const getLocations = async () => {
       var response = await api.get("/location");
-      setLocation(response.data);
+      console.log(response.data.itens)
+
+      setLocation(response.data.itens);
     };
     getLocations();
   }, []);
@@ -62,16 +66,26 @@ export default function CreatePlantForm(selectedLote) {
     setIdLote(selectedLote.selectedLote.id);
   }, [selectedLote]);
 
+
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
+
   const handleLoteSubmit: SubmitHandler<CreatePlantFormData> = async (
     formData
   ) => {
+    setOpenLoading(true);
+
     try {
       formData.id_lote = idLote;
 
       const lote = await api.post("plant", formData);
+      showAlert(formData.qtPlant + " plantas do lote " + selectedLote.selectedLote.name + " cadastradas com sucesso.", "success");
+      setOpenLoading(false);
       // Router.push('/nursery/'+selectedLote.id)
     } catch (error) {
       const errorOficial = error as Error;
+      setOpenLoading(false);
+      showAlert(errorOficial.message, "error");
+
     }
   };
 

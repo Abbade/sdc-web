@@ -3,7 +3,7 @@ import {
 } from "@mui/material";
 import * as yup from "yup";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -20,6 +20,7 @@ import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
+import { AlertContext } from "../../contexts/AlertContext";
 
 
 
@@ -82,23 +83,35 @@ export default function MovePlantForm(plants) {
   }, [plants])
 
 
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
+
 
   const handleLoteSubmit: SubmitHandler<MovePlantFormData> = async (
     formData
   ) => {
+  setOpenLoading(true);
+
     try {
+
       formData.plants = idPlants
 
 
       const lote = await api.post("move-plant", formData);
-      // Router.push('/nursery/'+selectedLote.id)
+  showAlert(idPlants?.length + "planta(s) alterada(s) com sucesso.", "success");
+  setOpenLoading(false);
+
+  // Router.push('/nursery/'+selectedLote.id)
 
 
     } catch (error) {
       const errorOficial = error as Error;
+  showAlert(errorOficial.message, "error");
+
+      setOpenLoading(false);
 
     }
   };
+ 
 
   return (
     <Container component="main" maxWidth="xs">

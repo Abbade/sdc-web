@@ -32,7 +32,7 @@ export default function Nursery() {
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(1);
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpenTrash] = useState(false);
   const [openTransplante, setOpenTransplante] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   
@@ -69,14 +69,17 @@ export default function Nursery() {
     // get(event.target.value, page, pageSize);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseTrash = () => {
+    setOpenTrash(false);
+    get(fastSearch, page + 1, pageSize);
   };
 
 
 
   const handleTransplanteClose = () => {
     setOpenTransplante(false);
+    get(fastSearch, page + 1, pageSize);
+
   };
 
   const handleOpenCreate = () => {
@@ -85,13 +88,15 @@ export default function Nursery() {
 
     const handleCloseCreate = () => {
       setOpenCreate(false)
+    get(fastSearch, page + 1, pageSize);
+
     };
 
 
   const handleOpenTrashLote = useCallback(
     (lote: LoteInterface) => () => {
       setLote(lote);
-      setOpen(true);
+      setOpenTrash(true);
     },
     []
   );
@@ -186,7 +191,7 @@ export default function Nursery() {
 
       />
       <FormDialog
-        onClose={handleClose}
+        onClose={handleCloseTrash}
         open={open}
         title={"Descartar Lote " + lote?.name}
       >

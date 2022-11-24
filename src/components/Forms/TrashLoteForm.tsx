@@ -3,7 +3,7 @@ import {
 } from "@mui/material";
 import * as yup from "yup";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -18,6 +18,7 @@ import {
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
+import { AlertContext } from "../../contexts/AlertContext";
 
 
 
@@ -57,7 +58,7 @@ export default function TrashLoteForm(selectedLote) {
   useEffect(() => {
     const getTrashReasons = async () => {
       var response = await api.get("/trash-reason");
-      setTrashReason(response.data);
+      setTrashReason(response.data.itens);
     };
     getTrashReasons();
   }, []);
@@ -68,22 +69,31 @@ export default function TrashLoteForm(selectedLote) {
 
   },[selectedLote])
 
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
+
+
 
 
   const handleLoteSubmit: SubmitHandler<TrashLoteFormData> = async (
     formData
   ) => {
+    setOpenLoading(true);
+
     try {
       formData.idLote = idLote;
       console.log(formData)
 
       const lote = await api.put("trash-lote", formData);
+      showAlert(formData.qtTrash + " mudas do lote " + selectedLote.selectedLote.name + " descartadas com sucesso.", "success");
+      setOpenLoading(false);
       // Router.push('/nursery/'+selectedLote.id)
 
       
     } catch (error) {
       const errorOficial = error as Error;
       console.log(error as Error);
+      setOpenLoading(false);
+      showAlert(errorOficial.message, "error");
     }
   };
 

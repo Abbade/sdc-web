@@ -1,7 +1,7 @@
 import { Box, Button, Grid } from "@mui/material";
 import * as yup from "yup";
 import Router from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import { Genetic, PropagationType } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
+import { AlertContext, showAlert } from "../../contexts/AlertContext";
 
 type CreateLoteFormData = {
   id_propagationType: number;
@@ -70,14 +71,26 @@ export default function CreateLoteForm() {
     getLocations();
   }, []);
 
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
+
   const handleLoteSubmit: SubmitHandler<CreateLoteFormData> = async (
     formData
   ) => {
-    try {
-      const user = await api.post("lote", formData);
-      Router.back();
+      setOpenLoading(true);
+      try {
+
+        const user = await api.post("lote", formData);
+
+      showAlert("Lote cadastrado com sucesso.", "success");
+      setOpenLoading(false);
+
+      // Router.back();
     } catch (error) {
-      const errorOficial = error as Error;
+        const errorOficial = error as Error;
+      setOpenLoading(false);
+      showAlert(errorOficial.message, "error");
+
+
     }
   };
 

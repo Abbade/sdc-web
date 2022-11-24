@@ -3,7 +3,7 @@ import {
 } from "@mui/material";
 import * as yup from "yup";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -20,6 +20,7 @@ import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
+import { AlertContext } from "../../contexts/AlertContext";
 
 const postmanJson = {
   "transplantDate": "2012-04-30T18:25:43.511Z",
@@ -69,7 +70,7 @@ export default function TrashPlantForm(plants) {
   useEffect(() => {
     const getTrashReasons = async () => {
       var response = await api.get("/trash-reason");
-      setTrashReasons(response.data);
+      setTrashReasons(response.data.itens);
     };
     getTrashReasons();
   }, []);
@@ -101,21 +102,31 @@ export default function TrashPlantForm(plants) {
 
   }, [plants])
 
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
 
 
   const handleLoteSubmit: SubmitHandler<TransplantPlantFormData> = async (
     formData
   ) => {
+  setOpenLoading(true);
+
     try {
+
       formData.plants = idPlants
 
 
       const lote = await api.post("trash-plant", formData);
-      // Router.push('/nursery/'+selectedLote.id)
+  showAlert(idPlants?.length + "descartes cadastrado(s) com sucesso.", "success");
+  setOpenLoading(false);
+
+  // Router.push('/nursery/'+selectedLote.id)
 
 
     } catch (error) {
       const errorOficial = error as Error;
+  showAlert(errorOficial.message, "error");
+
+      setOpenLoading(false);
 
     }
   };
