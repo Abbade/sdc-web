@@ -52,7 +52,7 @@ export default function ActionPlantsTable({ id }) {
       pageSize={pageSize}
         columns={columns}
         rows={lotes}
-        searchName={"Plantas descartadas"}
+        searchName={"Atividades"}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
         onFastSearchChange={onFastSearchChange}
@@ -81,7 +81,7 @@ const columns: GridColDef[] = [
   },
   {
     field: "name",
-    headerName: "Motivo",
+    headerName: "Atividade",
     width: 300,
     renderCell: (params) => {
       return (
@@ -93,6 +93,4 @@ const columns: GridColDef[] = [
   },
   
 
-  // { field: "qtTotal", headerName: "Total", width: 90 },
-  { field: "qtPropTrashed", headerName: "Quantidade", width: 130 },
 ];

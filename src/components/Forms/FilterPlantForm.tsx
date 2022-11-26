@@ -1,12 +1,12 @@
 import { Box, Button, Container, createTheme, Grid } from "@mui/material";
 import * as yup from "yup";
 
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
-import { Location, Recipiente } from "../../interfaces/LoteInterface";
+import { FaseCultivo, Genetic, Location, Recipiente } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
@@ -32,9 +32,14 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
     control,
     setValue,
     formState: { errors, isSubmitting },
+    reset
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
+
+
   const [recipiente, setRecipiente] = useState([] as Recipiente[]);
+  const [faseCultivo, setFaseCultivo] = useState([] as FaseCultivo[]);
+  const [genetic, setGenetic] = useState([] as Genetic[]);
   const [location, setLocation] = useState([] as Location[]);
   const { filter, setFilter} = useContext(PlantsContext);
   const { setOpenLoading} = useContext(AlertContext);
@@ -44,7 +49,7 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
     const getRecipientes = async () => {
       setOpenLoading(true);
       var response = await api.get("/recipiente");
-      setRecipiente(response.data);
+      setRecipiente(response.data.itens);
       if(filter?.idRecipiente > 0){
         setValue("idRecipiente", filter.idRecipiente);
       }
@@ -53,15 +58,37 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
     const getLocations = async () => {
       setOpenLoading(true);
       var response = await api.get("/location");
-      setLocation(response.data);
+      setLocation(response.data.itens);
       if(filter?.idLocation > 0){
         setValue("idLocation", filter.idLocation);
       }
       setOpenLoading(false);
     };
 
+    const getFasesCultivo = async () => {
+      setOpenLoading(true);
+      var response = await api.get("/fase-cultivo");
+      setFaseCultivo(response.data.itens);
+      if(filter?.idFaseCultivo > 0){
+        setValue("idFaseCultivo", filter.idFaseCultivo);
+      }
+      setOpenLoading(false);
+    };
+
+    const getGenetics = async () => {
+      setOpenLoading(true);
+      var response = await api.get("/genetic");
+      setGenetic(response.data.itens);
+      if(filter?.idGenetic > 0){
+        setValue("idGenetic", filter.idGenetic);
+      }
+      setOpenLoading(false);
+    };
+
     getRecipientes();
     getLocations();
+    getFasesCultivo();
+    getGenetics();
 
   }, [filter, setOpenLoading, setValue]);
 
@@ -81,6 +108,7 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
       const errorOficial = error as Error;
     }
   };
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -118,6 +146,24 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
                 error={errors.id_recipiente as FieldError}
               />
             </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Genetica"}
+                name={"idGenetic"}
+                values={genetic}
+                control={control}
+                error={errors.id_genetic as FieldError}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Fase de Cultivo"}
+                name={"idFaseCultivo"}
+                values={faseCultivo}
+                control={control}
+                error={errors.id_faseCultivo as FieldError}
+              />
+            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -126,6 +172,17 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
             sx={{ mt: 3, mb: 2 }}
           >
             Filtrar
+          </Button>
+          <Button
+            type="reset"
+            onClick={() => {
+              reset()
+            }}
+            fullWidth
+            variant="contained"
+            sx={{ mt: 1, mb: 2 }}
+          >
+            Limpar Filtros
           </Button>
         </Box>
       </Box>

@@ -132,18 +132,7 @@ export default function LoteDetail() {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content1"
-          id="panel1a-header"
-        >
-          <Typography>Plantas Descartadas</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <TrashedLoteTable id={id}></TrashedLoteTable>
-        </AccordionDetails>
-      </Accordion>
+   
 
 
       {/* <Can permissions={["lote.list"]}>
