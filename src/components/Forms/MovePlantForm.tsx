@@ -63,7 +63,7 @@ export default function MovePlantForm(plants) {
   useEffect(() => {
     const getLocations = async () => {
       var response = await api.get("/location");
-      setLocation(response.data);
+      setLocation(response.data.itens);
     };
     getLocations();
   }, []);

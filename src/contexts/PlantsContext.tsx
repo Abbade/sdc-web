@@ -31,6 +31,8 @@ export type FilterProp = {
   idRecipiente?: number;
   idLocation?: number;
   idFaseCultivo?: number;
+  isMother?: boolean;
+  isTrashed?: boolean;
 }
 
 const firstFilter = {
@@ -38,7 +40,9 @@ const firstFilter = {
   idLote: undefined,
   idGenetic: undefined,
   idRecipiente: undefined,
-  idFaseCultivo: undefined
+  idFaseCultivo: undefined,
+  isMother: undefined,
+  isTrashed: undefined
 } as FilterProp;
 
 type PlantProviderProps = {

@@ -316,7 +316,7 @@ export default function Layout({ children }: LayoutProps) {
               />
               <CustomLink
                 keylink="clone_link"
-                linkstr="/plants"
+                linkstr="/statistics"
                 name="Relatórios"
                 open={open}
                 icon={<TrendingUpIcon />}
