@@ -33,6 +33,7 @@ export default function PlantsTable({ id }) {
     rowCount = 1,
     setRowCount,
     setFilter,
+    setRefresh,
     filter,
     loadingTable,
   } = useContext(PlantsContext);
@@ -102,10 +103,8 @@ export default function PlantsTable({ id }) {
     setOpenMove(false);
     setOpenMother(false);
 
-    //PREGUIÇA DE ATUALIZAR CONTEXT - PENDING  
-    setFastSearch(" ")
-    setFastSearch("")
-    
+    //PREGUIÇA DE ATUALIZAR CONTEXT - PENDING
+    setRefresh(true)
   };
 
   const columns: GridColDef[] = [

@@ -22,6 +22,7 @@ type PlantsContextData = {
   filter: FilterProp;
   setFilter: Dispatch<SetStateAction<FilterProp>>;
   loadingTable: boolean;
+  setRefresh: Dispatch<SetStateAction<boolean>>;
 };
 
 export type FilterProp = {
@@ -57,6 +58,7 @@ export function PlantProvider({ children}: PlantProviderProps) {
   const [fastSearch, setFastSearch] = useState("");
   const [pageSize, setPageSize] = useState<number | undefined>(10);
   const [page, setPage] = useState(0);
+  const [refresh, setRefresh] = useState(false);
   const [rowCount, setRowCount] = useState(1);
   const[loadingTable, setLoadingTable] = useState(false);
 
@@ -77,9 +79,10 @@ export function PlantProvider({ children}: PlantProviderProps) {
       setPlantas(response.data.itens);
       setRowCount(response.data.total);
       setLoadingTable(false);
+      setRefresh(false);
     };
     get();
-  }, [pageSize, page, fastSearch, filter]);
+  }, [pageSize, page, fastSearch, filter, refresh]);
 
 
 
@@ -97,7 +100,8 @@ export function PlantProvider({ children}: PlantProviderProps) {
         setRowCount,
         filter,
         setFilter,
-        loadingTable
+        loadingTable,
+        setRefresh
       }}
     >
       {children}

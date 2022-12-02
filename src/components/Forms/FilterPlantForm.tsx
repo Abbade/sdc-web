@@ -22,6 +22,11 @@ const createObjFormSchema = yup.object().shape({
   idGenetic: yup.number(),
   idRecipiente: yup.number(),
   idFaseCultivo: yup.number(),
+  propagationDate: yup.date(),
+  aclimatationDate: yup.date(),
+  vegetationDate: yup.date(),
+  floweringDate: yup.date(),
+
 });
 interface FilterPlant {
   onClose : () => void;
@@ -162,6 +167,38 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
                 values={faseCultivo}
                 control={control}
                 error={errors.id_faseCultivo as FieldError}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicDatePicker
+                label={"Data de Propagação"}
+                name={"propagationDate"}
+                control={control}
+                error={errors.propagationDate as FieldError}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicDatePicker
+                label={"Data de Aclimatação"}
+                name={"aclimatationDate"}
+                control={control}
+                error={errors.aclimatationDate as FieldError}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicDatePicker
+                label={"Data de Vegetação"}
+                name={"vegetationDate"}
+                control={control}
+                error={errors.vegetationDate as FieldError}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicDatePicker
+                label={"Data de Floração"}
+                name={"floweringDate"}
+                control={control}
+                error={errors.floweringDate as FieldError}
               />
             </Grid>
           </Grid>

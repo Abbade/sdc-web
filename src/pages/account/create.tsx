@@ -1,21 +1,8 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@mui/material";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Router, { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
-import { FieldError, SubmitHandler, useForm } from "react-hook-form";
-import * as yup from "yup";
-import { AlertContext } from "../../contexts/AlertContext";
-import { EditInterface } from "../../interfaces/EditInterface";
-import { api } from "../../services/apiClient";
-import BasicAutocomplete from "../../components/Inputs/BasicAutocompleteMultiple";
-import BasicTextField from "../../components/Inputs/BasicTextField";
 import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import { withSSRAuth } from "../../utils/withSSRAuth";
-import BasicSelect from "../../components/Inputs/BasicSelect";
+import { useRouter } from "next/router";
+import * as yup from "yup";
 import AccountForm from "../../components/Forms/AccountForm";
+import { withSSRAuth } from "../../utils/withSSRAuth";
 
 type CreateFormData = {
   name: string;
@@ -46,7 +33,7 @@ export default function CreateAccount() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <AccountForm id={!isNaN(Number.parseInt(id.toString())) ? Number.parseInt(id.toString()) : undefined} onClose={() => router.back()}></AccountForm>
+      <AccountForm id={!isNaN(Number.parseInt(id?.toString())) ? Number.parseInt(id.toString()) : undefined} onClose={() => router.back()}></AccountForm>
     </Container>
   );
 }
