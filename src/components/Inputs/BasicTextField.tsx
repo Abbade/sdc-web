@@ -8,6 +8,7 @@ interface selectParams {
   label: string;
   name: string;
   error?: FieldError;
+  multiline?: boolean;
   control?: Control<FieldValues, any>;
   type?: string;
   disabled?: boolean;
@@ -16,9 +17,11 @@ export default function BasicTextField({
   name,
   label,
   control,
+  multiline,
   error = null,
   type = "text",
   disabled = false,
+
 }: selectParams) {
   return (
     <Box sx={{ minWidth: 120 }}>
@@ -33,6 +36,7 @@ export default function BasicTextField({
               value={value}
               label={label}
               error={!!error}
+              multiline={multiline}
               helperText={error?.message}
               type={type}
               disabled={disabled}

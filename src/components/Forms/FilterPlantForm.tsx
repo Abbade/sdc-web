@@ -17,6 +17,7 @@ import { AlertContext } from "../../contexts/AlertContext";
 
 const createObjFormSchema = yup.object().shape({
   // id_lote: yup.number().required("Genética é obrigatório"),
+  ids: yup.string(),
   totalFilter: yup.number(),
   idLote: yup.number(),
   idGenetic: yup.number(),
@@ -132,7 +133,15 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
           sx={{ mt: 3 }}
         >
           <Grid container spacing={2}>
-
+          <Grid item xs={12} sm={12}>
+          <BasicTextField
+            label={"Código(s)"}
+            name={"ids"}
+            multiline={true}
+            control={control}
+            error={errors.ids as FieldError}
+          />
+        </Grid>
             <Grid item xs={12} sm={12}>
               <BasicSelect
                 label={"Location"}

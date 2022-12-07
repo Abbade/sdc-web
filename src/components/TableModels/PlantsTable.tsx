@@ -2,13 +2,16 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import {
+  GridActionsCellItem,
   GridCallbackDetails,
   GridColDef,
   GridSelectionModel,
 } from "@mui/x-data-grid";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import Router from "next/router";
 
 import { format } from "date-fns";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { FilterProp, PlantsContext } from "../../contexts/PlantsContext";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
 import FormDialog from "../Dialogs/Dialog";
@@ -107,6 +110,13 @@ export default function PlantsTable({ id }) {
     setRefresh(true)
   };
 
+  const handleOpenDetails = useCallback(
+    (planta: PlantaInterface) => () => {
+      Router.push("/plants/" + planta.id);
+    },
+    []
+  );
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Codigo", width: 200 },
@@ -191,7 +201,8 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.aclimatationDate), "dd/MM/yyyy")}
+            {params.row.aclimatationDate
+              ? format(new Date(params.row.aclimatationDate), "dd/MM/yyyy"):""}
           </div>
         );
       },
@@ -203,7 +214,8 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.vegetationDate), "dd/MM/yyyy")}
+            {params.row.vegetationDate
+              ? format(new Date(params.row.vegetationDate), "dd/MM/yyyy"):""}
           </div>
         );
       },
@@ -215,7 +227,8 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.floweringDate), "dd/MM/yyyy")}
+            {params.row.floweringDate
+              ? format(new Date(params.row.floweringDate), "dd/MM/yyyy"):""}
           </div>
         );
       },
@@ -241,10 +254,27 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {format(new Date(params.row.trashDate), "dd/MM/yyyy")}
+            {params.row.trashDate
+              ? format(new Date(params.row.trashDate), "dd/MM/yyyy"):""}
           </div>
         );
       },
+    },
+    {
+      field: "actions",
+      type: "actions",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <GridActionsCellItem
+          key="detail"
+          icon={<ZoomInIcon />}
+          label="Detalhes"
+          onClick={handleOpenDetails(params.row)}
+        />
+        );
+      },
+    
     },
   ];
 

@@ -93,7 +93,7 @@ const columns: GridColDef[] = [
   },
   { field: "qt", headerName: "Quantidade", width: 160 },
   {
-    field: "obs",
+    field: "detail",
     headerName: "Detalhe",
     width: 300,
     renderCell: (params) => {
@@ -104,6 +104,8 @@ const columns: GridColDef[] = [
       );
     },
   },
+  { field: "obs", headerName: "OBS", width: 160 },
+
   
 
 ];
