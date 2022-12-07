@@ -91,6 +91,10 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
       setOpenLoading(false);
     };
 
+    if(filter?.ids) {
+      setValue("ids",filter.ids)
+    }
+
     getRecipientes();
     getLocations();
     getFasesCultivo();

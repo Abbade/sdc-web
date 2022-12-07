@@ -27,6 +27,7 @@ type PlantsContextData = {
 
 export type FilterProp = {
   totalFilter: number;
+  ids?: string;
   idLote?: number;
   idGenetic?: number;
   idRecipiente?: number;
@@ -38,6 +39,7 @@ export type FilterProp = {
 
 const firstFilter = {
   totalFilter: 0,
+  ids: undefined,
   idLote: undefined,
   idGenetic: undefined,
   idRecipiente: undefined,
