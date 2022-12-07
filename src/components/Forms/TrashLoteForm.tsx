@@ -84,6 +84,7 @@ export default function TrashLoteForm(selectedLote) {
       console.log(formData)
 
       const lote = await api.put("trash-lote", formData);
+      console.log(lote)
       showAlert(formData.qtTrash + " mudas do lote " + selectedLote.selectedLote.name + " descartadas com sucesso.", "success");
       setOpenLoading(false);
       // Router.push('/nursery/'+selectedLote.id)

@@ -19,6 +19,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { PlantProvider } from "../../../contexts/PlantsContext";
+import ActionLotesTable from "../../../components/TableModels/ActionLotesTable";
 
 export default function LoteDetail() {
   const { setOpenLoading } = useContext(AlertContext);
@@ -111,7 +112,7 @@ export default function LoteDetail() {
           <Typography>Plantas Descartadas</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <TrashedLoteTable id={id}></TrashedLoteTable>
+          <ActionLotesTable id={id}></ActionLotesTable>
         </AccordionDetails>
       </Accordion>
 
