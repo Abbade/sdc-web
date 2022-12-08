@@ -31,35 +31,51 @@ let dataInitial = {
     ],
 };
 
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
+
 export default function PieChart({xAxis, yAxis, label}) {
 
     const [data, setData] = useState(dataInitial)
 
 
     useEffect(() => {
+        let colors = [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                    ];
+        shuffle(colors);
 
         let dataIn = {
+            
             labels: xAxis,
+            
             datasets: [
                 {
+                    
                     label: label,
                     data: yAxis,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)',
-                    ],
+                    backgroundColor: colors,
+                    borderColor: colors,
                     borderWidth: 1,
                 },
             ],
@@ -69,5 +85,5 @@ export default function PieChart({xAxis, yAxis, label}) {
     }, [xAxis, yAxis, label])
 
 
-    return <Pie data={data}  />;
+    return <Pie  data={data}  />;
 }
