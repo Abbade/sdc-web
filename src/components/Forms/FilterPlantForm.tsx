@@ -95,6 +95,22 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
       setValue("ids",filter.ids)
     }
 
+    if(filter?.propagationDate) {
+      setValue("propagationDate",filter.propagationDate)
+    }
+
+    if(filter?.aclimatationDate) {
+      setValue("aclimatationDate",filter.aclimatationDate)
+    }
+
+    if(filter?.vegetationDate) {
+      setValue("vegetationDate",filter.vegetationDate)
+    }
+
+    if(filter?.floweringDate) {
+      setValue("floweringDate",filter.floweringDate)
+    }
+
     getRecipientes();
     getLocations();
     getFasesCultivo();
@@ -105,11 +121,17 @@ export default function FilterPlantForm({onClose} : FilterPlant) {
   const handleLoteSubmit: SubmitHandler<FilterProp> = async (formData) => {
     try {
       formData.totalFilter = 0;
+      formData.totalFilter = formData.ids?.toString()?.length > 0 ? formData.totalFilter + 1: formData.totalFilter;
       formData.totalFilter = formData.idFaseCultivo?.toString()?.length > 0 ? formData.totalFilter + 1: formData.totalFilter;
       formData.totalFilter = formData.idGenetic?.toString()?.length > 0 ? formData.totalFilter + 1 : formData.totalFilter;
       formData.totalFilter = formData.idLocation?.toString()?.length > 0 ? formData.totalFilter + 1 : formData.totalFilter;
       formData.totalFilter = formData.idLote?.toString()?.length > 0 ? formData.totalFilter + 1: formData.totalFilter;
       formData.totalFilter = formData.idRecipiente?.toString()?.length > 0 ? formData.totalFilter + 1 : formData.totalFilter;
+      formData.totalFilter = formData.propagationDate?.toString()?.length > 0 ? formData.totalFilter + 1: formData.totalFilter;
+      formData.totalFilter = formData.aclimatationDate?.toString()?.length > 0 ? formData.totalFilter + 1: formData.totalFilter;
+      formData.totalFilter = formData.vegetationDate?.toString()?.length > 0 ? formData.totalFilter + 1: formData.totalFilter;
+      formData.totalFilter = formData.floweringDate?.toString()?.length > 0 ? formData.totalFilter + 1: formData.totalFilter;
+
       console.log("FORM");
       console.log(formData);
       setFilter(formData);

@@ -35,6 +35,10 @@ export type FilterProp = {
   idFaseCultivo?: number;
   isMother?: boolean;
   isTrashed?: boolean;
+  propagationDate?: Date;
+  aclimatationDate?: Date;
+  vegetationDate?: Date;
+  floweringDate?: Date;
 }
 
 const firstFilter = {
@@ -45,7 +49,11 @@ const firstFilter = {
   idRecipiente: undefined,
   idFaseCultivo: undefined,
   isMother: undefined,
-  isTrashed: undefined
+  isTrashed: undefined,
+  propagationDate: undefined,
+  aclimatationDate: undefined,
+  vegetationDate: undefined,
+  floweringDate: undefined
 } as FilterProp;
 
 type PlantProviderProps = {
