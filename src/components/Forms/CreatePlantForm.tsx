@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
-import { Location, Recipiente } from "../../interfaces/LoteInterface";
+import { Location, LoteInterface, Recipiente } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
@@ -30,7 +30,12 @@ const createObjFormSchema = yup.object().shape({
 });
 const theme = createTheme();
 
-export default function CreatePlantForm(selectedLote) {
+type CreatePlantFormType = {
+  selectedLote : LoteInterface;
+  onClose?: (refresh? : boolean) => void;
+}
+
+export default function CreatePlantForm({selectedLote, onClose} : CreatePlantFormType) {
   const {
     handleSubmit,
     control,
@@ -63,7 +68,7 @@ export default function CreatePlantForm(selectedLote) {
   }, []);
 
   useEffect(() => {
-    setIdLote(selectedLote.selectedLote.id);
+    setIdLote(selectedLote.id);
   }, [selectedLote]);
 
 
@@ -78,8 +83,9 @@ export default function CreatePlantForm(selectedLote) {
       formData.id_lote = idLote;
 
       const lote = await api.post("plant", formData);
-      showAlert(formData.qtPlant + " plantas do lote " + selectedLote.selectedLote.name + " cadastradas com sucesso.", "success");
+      showAlert(formData.qtPlant + " plantas do lote " + selectedLote.name + " cadastradas com sucesso.", "success");
       setOpenLoading(false);
+      onClose();
       // Router.push('/nursery/'+selectedLote.id)
     } catch (error) {
       const errorOficial = error as Error;
@@ -119,7 +125,7 @@ export default function CreatePlantForm(selectedLote) {
               <BasicTextField
                 label={
                   "Quantidade  (" +
-                  selectedLote.selectedLote.qtProp +
+                  selectedLote.qtProp +
                   " Disponíveis)"
                 }
                 name={"qtPlant"}

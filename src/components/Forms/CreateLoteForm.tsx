@@ -1,15 +1,15 @@
-import { Box, Button, Grid } from "@mui/material";
-import * as yup from "yup";
-import Router from "next/router";
-import { useContext, useEffect, useState } from "react";
-import { api } from "../../services/apiClient";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Box, Button, Grid } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { AlertContext } from "../../contexts/AlertContext";
+import { EditInterface } from "../../interfaces/EditInterface";
 import { Genetic, PropagationType } from "../../interfaces/LoteInterface";
+import { api } from "../../services/apiClient";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
-import { AlertContext, showAlert } from "../../contexts/AlertContext";
 
 type CreateLoteFormData = {
   id_propagationType: number;
@@ -29,7 +29,7 @@ const createObjFormSchema = yup.object().shape({
   qtTotal: yup.number().required("Quantidade total é obrigatória"),
 });
 
-export default function CreateLoteForm() {
+export default function CreateLoteForm({ onClose }: EditInterface) {
   const {
     register,
     handleSubmit,
@@ -76,21 +76,18 @@ export default function CreateLoteForm() {
   const handleLoteSubmit: SubmitHandler<CreateLoteFormData> = async (
     formData
   ) => {
-      setOpenLoading(true);
-      try {
-
-        const user = await api.post("lote", formData);
+    setOpenLoading(true);
+    try {
+      const user = await api.post("lote", formData);
 
       showAlert("Lote cadastrado com sucesso.", "success");
       setOpenLoading(false);
-
+      onClose(true);
       // Router.back();
     } catch (error) {
-        const errorOficial = error as Error;
+      const errorOficial = error as Error;
       setOpenLoading(false);
       showAlert(errorOficial.message, "error");
-
-
     }
   };
 

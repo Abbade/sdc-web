@@ -87,6 +87,7 @@ export default function Nursery() {
     };
 
     const handleCloseCreate = () => {
+      
       setOpenCreate(false)
     get(fastSearch, page + 1, pageSize);
 
@@ -186,7 +187,7 @@ export default function Nursery() {
         rowCount={rowCount}
         pageSize={pageSize}
         searchName="Procurar Lotes"
-        optionsImport={optionsImport}
+        onAdd={handleOpenCreate}
         // url="/nursery/create-lote"
 
       />
@@ -195,21 +196,21 @@ export default function Nursery() {
         open={open}
         title={"Descartar Lote " + lote?.name}
       >
-        <TrashLoteForm selectedLote={lote}></TrashLoteForm>
+        <TrashLoteForm onClose={handleCloseTrash} selectedLote={lote}></TrashLoteForm>
       </FormDialog>
       <FormDialog
         onClose={handleTransplanteClose}
         open={openTransplante}
         title={"Transplantar " + lote?.name}
       >
-        <CreatePlantForm selectedLote={lote}></CreatePlantForm>
+        <CreatePlantForm onClose={handleTransplanteClose} selectedLote={lote}></CreatePlantForm>
       </FormDialog>
       <FormDialog
         onClose={handleCloseCreate}
         open={openCreate}
         title={"Novo Lote " + lote?.name}
       >
-        <CreateLoteForm ></CreateLoteForm>
+        <CreateLoteForm onClose={handleCloseCreate}></CreateLoteForm>
       </FormDialog>
     </Box>
   );

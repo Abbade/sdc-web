@@ -13,6 +13,7 @@ import {
   useForm
 } from "react-hook-form";
 import {
+  LoteInterface,
   TrashReason
 } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
@@ -38,8 +39,13 @@ const createObjFormSchema = yup.object().shape({
 });
 const theme = createTheme();
 
+type TrashLoteFormType = {
+  selectedLote : LoteInterface;
+  onClose?: (refresh? : boolean) => void;
+}
 
-export default function TrashLoteForm(selectedLote) {
+
+export default function TrashLoteForm({selectedLote, onClose } : TrashLoteFormType) {
  
   const {
     register,
@@ -64,8 +70,8 @@ export default function TrashLoteForm(selectedLote) {
   }, []);
 
   useEffect(() => {
-    setIdLote(selectedLote.selectedLote.id)
-
+    setIdLote(selectedLote.id)
+    
 
   },[selectedLote])
 
@@ -85,8 +91,9 @@ export default function TrashLoteForm(selectedLote) {
 
       const lote = await api.put("trash-lote", formData);
       console.log(lote)
-      showAlert(formData.qtTrash + " mudas do lote " + selectedLote.selectedLote.name + " descartadas com sucesso.", "success");
+      showAlert(formData.qtTrash + " mudas do lote " + selectedLote.name + " descartadas com sucesso.", "success");
       setOpenLoading(false);
+      onClose();
       // Router.push('/nursery/'+selectedLote.id)
 
       
@@ -127,7 +134,7 @@ export default function TrashLoteForm(selectedLote) {
 
             <Grid item xs={12} sm={12}>
               <BasicTextField
-                label={"Quantidade  (" + selectedLote.selectedLote.qtProp + " Disponíveis)"}
+                label={"Quantidade  (" + selectedLote.qtProp + " Disponíveis)"}
                 name={"qtTrash"}
                 control={control}
                 error={errors.qtTrash as FieldError}
