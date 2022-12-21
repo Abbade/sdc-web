@@ -1,13 +1,12 @@
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { Button } from "@mui/material";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import Box from "@mui/material/Box";
 import {
   GridActionsCellItem,
   GridCallbackDetails,
   GridColDef,
-  GridSelectionModel,
+  GridSelectionModel
 } from "@mui/x-data-grid";
-import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import Router from "next/router";
 
 import { format } from "date-fns";
@@ -22,9 +21,11 @@ import TransformPlantIntoMotherForm from "../Forms/TransformPlantIntoMotherForm"
 import TransplantPlantForm from "../Forms/TransplantPlantForm";
 import TrashPlantForm from "../Forms/TrashPlantForm";
 import Table from "../Table";
+import { AlertContext } from "../../contexts/AlertContext";
+
 
 export default function PlantsTable({ id }) {
-  const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
+  
   const {
     plants = [],
     fastSearch,
@@ -39,15 +40,22 @@ export default function PlantsTable({ id }) {
     setRefresh,
     filter,
     loadingTable,
+    refresh
   } = useContext(PlantsContext);
 
+  const { showAlert} = useContext(AlertContext);
+
+  const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
+  const [openTrash, setOpenTrash] = useState(false);
+  const [openChangeStage, setChangeStage] = useState(false);
+  const [openTransplant, setOpenTransplant] = useState(false);
+  const [openMove, setOpenMove] = useState(false);
+  const [openMother, setOpenMother] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
+
   useEffect(() => {
-
-    if(id > 0 )
-      setFilter({idLote: id} as FilterProp);
+    if (id > 0) setFilter({ idLote: id } as FilterProp);
   }, [id, setFilter]);
-
-
 
   const onPageSizeChange = async (
     pageSize: number,
@@ -76,13 +84,6 @@ export default function PlantsTable({ id }) {
     //get(event.target.value, page, pageSize);
   };
 
-  const [openTrash, setOpenTrash] = useState(false);
-  const [openChangeStage, setChangeStage] = useState(false);
-  const [openTransplant, setOpenTransplant] = useState(false);
-  const [openMove, setOpenMove] = useState(false);
-  const [openMother, setOpenMother] = useState(false);
-  const [openFilter, setOpenFilter] = useState(false);
-
   const optionsImport = [
     {
       title: "Transplante",
@@ -99,15 +100,22 @@ export default function PlantsTable({ id }) {
     },
   ];
 
+  const handleOpenSplitButton = (index : number) => {
+    if(selectedPlants.length > 0)
+      optionsImport[index].action(true);
+    else
+      showAlert("Selecione ao menos uma planta", 'warning')
+  }
+
   const handleClose = () => {
+    console.log("teste");
     setOpenTrash(false);
     setChangeStage(false);
     setOpenTransplant(false);
     setOpenMove(false);
     setOpenMother(false);
 
-    //PREGUIÇA DE ATUALIZAR CONTEXT - PENDING
-    setRefresh(true)
+    setRefresh(!refresh);
   };
 
   const handleOpenDetails = useCallback(
@@ -127,7 +135,7 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {params.row.isMotherPlant ? 'Sim' : 'Não'}
+            {params.row.isMotherPlant ? "Sim" : "Não"}
           </div>
         );
       },
@@ -202,7 +210,8 @@ export default function PlantsTable({ id }) {
         return (
           <div className="MuiDataGrid-cellContent">
             {params.row.aclimatationDate
-              ? format(new Date(params.row.aclimatationDate), "dd/MM/yyyy"):""}
+              ? format(new Date(params.row.aclimatationDate), "dd/MM/yyyy")
+              : ""}
           </div>
         );
       },
@@ -215,7 +224,8 @@ export default function PlantsTable({ id }) {
         return (
           <div className="MuiDataGrid-cellContent">
             {params.row.vegetationDate
-              ? format(new Date(params.row.vegetationDate), "dd/MM/yyyy"):""}
+              ? format(new Date(params.row.vegetationDate), "dd/MM/yyyy")
+              : ""}
           </div>
         );
       },
@@ -228,7 +238,8 @@ export default function PlantsTable({ id }) {
         return (
           <div className="MuiDataGrid-cellContent">
             {params.row.floweringDate
-              ? format(new Date(params.row.floweringDate), "dd/MM/yyyy"):""}
+              ? format(new Date(params.row.floweringDate), "dd/MM/yyyy")
+              : ""}
           </div>
         );
       },
@@ -255,7 +266,8 @@ export default function PlantsTable({ id }) {
         return (
           <div className="MuiDataGrid-cellContent">
             {params.row.trashDate
-              ? format(new Date(params.row.trashDate), "dd/MM/yyyy"):""}
+              ? format(new Date(params.row.trashDate), "dd/MM/yyyy")
+              : ""}
           </div>
         );
       },
@@ -267,14 +279,13 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <GridActionsCellItem
-          key="detail"
-          icon={<ZoomInIcon />}
-          label="Detalhes"
-          onClick={handleOpenDetails(params.row)}
-        />
+            key="detail"
+            icon={<ZoomInIcon />}
+            label="Detalhes"
+            onClick={handleOpenDetails(params.row)}
+          />
         );
       },
-    
     },
   ];
 
@@ -298,6 +309,7 @@ export default function PlantsTable({ id }) {
           console.log("teste");
           setOpenFilter(true);
         }}
+        onOpenSplitButton={handleOpenSplitButton}
         totalFilter={filter?.totalFilter}
       />
       <FormDialog
@@ -305,14 +317,17 @@ export default function PlantsTable({ id }) {
         open={openFilter}
         title={"Filtro"}
       >
-        <FilterPlantForm onClose={() => setOpenFilter(false)}></FilterPlantForm>
+        <FilterPlantForm  onClose={() => setOpenFilter(false)}></FilterPlantForm>
       </FormDialog>
       <FormDialog
         onClose={handleClose}
         open={openTransplant}
         title={"Transplantar"}
       >
-        <TransplantPlantForm plants={selectedPlants}></TransplantPlantForm>
+        <TransplantPlantForm
+          onClose={handleClose}
+          plants={selectedPlants}
+        ></TransplantPlantForm>
       </FormDialog>
       <FormDialog onClose={handleClose} open={openTrash} title={"Descartar"}>
         <TrashPlantForm plants={selectedPlants}></TrashPlantForm>

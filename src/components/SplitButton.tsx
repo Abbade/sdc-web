@@ -1,122 +1,138 @@
-import * as React from 'react';
+import EditIcon from '@mui/icons-material/Edit';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
+import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import { useEffect } from 'react';
+import {IconButton, useMediaQuery} from '@mui/material';
+import { alpha, styled, useTheme } from '@mui/material/styles';
+import * as React from 'react';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
+const StyledMenu = styled((props: MenuProps) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color:
+      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity,
+        ),
+      },
+    },
+  },
+}));
 
-export default function SplitButton(optionsImport) {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef<HTMLDivElement>(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-  const [buttonMenuList, setButtonMenuList] = React.useState([])
-  
-  useEffect(() => {
-    setButtonMenuList(optionsImport)
+export interface OptionsImportProps {
+  optionsImport: IOptionsImport[];
+  onOpenSplitButton: (index: number) => void;
+}
 
-  }, [optionsImport]);
+export interface IOptionsImport {
+  title: string;
+  icon: JSX.Element;
+  action: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-
-  const handleClick = () => {
-    console.info(`You clicked ${optionsImport[selectedIndex]}`);
+export default function SplitButton({optionsImport, onOpenSplitButton} : OptionsImportProps) {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const theme = useTheme();
+  const isSmallOrLess = useMediaQuery(theme.breakpoints.up("md"));
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number,
   ) => {
-
-    setSelectedIndex(index);
-    optionsImport.optionsImport[index].action(true)
-    // setOpen(false);
+    onOpenSplitButton(index);
+    //optionsImport[index].action(true);
+    setAnchorEl(null);
   };
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event: Event) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  return (
-    <>
-
-    { optionsImport != undefined && optionsImport.optionsImport != undefined ? (
+  if(optionsImport != null){
+    return (
+      <div>
+        {isSmallOrLess ? 
         <>
-        <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-          <Button onClick={handleClick}>
-            {/* {optionsImport.optionsImport[selectedIndex].title} */}
-            Ações
+            <Button
+              id="demo-customized-button"
+              aria-controls={open ? 'demo-customized-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              variant="contained"
+              disableElevation
+              startIcon={ <MoreVertIcon />}
+              onClick={handleClick}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+                  Ações
             </Button>
-          <Button
-            size="small"
-            aria-controls={open ? 'split-button-menu' : undefined}
-            aria-expanded={open ? 'true' : undefined}
-            aria-label="select merge strategy"
-            aria-haspopup="menu"
-            onClick={handleToggle}
-          >
-            <ArrowDropDownIcon />
-          </Button>
-        </ButtonGroup><Popper
-          sx={{
-            zIndex: 1,
-          }}
-          open={open}
-          anchorEl={anchorRef.current}
-          role={undefined}
-          transition
-          disablePortal
-        >
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                style={{
-                  transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-                }}
-              >
-                <Paper>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList id="split-button-menu" autoFocusItem>
-                      { optionsImport.optionsImport.map((option, index) => (
-                        <MenuItem
-                          key={option.key}
-                          // disabled={index === 2}
-                          // selected={index === selectedIndex}
-                          onClick={(event) => handleMenuItemClick(event, index)}
-                        >
-                          {option.title}
-                        </MenuItem>
-                      ))}
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
-          </>
-      )
-      : (
-        <></>
-      )
-    }
-    </>
-
-  )
-
+  
+        </> 
+        : 
+        <>
+          <IconButton
+  
+              aria-label="upload picture"
+              component="label"
+              onClick={handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+        </>}
+        <StyledMenu
+              id="demo-customized-menu"
+              MenuListProps={{
+                'aria-labelledby': 'demo-customized-button',
+              }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+            >
+              {optionsImport.map((option, index) => 
+                  <MenuItem key={index}  onClick={(event) => handleMenuItemClick(event, index)} disableRipple>
+                    {/* {option.icon} */}
+                    {option.title}
+                </MenuItem>
+              )}
+  
+            </StyledMenu>
+      </div>
+    );
+  }
+  return (<></>)
+ 
 }

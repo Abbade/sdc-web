@@ -13,7 +13,10 @@ import {
   GridSelectionModel,
 } from "@mui/x-data-grid";
 import * as React from "react";
-import SplitButton from "../SplitButton";
+import SplitButton, {
+  IOptionsImport,
+  OptionsImportProps,
+} from "../SplitButton";
 import DataTable from "./DataTable";
 
 export interface TableIndexInterface {
@@ -33,11 +36,12 @@ export interface TableIndexInterface {
   onFastSearchChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  optionsImport?: any;
+  optionsImport?: IOptionsImport[];
   onAdd?: () => void;
   onFilter?: () => void;
   totalFilter?: number;
   loading?: boolean;
+  onOpenSplitButton?: (index: number) => void;
   //onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -58,9 +62,10 @@ export default function Table({
   onFilter,
   totalFilter,
   loading,
+  onOpenSplitButton
 }: TableIndexInterface) {
   const theme = useTheme();
-  const isSmallOrLess = useMediaQuery(theme.breakpoints.up("sm"));
+  const isSmallOrLess = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -88,19 +93,22 @@ export default function Table({
               {isSmallOrLess ? (
                 <>
                   {onFilter !== undefined && (
-                    <Grid item xs={2} textAlign={"end"}>
-                      <IconButton aria-label="filter" onClick={onFilter}>
-                        <Badge badgeContent={totalFilter} color="warning">
-                          <FilterListIcon />
-                        </Badge>
-                      </IconButton>
+                    <Grid item xs={3} xl={2} textAlign={"end"}>
+                      <Badge badgeContent={totalFilter} color="warning">
+                        <Button
+                          disableElevation
+                          variant="contained"
+                          aria-label="filter"
+                          onClick={onFilter}
+                          startIcon={<FilterListIcon />}
+                        >
+                          Filtro
+                        </Button>
+                      </Badge>
                     </Grid>
                   )}
-                  <Grid item xs={3} md={3} xl={3} textAlign={"end"}>
-                    <SplitButton
-                      sx={{ ml: 1 }}
-                      optionsImport={optionsImport}
-                    ></SplitButton>
+                  <Grid item xs={3} md={3} lg={3} xl={2}  textAlign={"end"}>
+                    <SplitButton onOpenSplitButton={onOpenSplitButton} optionsImport={optionsImport}></SplitButton>
                   </Grid>
 
                   {onAdd !== undefined && (
@@ -138,6 +146,8 @@ export default function Table({
                       <AddIcon />
                     </IconButton>
                   )}
+
+                  <SplitButton onOpenSplitButton={onOpenSplitButton} optionsImport={optionsImport}></SplitButton>
                 </>
               )}
             </Grid>

@@ -1,38 +1,31 @@
-import {
-  Box, Button, Container, createTheme, Grid
-} from "@mui/material";
+import { Box, Button, Container, createTheme, Grid } from "@mui/material";
 import * as yup from "yup";
 
 import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  FieldError,
-  SubmitHandler,
-  useForm
-} from "react-hook-form";
+import { FieldError, SubmitHandler, useForm } from "react-hook-form";
+import { AlertContext } from "../../contexts/AlertContext";
 import {
   FaseCultivo,
-  Location, Recipiente
+  Location,
+  Recipiente,
 } from "../../interfaces/LoteInterface";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
 import BasicTextField from "../Inputs/BasicTextField";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
-import { AlertContext } from "../../contexts/AlertContext";
 
 const postmanJson = {
-  "transplantDate": "2012-04-30T18:25:43.511Z",
-  "plants": [1, 2, 3, 4],
-  "id_recipiente": 1,
-  "id_location": 1,
-  "id_faseCultivo": 2,
+  transplantDate: "2012-04-30T18:25:43.511Z",
+  plants: [1, 2, 3, 4],
+  id_recipiente: 1,
+  id_location: 1,
+  id_faseCultivo: 2,
 
-
-  "obs": "Ae"
-  }
-
+  obs: "Ae",
+};
 
 type TransplantPlantFormData = {
   plants: number[];
@@ -41,22 +34,26 @@ type TransplantPlantFormData = {
   id_recipiente: number;
   id_faseCultivo: number;
   obs: string;
-}
+};
 
 const createObjFormSchema = yup.object().shape({
   // id_lote: yup.number().required("Genética é obrigatório"),
 
   transplantDate: yup.date().required("Data obrigatória"),
-  obs: yup.string().required("Observação obrigatória"),
-  id_location: yup.number().required("Genética é obrigatório"),
-  id_recipiente: yup.number().required("Genética é obrigatório"),
-  id_faseCultivo: yup.number().required("Genética é obrigatório"),
+  obs: yup.string(),
+  id_location: yup.number(),
+  id_recipiente: yup.number().required("Recipiente obrigatório"),
+  id_faseCultivo: yup.number(),
 });
+
 const theme = createTheme();
 
+export interface TransplantPlantFormProps {
+  plants: PlantaInterface[];
+  onClose?: (refresh? : boolean) => void;
+}
 
-export default function TransplantPlantForm(plants) {
-
+export default function TransplantPlantForm({plants, onClose} : TransplantPlantFormProps) {
   const {
     register,
     handleSubmit,
@@ -64,13 +61,11 @@ export default function TransplantPlantForm(plants) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
-  
+  const [idPlants, setIdPlants] = useState([] as number[]);
 
-  const [idPlants, setIdPlants] = useState([] as number[])
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
 
-  const [recipiente, setRecipiente] = useState(
-    [] as Recipiente[]
-  );
+  const [recipiente, setRecipiente] = useState([] as Recipiente[]);
 
   useEffect(() => {
     const getRecipientes = async () => {
@@ -80,9 +75,7 @@ export default function TransplantPlantForm(plants) {
     getRecipientes();
   }, []);
 
-  const [location, setLocation] = useState(
-    [] as Location[]
-  );
+  const [location, setLocation] = useState([] as Location[]);
 
   useEffect(() => {
     const getLocations = async () => {
@@ -92,10 +85,7 @@ export default function TransplantPlantForm(plants) {
     getLocations();
   }, []);
 
-
-  const [faseCultivo, setFaseCultivo] = useState(
-    [] as FaseCultivo[]
-  );
+  const [faseCultivo, setFaseCultivo] = useState([] as FaseCultivo[]);
 
   useEffect(() => {
     const getFasesCultivo = async () => {
@@ -105,40 +95,38 @@ export default function TransplantPlantForm(plants) {
     getFasesCultivo();
   }, []);
 
-
   useEffect(() => {
-    console.log(plants.plants)
-    if(plants.plants.length > 0) {
-      setIdPlants(plants.plants.map((plant) => {
-        return plant.id
-      }))
-  
+    console.log(plants);
+    if (plants.length > 0) {
+      setIdPlants(
+        plants.map((plant) => {
+          return plant.id;
+        })
+      );
     }
-    
+  }, [plants]);
 
-  }, [plants])
-  const { showAlert, setOpenLoading } = useContext(AlertContext);
 
   const handleLoteSubmit: SubmitHandler<TransplantPlantFormData> = async (
     formData
   ) => {
     setOpenLoading(true);
     try {
-      formData.plants = idPlants
-
+      formData.plants = idPlants;
 
       const lote = await api.post("transplant-plant", formData);
-        showAlert(idPlants?.length + "plantas transplantadas com sucesso.", "success");
-        setOpenLoading(false);
+      showAlert(
+        idPlants?.length + "plantas transplantadas com sucesso.",
+        "success"
+      );
+      onClose();
+      setOpenLoading(false);
 
       // Router.push('/nursery/'+selectedLote.id)
-
-
     } catch (error) {
       const errorOficial = error as Error;
       showAlert(errorOficial.message, "error");
       setOpenLoading(false);
-
     }
   };
 
@@ -152,7 +140,6 @@ export default function TransplantPlantForm(plants) {
           alignItems: "center",
         }}
       >
-
         <Box
           component="form"
           noValidate
@@ -168,8 +155,6 @@ export default function TransplantPlantForm(plants) {
                 error={errors.transplantDate as FieldError}
               />
             </Grid>
-
-           
 
             <Grid item xs={12} sm={12}>
               <BasicSelect
@@ -213,7 +198,7 @@ export default function TransplantPlantForm(plants) {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Descartar Estacas
+            Transplantar
           </Button>
         </Box>
       </Box>

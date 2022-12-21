@@ -23,6 +23,7 @@ type PlantsContextData = {
   setFilter: Dispatch<SetStateAction<FilterProp>>;
   loadingTable: boolean;
   setRefresh: Dispatch<SetStateAction<boolean>>;
+  refresh: boolean;
 };
 
 export type FilterProp = {
@@ -39,7 +40,7 @@ export type FilterProp = {
   aclimatationDate?: Date;
   vegetationDate?: Date;
   floweringDate?: Date;
-}
+};
 
 const firstFilter = {
   totalFilter: 0,
@@ -53,27 +54,25 @@ const firstFilter = {
   propagationDate: undefined,
   aclimatationDate: undefined,
   vegetationDate: undefined,
-  floweringDate: undefined
+  floweringDate: undefined,
 } as FilterProp;
 
 type PlantProviderProps = {
   children: ReactNode;
-
 };
 
 export const PlantsContext = createContext({} as PlantsContextData);
 
-export function PlantProvider({ children}: PlantProviderProps) {
+export function PlantProvider({ children }: PlantProviderProps) {
   const [plants, setPlantas] = useState([] as PlantaInterface[]);
   const [fastSearch, setFastSearch] = useState("");
   const [pageSize, setPageSize] = useState<number | undefined>(10);
   const [page, setPage] = useState(0);
   const [refresh, setRefresh] = useState(false);
   const [rowCount, setRowCount] = useState(1);
-  const[loadingTable, setLoadingTable] = useState(false);
+  const [loadingTable, setLoadingTable] = useState(false);
 
   const [filter, setFilter] = useState(firstFilter);
- 
 
   useEffect(() => {
     const get = async () => {
@@ -83,18 +82,16 @@ export function PlantProvider({ children}: PlantProviderProps) {
           page: page + 1,
           limit: pageSize,
           name: fastSearch,
-          filter: filter
+          filter: filter,
         },
       });
       setPlantas(response.data.itens);
       setRowCount(response.data.total);
       setLoadingTable(false);
-      setRefresh(false);
     };
+    console.log("planta render");
     get();
   }, [pageSize, page, fastSearch, filter, refresh]);
-
-
 
   return (
     <PlantsContext.Provider
@@ -111,7 +108,8 @@ export function PlantProvider({ children}: PlantProviderProps) {
         filter,
         setFilter,
         loadingTable,
-        setRefresh
+        setRefresh,
+        refresh
       }}
     >
       {children}
