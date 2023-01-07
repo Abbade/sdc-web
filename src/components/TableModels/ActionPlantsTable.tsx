@@ -91,6 +91,29 @@ const columns: GridColDef[] = [
       );
     },
   },
+  {
+    field: "changes",
+    headerName: "Detalhes",
+    width: 300,
+    renderCell: (params) => {
+      return (
+        <div className="MuiDataGrid-cellContent">
+          
+          {
+          (params.row.faseCultivoOld?.name ? params.row.faseCultivoOld.name : "") +
+          (params.row.recipienteOld?.name ? params.row.recipienteOld.name : "") +
+          (params.row.locationOld?.name ? params.row.locationOld.name : "") +
+           (" -> ") +   
+          (params.row.faseCultivo?.name ? params.row.faseCultivo?.name : "") +
+          (params.row.location?.name ? params.row.location?.name : "") +
+          (params.row.recipiente?.name ? params.row.recipiente?.name : "") 
+          }
+         
+        </div>
+      );
+    },
+  },
+
   
 
 ];

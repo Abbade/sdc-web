@@ -22,6 +22,7 @@ import TransplantPlantForm from "../Forms/TransplantPlantForm";
 import TrashPlantForm from "../Forms/TrashPlantForm";
 import Table from "../Table";
 import { AlertContext } from "../../contexts/AlertContext";
+import CreateCropForm from "../Forms/CreateCropForm";
 
 
 export default function PlantsTable({ id }) {
@@ -51,6 +52,7 @@ export default function PlantsTable({ id }) {
   const [openTransplant, setOpenTransplant] = useState(false);
   const [openMove, setOpenMove] = useState(false);
   const [openMother, setOpenMother] = useState(false);
+  const [openCrop, setOpenCrop] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
   useEffect(() => {
@@ -97,6 +99,10 @@ export default function PlantsTable({ id }) {
       title: "Fase de Cultivo",
       icon: <ArrowDropDownIcon />,
       action: setChangeStage,
+    },{
+      title: "Colher",
+      icon: <ArrowDropDownIcon />,
+      action: setOpenCrop,
     },
   ];
 
@@ -114,6 +120,7 @@ export default function PlantsTable({ id }) {
     setOpenTransplant(false);
     setOpenMove(false);
     setOpenMother(false);
+    setOpenCrop(false);
 
     setRefresh(!refresh);
   };
@@ -251,8 +258,8 @@ export default function PlantsTable({ id }) {
       renderCell: (params) => {
         return (
           <div className="MuiDataGrid-cellContent">
-            {params.row.harvestDate
-              ? format(new Date(params.row.harvestDate), "dd/MM/yyyy")
+            {params.row.cropDate
+              ? format(new Date(params.row.cropDate), "dd/MM/yyyy")
               : ""}
           </div>
         );
@@ -346,6 +353,13 @@ export default function PlantsTable({ id }) {
         title={"Fase de Cultivo"}
       >
         <ChangePlantStageForm plants={selectedPlants}></ChangePlantStageForm>
+      </FormDialog>
+      <FormDialog
+        onClose={handleClose}
+        open={openCrop}
+        title={"Colher Plantas"}
+      >
+        <CreateCropForm plants={selectedPlants}></CreateCropForm>
       </FormDialog>
     </Box>
   );

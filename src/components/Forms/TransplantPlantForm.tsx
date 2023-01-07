@@ -90,7 +90,9 @@ export default function TransplantPlantForm({plants, onClose} : TransplantPlantF
   useEffect(() => {
     const getFasesCultivo = async () => {
       var response = await api.get("/fase-cultivo");
-      setFaseCultivo(response.data.itens);
+      setFaseCultivo(response.data.itens.filter(fase => {
+        return fase.name == "Vegetação" || fase.name =="Floração"
+      }));
     };
     getFasesCultivo();
   }, []);
