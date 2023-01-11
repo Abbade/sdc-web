@@ -125,4 +125,8 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
   return {
     props: {},
   };
-});
+}
+,
+  {
+    permissions: ["parameter.list"],
+  });

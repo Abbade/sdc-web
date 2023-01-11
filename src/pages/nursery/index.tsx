@@ -10,36 +10,31 @@ import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 
 export default function LoteDashboard() {
-  const { user, signOut, isAuthenticated } = useContext(AuthContext)
+  const { user, signOut, isAuthenticated } = useContext(AuthContext);
 
-  const routing = useRouter()
-
-
-
-  useEffect(() => {
-    api.get('/me')
-      .then(response => console.log(response))
-  }, [])
+  const routing = useRouter();
 
   return (
     <>
-    <Typography component="h1" variant="h4" sx={{pt: 1, pb: 1}}>
-      Buscar no berçário
-    </Typography>
-
+      <Typography component="h1" variant="h4" sx={{ pt: 1, pb: 1 }}>
+        Buscar no berçário
+      </Typography>
 
       <LoteTable></LoteTable>
-      <Can permissions={['lote.list']}>
+      <Can permissions={["lote.list"]}>
         <div>Métricas</div>
       </Can>
     </>
-  )
+  );
 }
 
-export const getServerSideProps = withSSRAuth(async (ctx) => {
-
-  return {
-    props: {}
+export const getServerSideProps = withSSRAuth(
+  async (ctx) => {
+    return {
+      props: {},
+    };
+  },
+  {
+    permissions: ["nursery.list"],
   }
-})
-
+);

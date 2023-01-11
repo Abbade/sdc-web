@@ -39,5 +39,8 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
   return {
     props: {}
   }
+},
+{
+  permissions: ["crop.list"],
 })
 

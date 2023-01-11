@@ -131,6 +131,6 @@ export const getServerSideProps = withSSRAuth(
     };
   },
   {
-    permissions: ["user.create"],
+    permissions: ["company.create"],
   }
 );

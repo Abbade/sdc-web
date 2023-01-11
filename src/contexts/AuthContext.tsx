@@ -83,6 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api
         .get("/me")
         .then((response) => {
+          console.log("chamou o me, cuidado!");
           const { email, permissions, roles, name } = response.data;
           console.log(name);
           setUser({ email, permissions, roles, name });

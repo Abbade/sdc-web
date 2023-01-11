@@ -33,5 +33,8 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
   return {
     props: {}
   }
+},
+{
+  permissions: ["plant.list"],
 })
 

@@ -7,6 +7,7 @@ import TotalByGeneticChart from "../../components/Charts/Model/TotalByGeneticCha
 import TotalByPropType from "../../components/Charts/Model/TotalByPropType";
 import TotalByThrashReason from "../../components/Charts/Model/TotalByThrashReason";
 import TotalNurseryTimeSeries from "../../components/Charts/Model/TotalNurseryTimeSeries";
+import { withSSRAuth } from "../../utils/withSSRAuth";
 
 export default function StatisticsIndex() {
   const [filterType, setFilterType] = useState("1");
@@ -89,3 +90,13 @@ export default function StatisticsIndex() {
     </Box>
   );
 }
+export const getServerSideProps = withSSRAuth(
+  async (ctx) => {
+    return {
+      props: {},
+    };
+  },
+  {
+    permissions: ["statistics.culti"],
+  }
+);

@@ -36,6 +36,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Avatar from "@mui/material/Avatar";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { Can } from "./Can";
 
 const drawerWidth = 240;
 
@@ -293,41 +294,54 @@ export default function Layout({ children }: LayoutProps) {
             icon={<ForestIcon />}
           >
             <>
+            <Can permissions={["nursery.list"]}>
+                <CustomLink
+                    keylink="clone_link"
+                    linkstr="/nursery"
+                    name="Berçario"
+                    open={open}
+                    icon={<GrassIcon />}
+                  />
+            </Can>
+            <Can permissions={["plant.list"]}>
               <CustomLink
-                keylink="clone_link"
-                linkstr="/nursery"
-                name="Berçario"
-                open={open}
-                icon={<GrassIcon />}
-              />
+                  keylink="clone_link"
+                  linkstr="/plants"
+                  name="Plantas"
+                  open={open}
+                  icon={<ForestIcon />}
+                />
+            </Can>
+            <Can permissions={["crop.list"]}>
               <CustomLink
-                keylink="clone_link"
-                linkstr="/plants"
-                name="Plantas"
-                open={open}
-                icon={<ForestIcon />}
-              />
-               <CustomLink
-                keylink="clone_link"
-                linkstr="/crops"
-                name="Colheitas"
-                open={open}
-                icon={<ContentCutIcon />}
-              />
+                  keylink="clone_link"
+                  linkstr="/crops"
+                  name="Colheitas"
+                  open={open}
+                  icon={<ContentCutIcon />}
+                />
+            </Can>
+            <Can permissions={["statistics.culti"]}>
               <CustomLink
-                keylink="clone_link"
-                linkstr="/statistics"
-                name="Relatórios"
-                open={open}
-                icon={<TrendingUpIcon />}
-              />
+                  keylink="clone_link"
+                  linkstr="/statistics"
+                  name="Relatórios"
+                  open={open}
+                  icon={<TrendingUpIcon />}
+                />
+            </Can>
+            <Can permissions={["parameter.list"]}>
               <CustomLink
-                keylink="clone_link"
-                linkstr="/params/cultivation/propagation-type"
-                name="Parâmetros"
-                open={open}
-                icon={<SettingsIcon />}
-              />
+                  keylink="clone_link"
+                  linkstr="/params/cultivation/propagation-type"
+                  name="Parâmetros"
+                  open={open}
+                  icon={<SettingsIcon />}
+                />
+            </Can>
+               
+              
+              
             </>
           </CustomMenu>
 
