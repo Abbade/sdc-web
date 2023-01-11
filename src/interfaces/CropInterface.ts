@@ -1,4 +1,5 @@
-export interface Crops {
+export interface CropInterface {
+    id: number
     id_location: number
     location: any    
   

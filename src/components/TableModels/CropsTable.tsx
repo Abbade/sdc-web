@@ -116,7 +116,7 @@ export default function Nursery() {
   const handleOpenDetails = useCallback(
     (lote: LoteInterface) => () => {
       setLote(lote);
-      Router.push("/nursery/" + lote.id);
+      Router.push("/crops/" + lote.id);
       console.log(lote);
     },
     []
