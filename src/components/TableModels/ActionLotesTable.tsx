@@ -105,7 +105,18 @@ const columns: GridColDef[] = [
     },
   },
   { field: "obs", headerName: "OBS", width: 160 },
-
+,{
+  field: "status",
+  headerName: "Status",
+  width: 300,
+  renderCell: (params) => {
+    return (
+      <div className="MuiDataGrid-cellContent">
+        {params.row.status}
+      </div>
+    );
+  },
+},
   
 
 ];

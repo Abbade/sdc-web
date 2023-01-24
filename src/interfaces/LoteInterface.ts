@@ -12,6 +12,7 @@ export interface FaseCultivo {
     name: string;
     description: string;
     ordem: number;
+    duration: number;
     id_user_create: number;
     created_at: Date;
 

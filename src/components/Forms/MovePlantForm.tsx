@@ -29,6 +29,9 @@ type MovePlantFormData = {
   plants: number[];
   id_location: number;
   obs: string;
+  scheduled: boolean;
+  id_user_atribution: number;
+  moveDate: Date;
 }
 
 const createObjFormSchema = yup.object().shape({
@@ -37,6 +40,8 @@ const createObjFormSchema = yup.object().shape({
   moveDate: yup.date().required("Data obrigatória"),
   obs: yup.string().required("Observação obrigatória"),
   id_location: yup.number().required("Genética é obrigatório"),
+  scheduled: yup.boolean(),
+  id_user_atribution: yup.number().required("Responsável obrigatório"),
 });
 const theme = createTheme();
 
@@ -60,12 +65,25 @@ export default function MovePlantForm(plants) {
     [] as Location[]
   );
 
+
+
   useEffect(() => {
     const getLocations = async () => {
       var response = await api.get("/location");
       setLocation(response.data.itens);
     };
     getLocations();
+  }, []);
+  const [user, setUser] = useState(
+    [] as Location[]
+  );
+  useEffect(() => {
+    const getUsers = async () => {
+      var response = await api.get("/user");
+      console.log(response.data.itens)
+      setUser(response.data.itens);
+    };
+    getUsers();
   }, []);
 
 
@@ -94,6 +112,7 @@ export default function MovePlantForm(plants) {
     try {
 
       formData.plants = idPlants
+      formData.scheduled = formData.moveDate > new Date() ? true : false
 
 
       const lote = await api.post("move-plant", formData);
@@ -140,7 +159,15 @@ export default function MovePlantForm(plants) {
               />
             </Grid>
 
-           
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Responsável"}
+                name={"id_user_atribution"}
+                values={user}
+                control={control}
+                error={errors.id_user_atribution as FieldError}
+              />
+            </Grid>
 
             <Grid item xs={12} sm={12}>
               <BasicSelect

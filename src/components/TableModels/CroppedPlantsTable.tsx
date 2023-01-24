@@ -67,8 +67,8 @@ export default function CroppedPlantsTable({ id }) {
 
 const columns: GridColDef[] = [
   { field: "name", headerName: "Código", width: 130 },
-  { field: "flowersWetMass", headerName: "Código", width: 130 },
-  { field: "flowersDriedMass", headerName: "Código", width: 130 },
+  { field: "flowersWetMass", headerName: "Massa Úmida", width: 130 },
+  { field: "flowersDriedMass", headerName: "Massa Seca", width: 130 },
   
 
 ];

@@ -78,6 +78,7 @@ export default function FaseCultivoIndex() {
       { field: "id", headerName: "ID", width: 70 },
       { field: "name", headerName: "Nome", width: 130 },
       { field: "ordem", headerName: "Ordem", width: 70 },
+      { field: "duration", headerName: "Duração*", width: 70 },
       {
         field: "actions",
         type: "actions",

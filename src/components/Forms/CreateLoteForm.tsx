@@ -27,6 +27,8 @@ const createObjFormSchema = yup.object().shape({
   id_genetic: yup.number().required("Genética é obrigatório"),
   id_location_init: yup.number().required("Localização é obrigatória"),
   qtTotal: yup.number().required("Quantidade total é obrigatória"),
+  scheduled: yup.boolean(),
+  id_user_atribution: yup.number().required("Responsável é obrigatório")
 });
 
 export default function CreateLoteForm({ onClose }: EditInterface) {
@@ -70,7 +72,17 @@ export default function CreateLoteForm({ onClose }: EditInterface) {
 
     getLocations();
   }, []);
-
+  const [user, setUser] = useState(
+    [] as Location[]
+  );
+  useEffect(() => {
+    const getUsers = async () => {
+      var response = await api.get("/user");
+      console.log(response.data.itens)
+      setUser(response.data.itens);
+    };
+    getUsers();
+  }, []);
   const { showAlert, setOpenLoading } = useContext(AlertContext);
 
   const handleLoteSubmit: SubmitHandler<CreateLoteFormData> = async (
@@ -116,6 +128,15 @@ export default function CreateLoteForm({ onClose }: EditInterface) {
             error={errors.propDate as FieldError}
           />
         </Grid>
+        <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Responsável"}
+                name={"id_user_atribution"}
+                values={user}
+                control={control}
+                error={errors.id_user_atribution as FieldError}
+              />
+            </Grid>
 
         <Grid item xs={12} sm={12}>
           <BasicSelect

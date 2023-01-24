@@ -82,7 +82,7 @@ const columns: GridColDef[] = [
   {
     field: "name",
     headerName: "Atividade",
-    width: 300,
+    width: 200,
     renderCell: (params) => {
       return (
         <div className="MuiDataGrid-cellContent">
@@ -113,7 +113,30 @@ const columns: GridColDef[] = [
       );
     },
   },
-
+  {
+    field: "status",
+    headerName: "Status",
+    width: 150,
+    renderCell: (params) => {
+      return (
+        <div className="MuiDataGrid-cellContent">
+          {params.row.status}
+        </div>
+      );
+    },
+  },
+  {
+    field: "completion",
+    headerName: "User",
+    width: 300,
+    renderCell: (params) => {
+      return (
+        <div className="MuiDataGrid-cellContent">
+          {params.row.completion?.name}
+        </div>
+      );
+    },
+  },
   
 
 ];

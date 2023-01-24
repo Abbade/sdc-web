@@ -34,6 +34,9 @@ type TransplantPlantFormData = {
   id_recipiente: number;
   id_faseCultivo: number;
   obs: string;
+  scheduled: boolean;
+  id_user_atribution: number;
+  transplantDate: Date
 };
 
 const createObjFormSchema = yup.object().shape({
@@ -44,6 +47,8 @@ const createObjFormSchema = yup.object().shape({
   id_location: yup.number(),
   id_recipiente: yup.number().required("Recipiente obrigatório"),
   id_faseCultivo: yup.number(),
+  scheduled: yup.boolean(),
+  id_user_atribution: yup.number()
 });
 
 const theme = createTheme();
@@ -108,6 +113,18 @@ export default function TransplantPlantForm({plants, onClose} : TransplantPlantF
     }
   }, [plants]);
 
+  const [user, setUser] = useState(
+    [] as Location[]
+  );
+  useEffect(() => {
+    const getUsers = async () => {
+      var response = await api.get("/user");
+      console.log(response.data.itens)
+      setUser(response.data.itens);
+    };
+    getUsers();
+  }, []);
+
 
   const handleLoteSubmit: SubmitHandler<TransplantPlantFormData> = async (
     formData
@@ -115,6 +132,7 @@ export default function TransplantPlantForm({plants, onClose} : TransplantPlantF
     setOpenLoading(true);
     try {
       formData.plants = idPlants;
+      formData.scheduled = formData.transplantDate > new Date() ? true : false;
 
       const lote = await api.post("transplant-plant", formData);
       showAlert(
@@ -155,6 +173,15 @@ export default function TransplantPlantForm({plants, onClose} : TransplantPlantF
                 name={"transplantDate"}
                 control={control}
                 error={errors.transplantDate as FieldError}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Responsável"}
+                name={"id_user_atribution"}
+                values={user}
+                control={control}
+                error={errors.id_user_atribution as FieldError}
               />
             </Grid>
 

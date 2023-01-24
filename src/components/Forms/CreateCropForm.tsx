@@ -34,6 +34,8 @@ type ChangePlantStageFormData = {
   cropWetTrimMass: number;
   cropFlowerWetMass: number;
   actionDate: Date;
+  scheduled: boolean;
+  id_user_atribution: number
 }
 
 const createObjFormSchema = yup.object().shape({
@@ -43,7 +45,9 @@ const createObjFormSchema = yup.object().shape({
   id_location: yup.number().required("Local de secagem obrigatório"),
   cropFullWetMass: yup.number().required("Local de secagem obrigatório"),
   cropWetTrimMass: yup.number().required("Local de secagem obrigatório"),
-  cropFlowerWetMass: yup.number().required("Local de secagem obrigatório")
+  cropFlowerWetMass: yup.number().required("Local de secagem obrigatório"),
+  id_user_atribution: yup.number().required("Responsável obrigatório"),
+  scheduled: yup.boolean()
 });
 const theme = createTheme();
 
@@ -88,6 +92,19 @@ export default function CreateCropForm(plants) {
     };
     getLocations();
   }, []);
+
+  const [user, setUser] = useState(
+    [] as Location[]
+  );
+  useEffect(() => {
+    const getUsers = async () => {
+      var response = await api.get("/user");
+      console.log(response.data.itens)
+      setUser(response.data.itens);
+    };
+    getUsers();
+  }, []);
+
 
   useEffect(() => {
     console.log(plants.plants)
@@ -162,6 +179,15 @@ export default function CreateCropForm(plants) {
                 name={"actionDate"}
                 control={control}
                 error={errors.actionDate as FieldError}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Responsável"}
+                name={"id_user_atribution"}
+                values={user}
+                control={control}
+                error={errors.id_user_atribution as FieldError}
               />
             </Grid>
             <Grid item xs={12} sm={12}>

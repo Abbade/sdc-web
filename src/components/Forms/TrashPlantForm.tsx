@@ -42,7 +42,8 @@ type TransplantPlantFormData = {
 
 const createObjFormSchema = yup.object().shape({
   // id_lote: yup.number().required("Genética é obrigatório"),
-
+  scheduled: yup.boolean(),
+  id_user_atribution: yup.number().required("Responsável obrigatório"),
   trashDate: yup.date().required("Data obrigatória"),
   obs: yup.string().required("Observação obrigatória"),
   id_trashReason: yup.number().required("Genética é obrigatório"),
@@ -73,6 +74,18 @@ export default function TrashPlantForm(plants) {
       setTrashReasons(response.data.itens);
     };
     getTrashReasons();
+  }, []);
+
+  const [user, setUser] = useState(
+    [] as Location[]
+  );
+  useEffect(() => {
+    const getUsers = async () => {
+      var response = await api.get("/user");
+      console.log(response.data.itens)
+      setUser(response.data.itens);
+    };
+    getUsers();
   }, []);
 
   // const [location, setLocation] = useState(
@@ -157,6 +170,17 @@ export default function TrashPlantForm(plants) {
                 error={errors.trashDate as FieldError}
               />
             </Grid>
+
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Responsável"}
+                name={"id_user_atribution"}
+                values={user}
+                control={control}
+                error={errors.id_user_atribution as FieldError}
+              />
+            </Grid>
+
 
             <Grid item xs={12} sm={12}>
               <BasicSelect

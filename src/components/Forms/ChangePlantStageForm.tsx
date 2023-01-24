@@ -29,6 +29,8 @@ type ChangePlantStageFormData = {
   plants: number[];
   id_faseCultivo: number;
   obs: string;
+  scheduled: boolean;
+  actionDate: Date
 }
 
 const createObjFormSchema = yup.object().shape({
@@ -37,6 +39,8 @@ const createObjFormSchema = yup.object().shape({
   actionDate: yup.date().required("Data obrigatória"),
   obs: yup.string().required("Observação obrigatória"),
   id_faseCultivo: yup.number().required("Genética é obrigatório"),
+  scheduled: yup.boolean(),
+  id_user_atribution: yup.number().required("Responsável obrigatório"),
 });
 const theme = createTheme();
 
@@ -72,6 +76,17 @@ export default function ChangePlantStageForm(plants) {
     console.log(faseCultivo)
   }, []);
 
+  const [user, setUser] = useState(
+    [] as Location[]
+  );
+  useEffect(() => {
+    const getUsers = async () => {
+      var response = await api.get("/user");
+      console.log(response.data.itens)
+      setUser(response.data.itens);
+    };
+    getUsers();
+  }, []);
 
 
   useEffect(() => {
@@ -97,6 +112,7 @@ export default function ChangePlantStageForm(plants) {
     try {
 
       formData.plants = idPlants
+      formData.scheduled = formData.actionDate > new Date() ? true : false
 
 
       const lote = await api.post("plant-stage", formData);
@@ -143,7 +159,16 @@ export default function ChangePlantStageForm(plants) {
               />
             </Grid>
 
-           
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Responsável"}
+                name={"id_user_atribution"}
+                values={user}
+                control={control}
+                error={errors.id_user_atribution as FieldError}
+              />
+            </Grid>
+
 
             <Grid item xs={12} sm={12}>
               <BasicSelect

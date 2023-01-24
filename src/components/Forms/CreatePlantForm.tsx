@@ -27,6 +27,8 @@ const createObjFormSchema = yup.object().shape({
   id_location: yup.number().required("Genética é obrigatório"),
   id_recipiente: yup.number().required("Genética é obrigatório"),
   qtPlant: yup.number().required("Quantidade total é obrigatória"),
+  scheduled: yup.boolean(),
+  id_user_atribution: yup.number().required("Responsável é obrigatório")
 });
 const theme = createTheme();
 
@@ -70,7 +72,17 @@ export default function CreatePlantForm({selectedLote, onClose} : CreatePlantFor
   useEffect(() => {
     setIdLote(selectedLote.id);
   }, [selectedLote]);
-
+  const [user, setUser] = useState(
+    [] as Location[]
+  );
+  useEffect(() => {
+    const getUsers = async () => {
+      var response = await api.get("/user");
+      console.log(response.data.itens)
+      setUser(response.data.itens);
+    };
+    getUsers();
+  }, []);
 
   const { showAlert, setOpenLoading } = useContext(AlertContext);
 
@@ -118,6 +130,16 @@ export default function CreatePlantForm({selectedLote, onClose} : CreatePlantFor
                 name={"aclimatationDate"}
                 control={control}
                 error={errors.aclimatationDate as FieldError}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
+              <BasicSelect
+                label={"Responsável"}
+                name={"id_user_atribution"}
+                values={user}
+                control={control}
+                error={errors.id_user_atribution as FieldError}
               />
             </Grid>
 

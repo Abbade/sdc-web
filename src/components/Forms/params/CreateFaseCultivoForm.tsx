@@ -21,6 +21,7 @@ const createObjFormSchema = yup.object().shape({
   name: yup.string().required("Nome é obrigatório"),
   description: yup.string().required("Descrição é obrigatório"),
   ordem: yup.number().required("Ordem da fase de cultivo é obrigatória"),
+  duration: yup.number()
 });
 
 const theme = createTheme();
@@ -49,6 +50,7 @@ export default function CreateFaseCultivoForm({ id, onClose }: EditInterface) {
             setValue("description", item.data.description);
 
             setValue("ordem", item.data.ordem);
+            setValue("duration", item.data.duration);
             setOpenLoading(false);
           } catch (error) {
             const errorOficial = error as Error;
@@ -113,6 +115,14 @@ export default function CreateFaseCultivoForm({ id, onClose }: EditInterface) {
             name={"ordem"}
             control={control}
             error={errors.ordem as FieldError}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <BasicTextField
+            label={"Duração"}
+            name={"duration"}
+            control={control}
+            error={errors.duration as FieldError}
           />
         </Grid>
       </Grid>
