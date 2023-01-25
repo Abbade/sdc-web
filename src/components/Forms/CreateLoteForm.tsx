@@ -1,11 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, Grid } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { AlertContext } from "../../contexts/AlertContext";
 import { EditInterface } from "../../interfaces/EditInterface";
-import { Genetic, PropagationType } from "../../interfaces/LoteInterface";
+import { Genetic, PropagationType, Recipiente } from "../../interfaces/LoteInterface";
 import { api } from "../../services/apiClient";
 import BasicDatePicker from "../Inputs/BasicDatePicker";
 import BasicSelect from "../Inputs/BasicSelect";
@@ -18,6 +18,7 @@ type CreateLoteFormData = {
   qtTotal: number;
   obs: string;
   propDate: Date;
+  scheduled: boolean
 };
 
 const createObjFormSchema = yup.object().shape({
@@ -43,6 +44,7 @@ export default function CreateLoteForm({ onClose }: EditInterface) {
     [] as PropagationType[]
   );
   const [location, setLocation] = useState([] as Location[]);
+  const [scheduled, setScheduled] = useState(false);
 
   useEffect(() => {
     const getPropagationTypes = async () => {
@@ -54,6 +56,7 @@ export default function CreateLoteForm({ onClose }: EditInterface) {
   }, []);
 
   const [genetic, setGenetics] = useState([] as Genetic[]);
+  const [recipiente, setRecipiente] = useState([] as Recipiente[]);
 
   useEffect(() => {
     const getGenetics = async () => {
@@ -63,7 +66,14 @@ export default function CreateLoteForm({ onClose }: EditInterface) {
 
     getGenetics();
   }, []);
+  useEffect(() => {
+    const getRecipientes = async () => {
+      var response = await api.get("/recipiente");
+      setRecipiente(response.data.itens);
+    };
 
+    getRecipientes();
+  }, []);
   useEffect(() => {
     const getLocations = async () => {
       var response = await api.get("/location");
@@ -128,6 +138,22 @@ export default function CreateLoteForm({ onClose }: EditInterface) {
             error={errors.propDate as FieldError}
           />
         </Grid>
+        {/* <Grid item xs={12} sm={12}>
+
+<FormControlLabel label="Agendar" control={
+
+<Checkbox
+              name="scheduled"
+              onChange={
+              (event, checked) => {
+                console.log(checked)
+                setScheduled(checked)
+              }
+              }
+              ></Checkbox>
+}              ></FormControlLabel>
+              
+            </Grid> */}
         <Grid item xs={12} sm={12}>
               <BasicSelect
                 label={"Responsável"}
@@ -137,7 +163,15 @@ export default function CreateLoteForm({ onClose }: EditInterface) {
                 error={errors.id_user_atribution as FieldError}
               />
             </Grid>
-
+            <Grid item xs={12} sm={12}>
+          <BasicSelect
+            label={"Recipiente"}
+            name={"id_recipiente"}
+            values={recipiente}
+            control={control}
+            error={errors.id_recipiente as FieldError}
+          />
+        </Grid>
         <Grid item xs={12} sm={12}>
           <BasicSelect
             label={"Tipo de Propagação"}

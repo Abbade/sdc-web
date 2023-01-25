@@ -1,5 +1,5 @@
 import {
-  Box, Button, Container, createTheme, Grid
+  Box, Button, Checkbox, Container, createTheme, FormControlLabel, Grid
 } from "@mui/material";
 import * as yup from "yup";
 
@@ -59,6 +59,7 @@ export default function ChangePlantStageForm(plants) {
   const [idPlants, setIdPlants] = useState([] as number[])
 
  
+  const [scheduled, setScheduled] = useState(false);
 
   const [faseCultivo, setFaseCultivo] = useState(
     [] as FaseCultivo[]
@@ -112,7 +113,7 @@ export default function ChangePlantStageForm(plants) {
     try {
 
       formData.plants = idPlants
-      formData.scheduled = formData.actionDate > new Date() ? true : false
+      formData.scheduled = scheduled
 
 
       const lote = await api.post("plant-stage", formData);
@@ -158,7 +159,22 @@ export default function ChangePlantStageForm(plants) {
                 error={errors.actionDate as FieldError}
               />
             </Grid>
+            <Grid item xs={12} sm={12}>
 
+<FormControlLabel label="Agendar" control={
+
+<Checkbox
+              name="scheduled"
+              onChange={
+              (event, checked) => {
+                console.log(checked)
+                setScheduled(checked)
+              }
+              }
+              ></Checkbox>
+}              ></FormControlLabel>
+              
+            </Grid>
             <Grid item xs={12} sm={12}>
               <BasicSelect
                 label={"Responsável"}

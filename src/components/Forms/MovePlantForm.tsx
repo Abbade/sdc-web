@@ -1,5 +1,5 @@
 import {
-  Box, Button, Container, createTheme, Grid
+  Box, Button, Checkbox, Container, createTheme, FormControlLabel, Grid
 } from "@mui/material";
 import * as yup from "yup";
 
@@ -56,6 +56,7 @@ export default function MovePlantForm(plants) {
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
   
+  const [scheduled, setScheduled] = useState(false);
 
   const [idPlants, setIdPlants] = useState([] as number[])
 
@@ -112,7 +113,7 @@ export default function MovePlantForm(plants) {
     try {
 
       formData.plants = idPlants
-      formData.scheduled = formData.moveDate > new Date() ? true : false
+      formData.scheduled = scheduled
 
 
       const lote = await api.post("move-plant", formData);
@@ -157,6 +158,23 @@ export default function MovePlantForm(plants) {
                 control={control}
                 error={errors.moveDate as FieldError}
               />
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
+
+<FormControlLabel label="Agendar" control={
+
+<Checkbox
+              name="scheduled"
+              onChange={
+              (event, checked) => {
+                console.log(checked)
+                setScheduled(checked)
+              }
+              }
+              ></Checkbox>
+}              ></FormControlLabel>
+              
             </Grid>
 
             <Grid item xs={12} sm={12}>

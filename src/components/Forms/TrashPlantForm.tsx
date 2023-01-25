@@ -1,5 +1,5 @@
 import {
-  Box, Button, Container, createTheme, Grid
+  Box, Button, Checkbox, Container, createTheme, FormControlLabel, Grid
 } from "@mui/material";
 import * as yup from "yup";
 
@@ -38,6 +38,7 @@ type TransplantPlantFormData = {
   plants: number[];
   id_trashReason: number;
   obs: string;
+  scheduled: boolean
 }
 
 const createObjFormSchema = yup.object().shape({
@@ -60,6 +61,7 @@ export default function TrashPlantForm(plants) {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
+  const [scheduled, setScheduled] = useState(false);
   
 
   const [idPlants, setIdPlants] = useState([] as number[])
@@ -126,7 +128,7 @@ export default function TrashPlantForm(plants) {
     try {
 
       formData.plants = idPlants
-
+      formData.scheduled = scheduled
 
       const lote = await api.post("trash-plant", formData);
   showAlert(idPlants?.length + "descartes cadastrado(s) com sucesso.", "success");
@@ -170,7 +172,22 @@ export default function TrashPlantForm(plants) {
                 error={errors.trashDate as FieldError}
               />
             </Grid>
+            <Grid item xs={12} sm={12}>
 
+<FormControlLabel label="Agendar" control={
+
+<Checkbox
+              name="scheduled"
+              onChange={
+              (event, checked) => {
+                console.log(checked)
+                setScheduled(checked)
+              }
+              }
+              ></Checkbox>
+}              ></FormControlLabel>
+              
+            </Grid>
             <Grid item xs={12} sm={12}>
               <BasicSelect
                 label={"Responsável"}

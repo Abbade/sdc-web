@@ -1,4 +1,4 @@
-import { Box, Button, Container, createTheme, Grid } from "@mui/material";
+import { Box, Button, Checkbox, Container, createTheme, FormControl, FormControlLabel, Grid } from "@mui/material";
 import * as yup from "yup";
 
 import { useContext, useEffect, useState } from "react";
@@ -67,6 +67,7 @@ export default function TransplantPlantForm({plants, onClose} : TransplantPlantF
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
   const [idPlants, setIdPlants] = useState([] as number[]);
+  const [scheduled, setScheduled] = useState(false);
 
   const { showAlert, setOpenLoading } = useContext(AlertContext);
 
@@ -132,8 +133,7 @@ export default function TransplantPlantForm({plants, onClose} : TransplantPlantF
     setOpenLoading(true);
     try {
       formData.plants = idPlants;
-      formData.scheduled = formData.transplantDate > new Date() ? true : false;
-
+      formData.scheduled = scheduled
       const lote = await api.post("transplant-plant", formData);
       showAlert(
         idPlants?.length + "plantas transplantadas com sucesso.",
@@ -174,6 +174,22 @@ export default function TransplantPlantForm({plants, onClose} : TransplantPlantF
                 control={control}
                 error={errors.transplantDate as FieldError}
               />
+            </Grid> 
+            <Grid item xs={12} sm={12}>
+
+<FormControlLabel label="Agendar" control={
+
+<Checkbox
+              name="scheduled"
+              onChange={
+              (event, checked) => {
+                console.log(checked)
+                setScheduled(checked)
+              }
+              }
+              ></Checkbox>
+}              ></FormControlLabel>
+              
             </Grid>
             <Grid item xs={12} sm={12}>
               <BasicSelect

@@ -74,7 +74,7 @@ const columns: GridColDef[] = [
     renderCell: (params) => {
       return (
         <div className="MuiDataGrid-cellContent">
-          {format(new Date(params.row.completionDate), "dd/MM/yyyy")}
+          {format(new Date(params.row.completionDate ? params.row.completionDate: params.row.scheduledDate), "dd/MM/yyyy")}
         </div>
       );
     },

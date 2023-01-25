@@ -1,4 +1,4 @@
-import { Box, Button, Container, createTheme, Grid } from "@mui/material";
+import { Box, Button, Checkbox, Container, createTheme, FormControlLabel, Grid } from "@mui/material";
 import * as yup from "yup";
 import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
@@ -17,6 +17,7 @@ type CreatePlantFormData = {
   id_location: number;
   id_recipiente: number;
   obs: string;
+  scheduled: boolean
 };
 
 const createObjFormSchema = yup.object().shape({
@@ -45,6 +46,7 @@ export default function CreatePlantForm({selectedLote, onClose} : CreatePlantFor
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
   const [idLote, setIdLote] = useState(0);
+  const [scheduled, setScheduled] = useState(false);
 
   const [recipiente, setRecipiente] = useState([] as Recipiente[]);
 
@@ -131,6 +133,22 @@ export default function CreatePlantForm({selectedLote, onClose} : CreatePlantFor
                 control={control}
                 error={errors.aclimatationDate as FieldError}
               />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+
+<FormControlLabel label="Agendar" control={
+
+<Checkbox
+              name="scheduled"
+              onChange={
+              (event, checked) => {
+                console.log(checked)
+                setScheduled(checked)
+              }
+              }
+              ></Checkbox>
+}              ></FormControlLabel>
+              
             </Grid>
 
             <Grid item xs={12} sm={12}>
