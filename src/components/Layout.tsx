@@ -360,7 +360,7 @@ export default function Layout({ children }: LayoutProps) {
           >
             <CustomLink
               keylink="clone_link"
-              linkstr="/nursery"
+              linkstr="/tasks"
               name="Fluxo"
               open={open}
               icon={<AssignmentTurnedInIcon />}
