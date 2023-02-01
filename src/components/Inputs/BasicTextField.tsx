@@ -12,12 +12,14 @@ interface selectParams {
   control?: Control<FieldValues, any>;
   type?: string;
   disabled?: boolean;
+  minRows?: number;
 }
 export default function BasicTextField({
   name,
   label,
   control,
   multiline,
+  minRows,
   error = null,
   type = "text",
   disabled = false,
@@ -40,6 +42,7 @@ export default function BasicTextField({
               helperText={error?.message}
               type={type}
               disabled={disabled}
+              minRows={minRows}
             />
           )}
         />

@@ -1,4 +1,5 @@
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
+import { Breakpoint } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -9,6 +10,7 @@ export interface DialogProps {
   onClose: (refresh: any) => void;
   title: string;
   children: ReactJSXElement;
+  size?: undefined | Breakpoint;
 }
 
 export default function FormDialog(props: DialogProps) {
@@ -19,7 +21,7 @@ export default function FormDialog(props: DialogProps) {
 
   return (
     <div>
-      <Dialog open={props.open} onClose={handleClose}>
+      <Dialog open={props.open} onClose={handleClose} fullWidth maxWidth={props.size != null ? props.size : 'sm'} >
         <DialogTitle>{props?.title}</DialogTitle>
         <DialogContent>
         {props?.children}

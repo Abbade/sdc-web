@@ -3,17 +3,16 @@ import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Router, { useRouter } from "next/router";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
-import BasicSelect from "../Inputs/BasicSelect";
-import BasicTextField from "../Inputs/BasicTextField";
 import { AlertContext } from "../../contexts/AlertContext";
+import { EditInterface } from "../../interfaces/EditInterface";
 import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
-import { EditInterface } from "../../interfaces/EditInterface";
+import BasicSelect from "../Inputs/BasicSelect";
+import BasicTextField from "../Inputs/BasicTextField";
 
 type CreateFormData = {
   name: string;
@@ -57,7 +56,6 @@ export default function AccountForm({ id, onClose }: EditInterface) {
     const get = async (id) => {
       setOpenLoading(true);
       try {
-        
         const rls = await api.get("roles");
         setRoles(rls.data.itens);
 
@@ -90,16 +88,16 @@ export default function AccountForm({ id, onClose }: EditInterface) {
       if (formData.id > 0) {
         const item = await api.put("user", formData);
         setOpenLoading(false);
-        showAlert('Perfil editado com sucesso.', 'success');
+        showAlert("Perfil editado com sucesso.", "success");
       } else {
         const item = await api.post("user", formData);
         setOpenLoading(false);
-        showAlert('Perfil cadastrado com sucesso.', 'success');
+        showAlert("Perfil cadastrado com sucesso.", "success");
       }
       onClose(true);
     } catch (error) {
       setOpenLoading(false);
-      showAlert(error.response.data.message, 'error');
+      showAlert(error.response.data.message, "error");
     }
   };
 
