@@ -10,7 +10,7 @@ import CreateActionGroup, { ICreateActionGroup } from "../../components/Forms/ac
 import { DateSelectArg } from "@fullcalendar/core";
 
 export default function Tasks() {
-  const [openForm, setOpenForm] = useState(false);
+
   const [selectedDate, setSelectedDate] = useState<ICreateActionGroup>({
     allDay: false,
     start: new Date(),
@@ -18,7 +18,7 @@ export default function Tasks() {
     desc: '',
     title: ''
   });
-
+  const [openForm, setOpenForm] = useState(false);
   const onClose = (refresh: any) => {
     setOpenForm(false);
   }

@@ -15,6 +15,8 @@ import BasicDateTimePicker from "../../Inputs/BasicDateTimePicker";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import BasicCheckbox from "../../Inputs/BasicCheckbox";
+import CreateAction, { ICreateAction } from "./CreateAction";
+import FormDialog from "../../Dialogs/Dialog";
 
 export type ICreateActionGroup = {
   title?: string;
@@ -23,10 +25,7 @@ export type ICreateActionGroup = {
   end: Date;
   allDay: boolean;
 };
-type RoleData = {
-  id: number;
-  name: string;
-};
+
 
 export interface CreateActionInterface {
   onClose?: (refresh?: boolean) => void;
@@ -54,6 +53,17 @@ export default function CreateActionGroup({
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
   const { setAlert, setOpenLoading, showAlert } = useContext(AlertContext);
+  const [openForm, setOpenForm] = useState(false);
+
+
+  const onCloseActionItems = (actionSave: ICreateAction) => {
+    console.log(actionSave)
+    setOpenForm(false);
+  }
+  const openAddActionItems = () => {
+
+    setOpenForm(true);
+  }
 
   useEffect(() => {
     console.log(form.allDay);
@@ -78,26 +88,7 @@ export default function CreateActionGroup({
     }
   };
 
-  // popover ação
 
-  const [btnItemAction, setBtnItemAction] = useState<HTMLButtonElement | null>(
-    null
-  );
-
-  const handleClickItemAction = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setBtnItemAction(event.currentTarget);
-  };
-
-  const handleCloseItemAction = () => {
-    setBtnItemAction(null);
-  };
-
-  const openAddItemAction = Boolean(btnItemAction);
-  const id = openAddItemAction ? "popover-addItemAction" : undefined;
-
-  // fim popover
 
   return (
     <Container component="main" maxWidth="xl">
@@ -163,27 +154,13 @@ export default function CreateActionGroup({
               </Grid>
               <Grid item xs={12}>
                 <Button
-                  aria-describedby={id}
                   variant="contained"
-                  onClick={handleClickItemAction}
+                  onClick={openAddActionItems}
                   fullWidth
                 >
                   Adicionar Ação
                 </Button>
-                <Popover
-                  id={id}
-                  open={openAddItemAction}
-                  anchorEl={btnItemAction}
-                  onClose={handleCloseItemAction}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                >
-                  <Typography sx={{ p: 2 }}>
-                    The content of the Popover.
-                  </Typography>
-                </Popover>
+ 
               </Grid>
             </Grid>
           </Grid>
@@ -198,6 +175,9 @@ export default function CreateActionGroup({
           Salvar
         </Button>
       </Box>
+      <FormDialog size="md"  onClose={onCloseActionItems} open={openForm} title="Adicionar Ação">
+        <CreateAction  onClose={onCloseActionItems} />
+      </FormDialog>
     </Container>
   );
 }

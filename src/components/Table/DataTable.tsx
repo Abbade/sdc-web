@@ -22,6 +22,7 @@ export interface DataTableInterface {
   ) => void;
   loading?: boolean;
   useCheckBox: boolean;
+  height?: string;
 }
 
 export default function DataTable({
@@ -34,10 +35,12 @@ export default function DataTable({
   rowCount,
   pageSize,
   loading,
-  useCheckBox
+  useCheckBox,
+  height
 }: DataTableInterface) {
+  const heightStr = height != null ? height : "calc(100vh - 300px)";
   return (
-    <div style={{ height: "calc(100vh - 300px)", width: "100%" }}>
+    <div style={{   height: heightStr, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}

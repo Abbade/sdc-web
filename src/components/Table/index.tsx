@@ -42,6 +42,8 @@ export interface TableIndexInterface {
   totalFilter?: number;
   loading?: boolean;
   onOpenSplitButton?: (index: number) => void;
+  selection?: boolean;
+  height?: string;
   //onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -62,7 +64,9 @@ export default function Table({
   onFilter,
   totalFilter,
   loading,
-  onOpenSplitButton
+  onOpenSplitButton,
+  selection,
+  height
 }: TableIndexInterface) {
   const theme = useTheme();
   const isSmallOrLess = useMediaQuery(theme.breakpoints.up("md"));
@@ -163,7 +167,8 @@ export default function Table({
           pageSize={pageSize}
           rowCount={rowCount}
           loading={loading}
-          useCheckBox={optionsImport != undefined}
+          useCheckBox={optionsImport != undefined || selection === true}
+          height={height}
         />
       </Paper>
     </Box>
