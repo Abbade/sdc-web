@@ -14,12 +14,17 @@ import FormDialog from "../Dialogs/Dialog";
 import FilterPlantForm from "../Forms/FilterPlantForm";
 import Table from "../Table";
 
-export default function PlantsTableAction() {
+export interface PlantsTableInterface{
+  selectedPlants: PlantaInterface[];
+  setSelectedPlants:  React.Dispatch<React.SetStateAction<PlantaInterface[]>>;
+} 
+
+export default function PlantsTableAction({selectedPlants, setSelectedPlants} : PlantsTableInterface) {
   const {
     plants = [],
     fastSearch,
     setFastSearch,
-    pageSize = 10,
+    pageSize = 100,
     setPageSize,
     page = 0,
     setPage,
@@ -34,10 +39,10 @@ export default function PlantsTableAction() {
 
   const { showAlert } = useContext(AlertContext);
 
-  const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
+  //const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
   const [openFilter, setOpenFilter] = useState(false);
 
-  
+
 
   const onPageSizeChange = async (
     pageSize: number,
@@ -54,6 +59,7 @@ export default function PlantsTableAction() {
     ids: GridSelectionModel,
     details: GridCallbackDetails<any>
   ) => {
+    console.log(ids);
     const selectedIDs = new Set(ids);
     const selectedRowData = plants.filter((row) => {
       return selectedIDs.has(row.id);

@@ -66,7 +66,7 @@ export const PlantsContext = createContext({} as PlantsContextData);
 export function PlantProvider({ children }: PlantProviderProps) {
   const [plants, setPlantas] = useState([] as PlantaInterface[]);
   const [fastSearch, setFastSearch] = useState("");
-  const [pageSize, setPageSize] = useState<number | undefined>(10);
+  const [pageSize, setPageSize] = useState<number | undefined>(50);
   const [page, setPage] = useState(0);
   const [refresh, setRefresh] = useState(false);
   const [rowCount, setRowCount] = useState(1);

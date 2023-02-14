@@ -17,6 +17,18 @@ import Typography from "@mui/material/Typography";
 import BasicCheckbox from "../../Inputs/BasicCheckbox";
 import CreateAction, { ICreateAction } from "./CreateAction";
 import FormDialog from "../../Dialogs/Dialog";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FolderIcon from "@mui/icons-material/Folder";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ForestIcon from '@mui/icons-material/Forest';
 
 export type ICreateActionGroup = {
   title?: string;
@@ -24,8 +36,13 @@ export type ICreateActionGroup = {
   start: Date;
   end: Date;
   allDay: boolean;
+  actions?: ICreateAction[];
 };
 
+type ItemType = {
+  id: number;
+  name: string;
+};
 
 export interface CreateActionInterface {
   onClose?: (refresh?: boolean) => void;
@@ -37,7 +54,7 @@ const createObjFormSchema = yup.object().shape({
   desc: yup.string().required("Descrição é obrigatória"),
   start: yup.date().required("Data início é obrigatória"),
   end: yup.date().required("Data fim é obrigatória"),
-  allDay: yup.boolean()
+  allDay: yup.boolean(),
 });
 
 export default function CreateActionGroup({
@@ -54,15 +71,34 @@ export default function CreateActionGroup({
 
   const { setAlert, setOpenLoading, showAlert } = useContext(AlertContext);
   const [openForm, setOpenForm] = useState(false);
-
+  const [actionsTypes, setActionsTypes] = useState<ItemType[]>([]);
+  const [actions, setActions] = useState([] as ICreateAction[]);
 
   const onCloseActionItems = (actionSave: ICreateAction) => {
-    console.log(actionSave)
-    setOpenForm(false);
-  }
-  const openAddActionItems = () => {
+    console.log(actionSave);
+    if(actionSave != null){
+      if(actionSave.actionTypeId != null){
+        let actionExists = actions.filter(x => x.actionTypeId === actionSave.actionTypeId)[0];
+        if(actionExists != null){
+          showAlert("Ação ja existe", "error");
+        }
+        else{
+          setActions([ ...actions, actionSave]);
+          setOpenForm(false);
+        }
 
+      }
+    
+    }
+  
+
+  };
+  const openAddActionItems = () => {
     setOpenForm(true);
+  };
+
+  const onRemoveAction = (action) => {
+    setActions(actions.filter(x => x !== action));
   }
 
   useEffect(() => {
@@ -72,23 +108,34 @@ export default function CreateActionGroup({
     setValue("allDay", form.allDay);
   }, [setValue, form]);
 
+  useEffect(() => {
+    const getActionType = async () => {
+      setOpenLoading(true);
+      const types = await api.get("/actionsTypes");
+      setActionsTypes(types.data.itens);
+      setOpenLoading(false);
+    };
+
+    getActionType();
+  }, [setOpenLoading]);
+
   const handleLoteSubmit: SubmitHandler<ICreateActionGroup> = async (
     formData
   ) => {
     try {
+      formData.actions = actions;
       console.log(formData);
+
       setOpenLoading(true);
-    //  const item = await api.post("actiongroup", formData);
+      //  const item = await api.post("actiongroup", formData);
       setOpenLoading(false);
       showAlert("Ação cadastrada com sucesso.", "success");
-     // onClose(true);
+      // onClose(true);
     } catch (error) {
       setOpenLoading(false);
       showAlert(error.response.data.message, "error");
     }
   };
-
-
 
   return (
     <Container component="main" maxWidth="xl">
@@ -105,7 +152,6 @@ export default function CreateActionGroup({
                 <BasicTextField
                   label={"Título"}
                   name={"title"}
-                  
                   control={control}
                   error={errors.title as FieldError}
                 />
@@ -120,6 +166,31 @@ export default function CreateActionGroup({
                   control={control}
                   error={errors.desc as FieldError}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <List>
+                  {actions?.map((action, index) => (
+                    <>
+                      <ListItem
+                        secondaryAction={
+                          <IconButton edge="end" aria-label="delete" onClick={() => onRemoveAction(action)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Avatar>
+                            <ForestIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={actionsTypes.filter(x => x.id === action.actionTypeId)[0]?.name}
+                          secondary={action.plants.length + ' Planta(s)'}
+                        />
+                      </ListItem>
+                    </>
+                  ))}
+                </List>
               </Grid>
             </Grid>
           </Grid>
@@ -160,7 +231,6 @@ export default function CreateActionGroup({
                 >
                   Adicionar Ação
                 </Button>
- 
               </Grid>
             </Grid>
           </Grid>
@@ -175,8 +245,13 @@ export default function CreateActionGroup({
           Salvar
         </Button>
       </Box>
-      <FormDialog size="md"  onClose={onCloseActionItems} open={openForm} title="Adicionar Ação">
-        <CreateAction  onClose={onCloseActionItems} />
+      <FormDialog
+        size="md"
+        onClose={onCloseActionItems}
+        open={openForm}
+        title="Adicionar Ação"
+      >
+        <CreateAction onClose={onCloseActionItems} />
       </FormDialog>
     </Container>
   );

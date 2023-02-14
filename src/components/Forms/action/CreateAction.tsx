@@ -9,10 +9,13 @@ import * as yup from "yup";
 import { ACTION_TYPE } from "../../../constants/ACTION_TYPE";
 import { AlertContext } from "../../../contexts/AlertContext";
 import { PlantProvider } from "../../../contexts/PlantsContext";
+import { FaseCultivo } from "../../../interfaces/LoteInterface";
+import { PlantaInterface } from "../../../interfaces/PlantaInterface";
 import { api } from "../../../services/apiClient";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
 import BasicSelect from "../../Inputs/BasicSelect";
 import PlantsTableAction from "../../TableModels/PlantsTableAction";
+import ActionTypeInput from "./ActionTypeInput";
 
 export type ICreateAction = {
   actionTypeId: number;
@@ -22,17 +25,23 @@ export type ICreateAction = {
   crops?: ActionItem[];
   recipientId?: number;
   stageId?: number;
+  trashReasonId?: number;
+  scheduledDate?: Date;
 };
 type ActionItem = {
   id: number;
-  userAttributionId: number;
-  scheduledDate?: Date;
+  completed: boolean;
 };
 
 type ItemType = {
   id: number;
   name: string;
 };
+
+interface ActionTypeValidationProps {
+  success: boolean;
+  msg: string;
+}
 
 export interface CreateActionInterface {
   onClose?: (action?: ICreateAction) => void;
@@ -42,6 +51,7 @@ const createObjFormSchema = yup.object().shape({
   //userAttributionId: yup.number().required("Usuário é obrigatório"),
   actionTypeId: yup.number().required("Tipo da ação é obrigatório"),
   recipientId: yup.number(),
+  trashReasonId: yup.number(),
   stageId: yup.number(),
 });
 
@@ -53,14 +63,15 @@ export default function CreateAction({ onClose }: CreateActionInterface) {
     setValue,
     watch,
     getValues,
+    setError,
+    resetField,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
   const { setAlert, setOpenLoading, showAlert } = useContext(AlertContext);
   const [actionsTypes, setActionsTypes] = useState<ItemType[]>([]);
-  const [recipients, setRecipients] = useState<ItemType[]>([]);
-  const [plantStage, setPlantStage] = useState<ItemType[]>([]);
-  const [showPlants, setShowPlants] = useState(false);
+
+  const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
 
   useEffect(() => {
     const getActionType = async () => {
@@ -69,85 +80,75 @@ export default function CreateAction({ onClose }: CreateActionInterface) {
       setActionsTypes(types.data.itens);
       setOpenLoading(false);
     };
-    const getRecipients = async () => {
-      setOpenLoading(true);
-      const types = await api.get("/recipiente");
-      setRecipients(types.data.itens);
-      setOpenLoading(false);
-    };
-    const getPlantStage = async () => {
-      setOpenLoading(true);
-      const types = await api.get("/fase-cultivo");
-      setPlantStage(types.data.itens);
-      setOpenLoading(false);
-    };
+
     getActionType();
-    const subscription = watch((value, { name, type }) => {
-      console.log(value, name, type);
-      if (name === "actionTypeId" && type === "change") {
-        const actionTypeIdNum =
-          isNaN(Number.parseInt(value.actionTypeId)) ||
-          value.actionTypeId == undefined
-            ? -1
-            : Number.parseInt(value.actionTypeId);
+  }, [setOpenLoading]);
 
-        switch (actionTypeIdNum) {
-          case ACTION_TYPE.TRANSPLANTE:
-            getRecipients();
-            break;
-          case ACTION_TYPE.ALTERA_FASE_CULTIVO:
-            getPlantStage();
-            break;
-          default:
-            setRecipients([]);
-            break;
-        }
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [setOpenLoading, watch]);
-
-  const ActionTypeInputs = (props) => {
-    const actionType = props.actionType;
+  const ActionTypeValidation = (action: ICreateAction): boolean => {
     const actionTypeIdNum =
-      isNaN(Number.parseInt(actionType)) || actionType == undefined
+      action.actionTypeId == undefined
         ? -1
-        : Number.parseInt(actionType);
+        : Number.parseInt(action.actionTypeId.toString());
+
+    let res = { success: true, msg: "" } as ActionTypeValidationProps;
 
     switch (actionTypeIdNum) {
       case ACTION_TYPE.TRANSPLANTE:
-        return (<BasicSelect
-          control={control}
-          label={"Recipiente"}
-          name={"recipientId"}
-          error={errors.recipientId as FieldError}
-          values={recipients}
-        />);
+        if (action.recipientId == null) {
+          setError("recipientId", {
+            type: "custom",
+            message: "Campo obrigatório",
+          });
+          return false;
+        }
+
+        break;
       case ACTION_TYPE.ALTERA_FASE_CULTIVO:
-        return (<BasicSelect
-          control={control}
-          label={"Fase de Cultivo"}
-          name={"stageId"}
-          error={errors.stageId as FieldError}
-          values={plantStage}
-        />);
-      default:
-        return (<></>);
+        if (action.stageId == null) {
+          setError("stageId", { type: "custom", message: "Campo obrigatório" });
+          return false;
+        }
+        break;
+      case ACTION_TYPE.DESCARTE_PLANTA:
+        if (action.trashReasonId == null) {
+          setError("trashReasonId", {
+            type: "custom",
+            message: "Campo obrigatório",
+          });
+          return false;
+        }
+        break;
     }
+    return true;
   };
 
   const handleLoteSubmit: SubmitHandler<ICreateAction> = async (formData) => {
     try {
+      setOpenLoading(true);
+   
+      if (!ActionTypeValidation(formData)) {
+        setOpenLoading(false);
+        return;
+      }
+      if (selectedPlants.length <= 0) {
+        showAlert("Selecione ao menos uma Planta/Muda", "error");
+        setOpenLoading(false);
+        return;
+      }
+      let plants = selectedPlants.map((plant) => {
+        return { id: plant.id, completed: false } as ActionItem;
+      });
+      formData.plants = plants;
       console.log("oi");
       console.log(formData);
-      setOpenLoading(true);
-      //  const item = await api.post("actiongroup", formData);
       setOpenLoading(false);
       showAlert("Ação Salva com sucesso.", "success");
+      onClose(formData)
       // onClose(true);
     } catch (error) {
       setOpenLoading(false);
-      showAlert(error.response.data.message, "error");
+
+      //showAlert(error.response.data.message, "error");
     }
   };
 
@@ -170,11 +171,21 @@ export default function CreateAction({ onClose }: CreateActionInterface) {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <ActionTypeInputs actionType={getValues("actionTypeId")}  />
+            <ActionTypeInput
+              control={control}
+              errors={errors}
+              actionTypeId={watch("actionTypeId")}
+              setError={setError}
+              setValue={setValue}
+              resetField={resetField}
+            />
           </Grid>
           <Grid item xs={12}>
             <PlantProvider>
-              <PlantsTableAction></PlantsTableAction>
+              <PlantsTableAction
+                selectedPlants={selectedPlants}
+                setSelectedPlants={setSelectedPlants}
+              ></PlantsTableAction>
             </PlantProvider>
           </Grid>
         </Grid>
@@ -185,7 +196,7 @@ export default function CreateAction({ onClose }: CreateActionInterface) {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Salvar
+          Adicionar
         </Button>
       </Box>
     </Container>
