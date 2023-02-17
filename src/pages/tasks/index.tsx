@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import { withSSRAuth } from "../../utils/withSSRAuth";
@@ -7,7 +7,17 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FormDialog from "../../components/Dialogs/Dialog";
 import CreateActionGroup, { ICreateActionGroup } from "../../components/Forms/action/CreateActionGroup";
-import { DateSelectArg } from "@fullcalendar/core";
+import { DateSelectArg, EventSourceInput } from "@fullcalendar/core";
+import { api } from "../../services/apiClient";
+
+interface Task {
+    id: number;
+    id_user_create: number;
+    title: string;
+    desc: string;
+    start: Date;
+    end: Date;
+}
 
 export default function Tasks() {
 
@@ -18,10 +28,22 @@ export default function Tasks() {
     desc: '',
     title: ''
   });
+  const [tasks, setTasks] = useState<EventSourceInput> ([]);
   const [openForm, setOpenForm] = useState(false);
+
+  useEffect(() => {
+    const get = async () => {
+      const itens = await api.get("/tasks?filterType=1");
+      setTasks(itens.data.itens);
+    }
+    get();
+  }, [])
+
+
   const onClose = (refresh: any) => {
     setOpenForm(false);
   }
+
   const openAddTask = (dateInfo : DateSelectArg) => {
     setSelectedDate({
       allDay: dateInfo.allDay,
@@ -38,14 +60,7 @@ export default function Tasks() {
         <CreateActionGroup form={selectedDate} onClose={onClose} />
       </FormDialog>
       <FullCalendar
-        events={[
-          {
-            title: "testeaa",
-            allDay: true,
-            start: new Date(),
-            end: new Date().setDate(new Date().getDate() + 3),
-          },
-        ]}
+        events={tasks}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         selectable={true}
         select={openAddTask}
