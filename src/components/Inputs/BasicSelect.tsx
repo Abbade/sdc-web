@@ -21,6 +21,10 @@ export default function BasicSelect({
   control,
   error = null,
 }: selectParams) {
+  const preventPropagation = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+}
   return (
     <Box sx={{ minWidth: 120 }}>
       <Controller
@@ -35,6 +39,7 @@ export default function BasicSelect({
               value={value}
               label={name}
               name={name}
+              onClick={preventPropagation}
               onChange={onChange}
             >
               {values?.map((selectValue) => {

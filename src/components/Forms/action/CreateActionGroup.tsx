@@ -28,7 +28,9 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ForestIcon from '@mui/icons-material/Forest';
+import ForestIcon from "@mui/icons-material/Forest";
+import { ActionTypeProvider } from "../../../contexts/ActionTypeContext";
+import { ACTION_TYPE } from "../../../constants/ACTION_TYPE";
 
 export type ICreateActionGroup = {
   title?: string;
@@ -66,6 +68,10 @@ export default function CreateActionGroup({
     handleSubmit,
     control,
     setValue,
+    resetField,
+    setError,
+    getValues,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(createObjFormSchema) });
 
@@ -73,33 +79,41 @@ export default function CreateActionGroup({
   const [openForm, setOpenForm] = useState(false);
   const [actionsTypes, setActionsTypes] = useState<ItemType[]>([]);
   const [actions, setActions] = useState([] as ICreateAction[]);
+  const [chosen, setChosen] = useState(-1);
+
+  const handleChosen = (chosenOne: number) => {
+    if (chosenOne === chosen) setChosen(-1);
+    else setChosen(chosenOne);
+  };
 
   const onCloseActionItems = (actionSave: ICreateAction) => {
     console.log(actionSave);
-    if(actionSave != null){
-      if(actionSave.actionTypeId != null){
-        let actionExists = actions.filter(x => x.actionTypeId === actionSave.actionTypeId)[0];
-        if(actionExists != null){
+    if (actionSave != null) {
+      if (actionSave.actionTypeId != null) {
+        let actionExists = actions.filter(
+          (x) => x.actionTypeId === actionSave.actionTypeId
+        )[0];
+        if (actionExists != null) {
           showAlert("Ação ja existe", "error");
-        }
-        else{
-          setActions([ ...actions, actionSave]);
+        } else {
+          setActions([...actions, actionSave]);
           setOpenForm(false);
         }
-
       }
-    
     }
-  
-
   };
   const openAddActionItems = () => {
-    setOpenForm(true);
+    setActions([...actions, {} as ICreateAction]);
+    let actionsValues = getValues("actions") as ICreateAction[];
+    if (actionsValues == null) actionsValues = [];
+    setValue("actions", [...actionsValues, {} as ICreateAction], {
+      shouldValidate: true,
+    });
   };
 
   const onRemoveAction = (action) => {
-    setActions(actions.filter(x => x !== action));
-  }
+    setActions(actions.filter((x) => x !== action));
+  };
 
   useEffect(() => {
     console.log(form.allDay);
@@ -119,19 +133,90 @@ export default function CreateActionGroup({
     getActionType();
   }, [setOpenLoading]);
 
+  const ActionTypeValidation = (actions: ICreateAction[]): boolean => {
+    let flag = true;
+    if (actions != null) {
+      actions.map((action, i) => {
+        let actionName = "actions[" + i + "].";
+
+        const actionTypeIdNum =
+          action.actionTypeId == undefined
+            ? -1
+            : Number.parseInt(action.actionTypeId.toString());
+
+        switch (actionTypeIdNum) {
+          case ACTION_TYPE.TRANSPLANTE:
+            if (action.recipientId == null) {
+              setError(actionName + "recipientId", {
+                type: "custom",
+                message: "Campo obrigatório",
+              });
+              flag = false;
+            }
+
+            break;
+          case ACTION_TYPE.ALTERA_FASE_CULTIVO:
+            if (action.stageId == null) {
+              setError(actionName + "stageId", {
+                type: "custom",
+                message: "Campo obrigatório",
+              });
+              flag = false;
+            }
+            break;
+          case ACTION_TYPE.DESCARTE_PLANTA:
+            if (action.trashReasonId == null) {
+              setError(actionName + "trashReasonId", {
+                type: "custom",
+                message: "Campo obrigatório",
+              });
+              flag = false;
+            }
+            break;
+        }
+      });
+    }
+
+    return flag;
+  };
+
+  const ActionPlantValidation = (actions: ICreateAction[]): boolean => {
+    let flag = true;
+    if (actions != null && actions.length > 0) {
+      actions.map((action) => {
+        let plantCount = action.plants.length;
+        if (plantCount <= 0) {
+          flag = false;
+        }
+      });
+    }
+    return flag;
+  };
+
   const handleLoteSubmit: SubmitHandler<ICreateActionGroup> = async (
     formData
   ) => {
     try {
-      formData.actions = actions;
-      console.log(formData);
-
       setOpenLoading(true);
-      //  const item = await api.post("actiongroup", formData);
+      console.log(formData);
+      //formData.actions = actions;
+      console.log(formData);
+      if (!ActionTypeValidation(formData.actions)) {
+        setOpenLoading(false);
+        return;
+      }
+      if (!ActionPlantValidation(formData.actions)) {
+        showAlert("Selecione ao menos uma planta/Berçário", "error");
+        setOpenLoading(false);
+        return;
+      }
+
+      const item = await api.post("action-group", formData);
       setOpenLoading(false);
       showAlert("Ação cadastrada com sucesso.", "success");
       // onClose(true);
     } catch (error) {
+      console.log(error);
       setOpenLoading(false);
       showAlert(error.response.data.message, "error");
     }
@@ -168,29 +253,26 @@ export default function CreateActionGroup({
                 />
               </Grid>
               <Grid item xs={12}>
-                <List>
-                  {actions?.map((action, index) => (
-                    <>
-                      <ListItem
-                        secondaryAction={
-                          <IconButton edge="end" aria-label="delete" onClick={() => onRemoveAction(action)}>
-                            <DeleteIcon />
-                          </IconButton>
-                        }
-                      >
-                        <ListItemAvatar>
-                          <Avatar>
-                            <ForestIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={actionsTypes.filter(x => x.id === action.actionTypeId)[0]?.name}
-                          secondary={action.plants.length + ' Planta(s)'}
-                        />
-                      </ListItem>
-                    </>
-                  ))}
-                </List>
+                <ActionTypeProvider>
+                  <List>
+                    {actions?.map((action, index) => (
+                      <CreateAction
+                        key={index}
+                        chosen={chosen}
+                        control={control}
+                        errors={errors}
+                        handleChosen={handleChosen}
+                        index={index}
+                        resetField={resetField}
+                        setError={setError}
+                        setValue={setValue}
+                        actionTypeId={action.actionTypeId}
+                        onClose={onCloseActionItems}
+                        watch={watch}
+                      />
+                    ))}
+                  </List>
+                </ActionTypeProvider>
               </Grid>
             </Grid>
           </Grid>
@@ -245,14 +327,14 @@ export default function CreateActionGroup({
           Salvar
         </Button>
       </Box>
-      <FormDialog
+      {/* <FormDialog
         size="md"
         onClose={onCloseActionItems}
         open={openForm}
         title="Adicionar Ação"
       >
         <CreateAction onClose={onCloseActionItems} />
-      </FormDialog>
+      </FormDialog> */}
     </Container>
   );
 }

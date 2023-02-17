@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Control, FieldError, FieldErrors, FieldValues, UseFormResetField, UseFormSetError, UseFormSetValue } from "react-hook-form";
 import { ACTION_TYPE } from "../../../constants/ACTION_TYPE";
+import { ActionTypeContext } from "../../../contexts/ActionTypeContext";
 import { AlertContext } from "../../../contexts/AlertContext";
 import { api } from "../../../services/apiClient";
 import BasicSelect from "../../Inputs/BasicSelect";
@@ -13,6 +14,8 @@ export interface ActionTypeInputProps {
   setError: UseFormSetError<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
   resetField: UseFormResetField<FieldValues>;
+  index: number;
+  
 }
 
 type ItemType = {
@@ -31,56 +34,25 @@ export default function ActionTypeInput({
   actionTypeId,
   setError,
   setValue,
-  resetField
+  resetField,
+  index
 }: ActionTypeInputProps) {
-  const [recipients, setRecipients] = useState<ItemType[]>([]);
-  const [plantStage, setPlantStage] = useState<ItemType[]>([]);
-  const [trashReasons, setTrashReasons] = useState<ItemType[]>([]);
+
   const { setOpenLoading } = useContext(AlertContext);
+  const { plantStage, recipients, trashReasons } = useContext(ActionTypeContext);
 
   
 
   useEffect(() => {
-    const getRecipients = async () => {
-      setOpenLoading(true);
-      const types = await api.get("/recipiente");
-      setRecipients(types.data.itens);
-      setOpenLoading(false);
-    };
-    const getPlantStage = async () => {
-      setOpenLoading(true);
-      const types = await api.get("/fase-cultivo");
-      setPlantStage(types.data.itens);
-      setOpenLoading(false);
-    };
-    const getTrashReasons = async () => {
-      var response = await api.get("/trash-reason");
-      setTrashReasons(response.data.itens);
-    };
-
     const reset = () => {
-        resetField('recipientId');
-        resetField('stageId');
-        resetField('trashReasonId');
+        resetField('actions[' + index + '].' + 'recipientId');
+        resetField('actions[' + index + '].' + 'stageId');
+        resetField('actions[' + index + '].' + 'trashReasonId');
     }
     reset();
-    const actionTypeIdNum =
-    actionTypeId == undefined
-      ? -1
-      : Number.parseInt(actionTypeId.toString());
+  }, [resetField, index]);
 
-    switch (actionTypeIdNum) {
-      case ACTION_TYPE.TRANSPLANTE:
-        getRecipients();
-        break;
-      case ACTION_TYPE.ALTERA_FASE_CULTIVO:
-        getPlantStage();
-        break;
-      case ACTION_TYPE.DESCARTE_PLANTA:
-        getTrashReasons();
-        break;
-    }
-  }, [actionTypeId, setOpenLoading, resetField]);
+  const errorsIndex = errors != null && errors.actions != null && errors.actions[index] != null ? errors.actions[index] : {};
 
   const ActionTypeInputs = (props) => {
     const actionType = props.actionType;
@@ -88,6 +60,7 @@ export default function ActionTypeInput({
       isNaN(Number.parseInt(actionType)) || actionType == undefined
         ? -1
         : Number.parseInt(actionType);
+        
 
     switch (actionTypeIdNum) {
       case ACTION_TYPE.TRANSPLANTE:
@@ -95,8 +68,8 @@ export default function ActionTypeInput({
           <BasicSelect
             control={control}
             label={"Recipiente"}
-            name={"recipientId"}
-            error={errors.recipientId as FieldError}
+            name={'actions[' + index + '].' + "recipientId"}
+            error={errorsIndex.recipientId as FieldError}
             values={recipients}
           />
         );
@@ -105,8 +78,8 @@ export default function ActionTypeInput({
           <BasicSelect
             control={control}
             label={"Fase de Cultivo"}
-            name={"stageId"}
-            error={errors.stageId as FieldError}
+            name={'actions[' + index + '].' + "stageId"}
+            error={errorsIndex?.stageId as FieldError}
             values={plantStage}
           />
         );
@@ -114,10 +87,10 @@ export default function ActionTypeInput({
         return (
           <BasicSelect
             label={"Trash Reason"}
-            name={"trashReasonId"}
+            name={'actions[' + index + '].' + "trashReasonId"}
             values={trashReasons}
             control={control}
-            error={errors.trashReasonId as FieldError}
+            error={errorsIndex.trashReasonId as FieldError}
           />
         );
       default:

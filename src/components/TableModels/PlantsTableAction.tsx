@@ -11,15 +11,17 @@ import { AlertContext } from "../../contexts/AlertContext";
 import { FilterProp, PlantsContext } from "../../contexts/PlantsContext";
 import { PlantaInterface } from "../../interfaces/PlantaInterface";
 import FormDialog from "../Dialogs/Dialog";
+import { ActionItem } from "../Forms/action/CreateAction";
 import FilterPlantForm from "../Forms/FilterPlantForm";
 import Table from "../Table";
 
 export interface PlantsTableInterface{
-  selectedPlants: PlantaInterface[];
-  setSelectedPlants:  React.Dispatch<React.SetStateAction<PlantaInterface[]>>;
+  selectedPlants: number[];
+  setSelectedPlants:  React.Dispatch<React.SetStateAction<number[]>>;
+  onCheckboxSelect : (selecteds : number[]) => void;
 } 
 
-export default function PlantsTableAction({selectedPlants, setSelectedPlants} : PlantsTableInterface) {
+export default function PlantsTableAction({selectedPlants, setSelectedPlants, onCheckboxSelect} : PlantsTableInterface) {
   const {
     plants = [],
     fastSearch,
@@ -61,10 +63,10 @@ export default function PlantsTableAction({selectedPlants, setSelectedPlants} : 
   ) => {
     console.log(ids);
     const selectedIDs = new Set(ids);
-    const selectedRowData = plants.filter((row) => {
-      return selectedIDs.has(row.id);
-    });
-    setSelectedPlants(selectedRowData);
+    let idsObj = ids.map((id) => id as number );
+    onCheckboxSelect(idsObj)
+
+    setSelectedPlants(idsObj);
   };
 
   const onFastSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
