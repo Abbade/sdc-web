@@ -4,7 +4,13 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { useContext, useEffect, useState } from "react";
-import { FieldError, FieldValues, SubmitHandler, useForm, UseFormWatch } from "react-hook-form";
+import {
+  FieldError,
+  FieldValues,
+  SubmitHandler,
+  useForm,
+  UseFormWatch,
+} from "react-hook-form";
 import * as yup from "yup";
 import { ACTION_TYPE } from "../../../constants/ACTION_TYPE";
 import { AlertContext } from "../../../contexts/AlertContext";
@@ -49,7 +55,7 @@ interface ActionTypeValidationProps {
 
 export interface CreateActionInterface extends ActionTypeInputProps {
   onClose?: (action?: ICreateAction) => void;
-  
+
   chosen: number;
   watch: UseFormWatch<FieldValues>;
   handleChosen: (chosen: number) => void;
@@ -73,16 +79,18 @@ export default function CreateAction({
   resetField,
   setError,
   setValue,
-  watch
+  watch,
 }: CreateActionInterface) {
   const { setAlert, setOpenLoading, showAlert } = useContext(AlertContext);
   const [actionsTypes, setActionsTypes] = useState<ItemType[]>([]);
 
   const [selectedPlants, setSelectedPlants] = useState([] as number[]);
 
-  const onCheckboxSelection = (selecteds : number[]) => {
-    setValue('actions[' + index + '].plants', selecteds, { shouldValidate: true })
-  }
+  const onCheckboxSelection = (selecteds: number[]) => {
+    setValue("actions[" + index + "].plants", selecteds, {
+      shouldValidate: true,
+    });
+  };
 
   useEffect(() => {
     const getActionType = async () => {
@@ -94,18 +102,16 @@ export default function CreateAction({
 
     getActionType();
   }, [setOpenLoading]);
-  
+
   return (
     <Accordion
       expanded={chosen === index}
-      disableGutters
       onChange={() => {
         handleChosen(index);
       }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
-        
         aria-controls="panel1bh-content"
         id="panel1bh-header"
       >
@@ -114,7 +120,7 @@ export default function CreateAction({
             <BasicSelect
               control={control}
               label={"Tipo Ação"}
-              name={'actions[' + index + '].' + "actionTypeId"}
+              name={"actions[" + index + "]." + "actionTypeId"}
               error={errors.actionTypeId as FieldError}
               values={actionsTypes}
             />
@@ -123,7 +129,7 @@ export default function CreateAction({
             <ActionTypeInput
               control={control}
               errors={errors}
-              actionTypeId={watch('actions[' + index + '].' + "actionTypeId")}
+              actionTypeId={watch("actions[" + index + "]." + "actionTypeId")}
               //actionTypeId={1}
               setError={setError}
               setValue={setValue}

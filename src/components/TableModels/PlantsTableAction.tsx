@@ -24,28 +24,17 @@ export interface PlantsTableInterface{
 export default function PlantsTableAction({selectedPlants, setSelectedPlants, onCheckboxSelect} : PlantsTableInterface) {
   const {
     plants = [],
-    fastSearch,
     setFastSearch,
     pageSize = 100,
     setPageSize,
     page = 0,
     setPage,
     rowCount = 1,
-    setRowCount,
-    setFilter,
-    setRefresh,
     filter,
     loadingTable,
-    refresh,
   } = useContext(PlantsContext);
 
-  const { showAlert } = useContext(AlertContext);
-
-  //const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
   const [openFilter, setOpenFilter] = useState(false);
-
-
-
   const onPageSizeChange = async (
     pageSize: number,
     details: GridCallbackDetails

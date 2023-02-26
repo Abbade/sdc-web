@@ -184,10 +184,16 @@ export default function CreateActionGroup({
     let flag = true;
     if (actions != null && actions.length > 0) {
       actions.map((action) => {
-        let plantCount = action.plants.length;
-        if (plantCount <= 0) {
+        if(action.plants != null){
+          let plantCount = action.plants.length;
+          if (plantCount <= 0) {
+            flag = false;
+          }
+        }
+        else{
           flag = false;
         }
+     
       });
     }
     return flag;

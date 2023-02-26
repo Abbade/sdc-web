@@ -97,7 +97,7 @@ export default function Table({
               {isSmallOrLess ? (
                 <>
                   {onFilter !== undefined && (
-                    <Grid item xs={3} xl={2} textAlign={"end"}>
+                    <Grid item xs={4} xl={2} textAlign={"end"}>
                       <Badge badgeContent={totalFilter} color="warning">
                         <Button
                           disableElevation
@@ -111,9 +111,14 @@ export default function Table({
                       </Badge>
                     </Grid>
                   )}
-                  <Grid item xs={3} md={3} lg={3} xl={2}  textAlign={"end"}>
-                    <SplitButton onOpenSplitButton={onOpenSplitButton} optionsImport={optionsImport}></SplitButton>
-                  </Grid>
+                  {
+                    optionsImport !== undefined && (
+                      <Grid item xs={3} md={3} lg={3} xl={2}  textAlign={"end"}>
+                      <SplitButton onOpenSplitButton={onOpenSplitButton} optionsImport={optionsImport}></SplitButton>
+                    </Grid>
+                    )
+                  }
+              
 
                   {onAdd !== undefined && (
                     <Button
