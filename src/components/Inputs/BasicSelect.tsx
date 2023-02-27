@@ -3,7 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import Select, { SelectProps } from "@mui/material/Select";
 import { Control, Controller, FieldError, FieldValues } from "react-hook-form";
 
 interface selectParams {
@@ -11,6 +11,7 @@ interface selectParams {
   name: string;
   values?: any[];
   error?: FieldError;
+  readonly?: boolean;
   control: Control<FieldValues, any>;
 }
 
@@ -19,6 +20,7 @@ export default function BasicSelect({
   name,
   values,
   control,
+  readonly,
   error = null,
 }: selectParams) {
   const preventPropagation = (e) => {
@@ -39,6 +41,7 @@ export default function BasicSelect({
               value={value}
               label={name}
               name={name}
+              readOnly={readonly !== undefined ? readonly : false}
               onClick={preventPropagation}
               onChange={onChange}
             >

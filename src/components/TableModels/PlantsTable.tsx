@@ -5,7 +5,7 @@ import {
   GridActionsCellItem,
   GridCallbackDetails,
   GridColDef,
-  GridSelectionModel
+  GridSelectionModel,
 } from "@mui/x-data-grid";
 import Router from "next/router";
 
@@ -23,10 +23,11 @@ import TrashPlantForm from "../Forms/TrashPlantForm";
 import Table from "../Table";
 import { AlertContext } from "../../contexts/AlertContext";
 import CreateCropForm from "../Forms/CreateCropForm";
-
+import CreateActionGroup, { ItemType } from "../Forms/action/CreateActionGroup";
+import { api } from "../../services/apiClient";
+import { IOptionsImport } from "../SplitButton";
 
 export default function PlantsTable({ id }) {
-  
   const {
     plants = [],
     fastSearch,
@@ -41,10 +42,10 @@ export default function PlantsTable({ id }) {
     setRefresh,
     filter,
     loadingTable,
-    refresh
+    refresh,
   } = useContext(PlantsContext);
 
-  const { showAlert} = useContext(AlertContext);
+  const { showAlert, setOpenLoading } = useContext(AlertContext);
 
   const [selectedPlants, setSelectedPlants] = useState([] as PlantaInterface[]);
   const [openTrash, setOpenTrash] = useState(false);
@@ -54,10 +55,32 @@ export default function PlantsTable({ id }) {
   const [openMother, setOpenMother] = useState(false);
   const [openCrop, setOpenCrop] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
+  const [actionsTypes, setActionsTypes] = useState<IOptionsImport[]>([]);
+  const [actionTypeId, setActionTypeId] = useState(-1);
+  const [actionTypeName, setActionTypeName] = useState("Tranplante");
 
   useEffect(() => {
     if (id > 0) setFilter({ idLote: id } as FilterProp);
-  }, [id, setFilter]);
+  }, [id, setFilter, setOpenLoading]);
+
+  useEffect(() => {
+    const getActionType = async () => {
+      setOpenLoading(true);
+      const types = await api.get("/actionsTypes");
+      setActionsTypes(types.data.itens);
+      setOpenLoading(false);
+    };
+
+    getActionType();
+  }, [setOpenLoading]);
+
+  useEffect(() => {
+    if (actionTypeId > 0) {
+      setActionTypeName(
+        actionsTypes.filter((x) => x.id === actionTypeId)[0].name
+      );
+    }
+  }, [actionTypeId, actionsTypes]);
 
   const onPageSizeChange = async (
     pageSize: number,
@@ -99,29 +122,24 @@ export default function PlantsTable({ id }) {
       title: "Fase de Cultivo",
       icon: <ArrowDropDownIcon />,
       action: setChangeStage,
-    },{
+    },
+    {
       title: "Colher",
       icon: <ArrowDropDownIcon />,
       action: setOpenCrop,
     },
   ];
 
-  const handleOpenSplitButton = (index : number) => {
-    if(selectedPlants.length > 0)
-      optionsImport[index].action(true);
-    else
-      showAlert("Selecione ao menos uma planta", 'warning')
-  }
+  const handleOpenSplitButton = (id: number) => {
+    if (selectedPlants.length > 0) setActionTypeId(id);
+    //optionsImport[index].action(true);
+    else showAlert("Selecione ao menos uma planta", "warning");
+  };
 
   const handleClose = () => {
     console.log("teste");
-    setOpenTrash(false);
-    setChangeStage(false);
-    setOpenTransplant(false);
-    setOpenMove(false);
-    setOpenMother(false);
-    setOpenCrop(false);
 
+    setActionTypeId(-1);
     setRefresh(!refresh);
   };
 
@@ -311,7 +329,7 @@ export default function PlantsTable({ id }) {
         rowCount={rowCount}
         pageSize={pageSize}
         searchName={"Procurar plantas"}
-        optionsImport={optionsImport}
+        optionsImport={actionsTypes}
         onFilter={() => {
           console.log("teste");
           setOpenFilter(true);
@@ -324,7 +342,7 @@ export default function PlantsTable({ id }) {
         open={openFilter}
         title={"Filtro"}
       >
-        <FilterPlantForm  onClose={() => setOpenFilter(false)}></FilterPlantForm>
+        <FilterPlantForm onClose={() => setOpenFilter(false)}></FilterPlantForm>
       </FormDialog>
       <FormDialog
         onClose={handleClose}
@@ -335,6 +353,31 @@ export default function PlantsTable({ id }) {
           onClose={handleClose}
           plants={selectedPlants}
         ></TransplantPlantForm>
+      </FormDialog>
+      <FormDialog
+        onClose={handleClose}
+        open={actionTypeId !== -1}
+        size={"xl"}
+        title={actionTypeName}
+      >
+        <CreateActionGroup
+        onClose={handleClose}
+          form={{
+            title: actionTypeName,
+            desc: actionTypeName,
+            start: new Date(),
+            end: new Date(),
+            allDay: false,
+            actions: [
+              {
+                actionTypeId: actionTypeId,
+                plants: selectedPlants,
+                completed: false
+              },
+            ],
+          }}
+          fromAction={true}
+        ></CreateActionGroup>
       </FormDialog>
       <FormDialog onClose={handleClose} open={openTrash} title={"Descartar"}>
         <TrashPlantForm plants={selectedPlants}></TrashPlantForm>

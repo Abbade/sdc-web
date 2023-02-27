@@ -139,21 +139,21 @@ export default function PlantsTableAction({selectedPlants, setSelectedPlants, on
         rowCount={rowCount}
         pageSize={pageSize}
         searchName={"Procurar plantas"}
-        onFilter={() => {
-          console.log("teste");
-          setOpenFilter(true);
-        }}
+        // onFilter={() => {
+        //   console.log("teste");
+        //   setOpenFilter(true);
+        // }}
         selection={true}
-        totalFilter={filter?.totalFilter}
+        // totalFilter={filter?.totalFilter}
         height="300px"
       />
-      <FormDialog
+      {/* <FormDialog
         onClose={() => setOpenFilter(false)}
         open={openFilter}
         title={"Filtro"}
       >
         <FilterPlantForm onClose={() => setOpenFilter(false)}></FilterPlantForm>
-      </FormDialog>
+      </FormDialog> */}
     </Box>
   );
 }

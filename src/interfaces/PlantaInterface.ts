@@ -32,3 +32,4 @@ export interface INewPlant {
     id_faseCultivo: number;
   }
   
+  

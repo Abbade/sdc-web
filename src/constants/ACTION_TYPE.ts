@@ -10,3 +10,6 @@ export const ACTION_TYPE = {
   COLHEITA: 9,
   FINISH_CROP: 10
 };
+
+export const PLANTS_TYPES = [1, 2, 3, 5, 6, 8];
+export const NURSERY_TYPES = [4, 7]

@@ -57,9 +57,8 @@ export interface OptionsImportProps {
 }
 
 export interface IOptionsImport {
-  title: string;
-  icon: JSX.Element;
-  action: React.Dispatch<React.SetStateAction<boolean>>;
+  name: string;
+  id: number;
 }
 
 export default function SplitButton({optionsImport, onOpenSplitButton} : OptionsImportProps) {
@@ -75,10 +74,9 @@ export default function SplitButton({optionsImport, onOpenSplitButton} : Options
   };
 
   const handleMenuItemClick = (
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: number,
+    id: number,
   ) => {
-    onOpenSplitButton(index);
+    onOpenSplitButton(id);
     //optionsImport[index].action(true);
     setAnchorEl(null);
   };
@@ -123,9 +121,9 @@ export default function SplitButton({optionsImport, onOpenSplitButton} : Options
               onClose={handleClose}
             >
               {optionsImport.map((option, index) => 
-                  <MenuItem key={index}  onClick={(event) => handleMenuItemClick(event, index)} disableRipple>
+                  <MenuItem key={index}  onClick={(event) => handleMenuItemClick(option.id)} disableRipple>
                     {/* {option.icon} */}
-                    {option.title}
+                    {option.name}
                 </MenuItem>
               )}
   

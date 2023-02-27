@@ -6,7 +6,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Control, FieldError, FieldValues, Controller } from "react-hook-form";
+import locale from "date-fns/locale/pt-BR";
 import { DateTimePicker } from "@mui/x-date-pickers";
+
+
 
 interface DatePickerParams {
   label: string;
@@ -18,7 +21,7 @@ interface DatePickerParams {
 export default function BasicDateTimePicker({ label, name, error, control, readonly }: DatePickerParams) {
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={locale} >
       <Controller
         name={name}
         control={control}

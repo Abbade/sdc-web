@@ -3,34 +3,20 @@ import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import List from "@mui/material/List";
 import { useContext, useEffect, useState } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
+import { ACTION_TYPE } from "../../../constants/ACTION_TYPE";
+import { ActionTypeProvider } from "../../../contexts/ActionTypeContext";
 import { AlertContext } from "../../../contexts/AlertContext";
+import { UserInterface } from "../../../interfaces/UserInterface";
 import { api } from "../../../services/apiClient";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
-import BasicTextField from "../../Inputs/BasicTextField";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import BasicDateTimePicker from "../../Inputs/BasicDateTimePicker";
-import Popover from "@mui/material/Popover";
-import Typography from "@mui/material/Typography";
 import BasicCheckbox from "../../Inputs/BasicCheckbox";
+import BasicDateTimePicker from "../../Inputs/BasicDateTimePicker";
+import BasicTextField from "../../Inputs/BasicTextField";
 import CreateAction, { ICreateAction } from "./CreateAction";
-import FormDialog from "../../Dialogs/Dialog";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FolderIcon from "@mui/icons-material/Folder";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ForestIcon from "@mui/icons-material/Forest";
-import { ActionTypeProvider } from "../../../contexts/ActionTypeContext";
-import { ACTION_TYPE } from "../../../constants/ACTION_TYPE";
 
 export type ICreateActionGroup = {
   title?: string;
@@ -41,7 +27,7 @@ export type ICreateActionGroup = {
   actions?: ICreateAction[];
 };
 
-type ItemType = {
+export type ItemType = {
   id: number;
   name: string;
 };
@@ -49,6 +35,7 @@ type ItemType = {
 export interface CreateActionInterface {
   onClose?: (refresh?: boolean) => void;
   form: ICreateActionGroup;
+  fromAction: boolean;
 }
 
 const createObjFormSchema = yup.object().shape({
@@ -62,6 +49,7 @@ const createObjFormSchema = yup.object().shape({
 export default function CreateActionGroup({
   form,
   onClose,
+  fromAction,
 }: CreateActionInterface) {
   const {
     register,
@@ -78,6 +66,7 @@ export default function CreateActionGroup({
   const { setAlert, setOpenLoading, showAlert } = useContext(AlertContext);
   const [openForm, setOpenForm] = useState(false);
   const [actionsTypes, setActionsTypes] = useState<ItemType[]>([]);
+  const [users, setUsers] = useState<UserInterface[]>([]);
   const [actions, setActions] = useState([] as ICreateAction[]);
   const [chosen, setChosen] = useState(-1);
 
@@ -116,11 +105,28 @@ export default function CreateActionGroup({
   };
 
   useEffect(() => {
-    console.log(form.allDay);
+
+    if(form.actions != null){
+      setActions(form.actions);
+    }
+    if(fromAction){
+
+     
+      setValue("title", form.title );
+      setValue("desc", form.desc);
+      if(form.actions[0].plants !== undefined) {
+        let arrayPlants = form.actions[0].plants.map((plantA) => plantA.id);
+   
+        setValue("actions[0].plants", arrayPlants);
+      }
+     
+      setValue("actions[0].actionTypeId", form.actions[0].actionTypeId);
+
+    }
     setValue("start", form.start);
     setValue("end", form.end);
     setValue("allDay", form.allDay);
-  }, [setValue, form]);
+  }, [setValue, form, fromAction]);
 
   useEffect(() => {
     const getActionType = async () => {
@@ -130,6 +136,14 @@ export default function CreateActionGroup({
       setOpenLoading(false);
     };
 
+    const getUsers = async () => {
+      setOpenLoading(true);
+      const types = await api.get("/user");
+      setUsers(types.data.itens);
+      setOpenLoading(false);
+    };
+
+    getUsers();
     getActionType();
   }, [setOpenLoading]);
 
@@ -184,16 +198,14 @@ export default function CreateActionGroup({
     let flag = true;
     if (actions != null && actions.length > 0) {
       actions.map((action) => {
-        if(action.plants != null){
+        if (action.plants != null) {
           let plantCount = action.plants.length;
           if (plantCount <= 0) {
             flag = false;
           }
-        }
-        else{
+        } else {
           flag = false;
         }
-     
       });
     }
     return flag;
@@ -204,6 +216,7 @@ export default function CreateActionGroup({
   ) => {
     try {
       setOpenLoading(true);
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
       console.log(formData);
       //formData.actions = actions;
       console.log(formData);
@@ -220,7 +233,7 @@ export default function CreateActionGroup({
       const item = await api.post("action-group", formData);
       setOpenLoading(false);
       showAlert("Ação cadastrada com sucesso.", "success");
-      // onClose(true);
+      onClose(true);
     } catch (error) {
       console.log(error);
       setOpenLoading(false);
@@ -263,8 +276,12 @@ export default function CreateActionGroup({
                   <List>
                     {actions?.map((action, index) => (
                       <CreateAction
+                        fromAction={fromAction}
                         key={index}
+                        actionsTypes={actionsTypes}
                         chosen={chosen}
+                        getValues={getValues}
+                        users={users}
                         control={control}
                         errors={errors}
                         handleChosen={handleChosen}
@@ -289,7 +306,7 @@ export default function CreateActionGroup({
                   label={"Data Início"}
                   name={"start"}
                   control={control}
-                  readonly={true}
+                  readonly={!fromAction ? true : false}
                   error={errors.start as FieldError}
                 />
               </Grid>
@@ -297,7 +314,7 @@ export default function CreateActionGroup({
                 <BasicDateTimePicker
                   label={"Data Fim"}
                   name={"end"}
-                  readonly={true}
+                  readonly={!fromAction ? true : false}
                   control={control}
                   error={errors.end as FieldError}
                 />
@@ -306,20 +323,22 @@ export default function CreateActionGroup({
                 <BasicCheckbox
                   label={"Dia todo"}
                   name={"allDay"}
-                  readOnly={true}
+                  readOnly={!fromAction ? true : false}
                   control={control}
                   error={errors.allDay as FieldError}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  onClick={openAddActionItems}
-                  fullWidth
-                >
-                  Adicionar Ação
-                </Button>
-              </Grid>
+              {!fromAction && (
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    onClick={openAddActionItems}
+                    fullWidth
+                  >
+                    Adicionar Ação
+                  </Button>
+                </Grid>
+              )}
             </Grid>
           </Grid>
         </Grid>

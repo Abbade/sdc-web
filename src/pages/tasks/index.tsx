@@ -57,7 +57,7 @@ export default function Tasks() {
   return (
     <>
       <FormDialog size={'xl'} onClose={onClose} open={openForm} title="Adicionar Tarefa">
-        <CreateActionGroup form={selectedDate} onClose={onClose} />
+        <CreateActionGroup form={selectedDate} onClose={onClose} fromAction={false} />
       </FormDialog>
       <FullCalendar
         events={tasks}
