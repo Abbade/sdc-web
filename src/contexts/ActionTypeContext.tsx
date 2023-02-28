@@ -13,6 +13,7 @@ type PlantsContextData = {
   recipients : ItemType[];
   plantStage : ItemType[];
   trashReasons : ItemType[];
+  locations : ItemType[];
 };
 
 
@@ -31,6 +32,7 @@ export function ActionTypeProvider({ children }: PlantProviderProps) {
   const [recipients, setRecipients] = useState<ItemType[]>([]);
   const [plantStage, setPlantStage] = useState<ItemType[]>([]);
   const [trashReasons, setTrashReasons] = useState<ItemType[]>([]);
+  const [locations, setLocations] = useState<ItemType[]>([]);
 
 
   useEffect(() => {
@@ -46,9 +48,14 @@ export function ActionTypeProvider({ children }: PlantProviderProps) {
       var response = await api.get("/trash-reason");
       setTrashReasons(response.data.itens);
     };
+    const getLocations = async () => {
+      var response = await api.get("/location");
+      setLocations(response.data.itens);
+    };
     getTrashReasons();
     getPlantStage();
     getRecipients();
+    getLocations();
   }, []);
 
   return (
@@ -56,7 +63,8 @@ export function ActionTypeProvider({ children }: PlantProviderProps) {
       value={{
         recipients,
         plantStage,
-        trashReasons
+        trashReasons,
+        locations
       }}
     >
       {children}

@@ -26,6 +26,8 @@ import CreateCropForm from "../Forms/CreateCropForm";
 import CreateActionGroup, { ItemType } from "../Forms/action/CreateActionGroup";
 import { api } from "../../services/apiClient";
 import { IOptionsImport } from "../SplitButton";
+import { TYPE_PLANT } from "../../constants/ACTION_TYPE";
+
 
 export default function PlantsTable({ id }) {
   const {
@@ -67,7 +69,7 @@ export default function PlantsTable({ id }) {
     const getActionType = async () => {
       setOpenLoading(true);
       const types = await api.get("/actionsTypes");
-      setActionsTypes(types.data.itens);
+      setActionsTypes(types.data.itens?.filter(x => x.type === TYPE_PLANT.PLANTS_TYPES));
       setOpenLoading(false);
     };
 

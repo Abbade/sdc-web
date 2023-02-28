@@ -39,7 +39,7 @@ export default function ActionTypeInput({
 }: ActionTypeInputProps) {
 
   const { setOpenLoading } = useContext(AlertContext);
-  const { plantStage, recipients, trashReasons } = useContext(ActionTypeContext);
+  const { plantStage, recipients, trashReasons, locations } = useContext(ActionTypeContext);
 
   
 
@@ -86,13 +86,24 @@ export default function ActionTypeInput({
       case ACTION_TYPE.DESCARTE_PLANTA:
         return (
           <BasicSelect
-            label={"Trash Reason"}
+            label={"Motivo Descarte"}
             name={'actions[' + index + '].' + "trashReasonId"}
             values={trashReasons}
             control={control}
             error={errorsIndex.trashReasonId as FieldError}
           />
         );
+
+        case ACTION_TYPE.ALTERA_LOCAL:
+          return (
+            <BasicSelect
+              label={"Localização"}
+              name={'actions[' + index + '].' + "locationId"}
+              values={locations}
+              control={control}
+              error={errorsIndex.locationId as FieldError}
+            />
+          );
       default:
         return <></>;
     }

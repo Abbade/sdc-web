@@ -37,6 +37,7 @@ export type ICreateAction = {
   stageId?: number;
   trashReasonId?: number;
   scheduledDate?: Date;
+  locationId?: number;
 };
 export type ActionItem = {
   id: number;

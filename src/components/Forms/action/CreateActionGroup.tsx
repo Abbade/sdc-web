@@ -187,6 +187,15 @@ export default function CreateActionGroup({
               flag = false;
             }
             break;
+          case ACTION_TYPE.ALTERA_LOCAL:
+              if (action.locationId == null) {
+                setError(actionName + "locationId", {
+                  type: "custom",
+                  message: "Campo obrigatório",
+                });
+                flag = false;
+              }
+              break;
         }
       });
     }

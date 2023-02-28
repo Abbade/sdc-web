@@ -11,5 +11,9 @@ export const ACTION_TYPE = {
   FINISH_CROP: 10
 };
 
-export const PLANTS_TYPES = [1, 2, 3, 5, 6, 8];
-export const NURSERY_TYPES = [4, 7]
+export const TYPE_PLANT = {
+  PLANTS_TYPES: 1,
+  NURSERY_TYPES: 2,
+  CROP_TYPE: 3,
+  CRIACAO: 4,
+}
