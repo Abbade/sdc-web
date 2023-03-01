@@ -14,7 +14,7 @@ import { LoteInterface } from "../../interfaces/LoteInterface";
 import { api } from "../../services/apiClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import FormDialog from "../Dialogs/Dialog";
-import CreateLoteForm from "../Forms/CreateLoteForm";
+import CreateLoteForm from "../Forms/action/CreateLoteForm";
 import FinishCropForm from "../Forms/FinishCropForm";
 import TrashLoteForm from "../Forms/TrashLoteForm";
 import Table from "../Table";

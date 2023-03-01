@@ -16,7 +16,7 @@ import CreatePlantForm from "../Forms/CreatePlantForm";
 import TrashLoteForm from "../Forms/TrashLoteForm";
 import Table from "../Table";
 import ParkIcon from '@mui/icons-material/Park';
-import CreateLoteForm from "../Forms/CreateLoteForm";
+import CreateLoteForm from "../Forms/action/CreateLoteForm";
 
 const InitialLoteDetailsProps = {
   id: 0,
@@ -208,6 +208,7 @@ export default function Nursery() {
       <FormDialog
         onClose={handleCloseCreate}
         open={openCreate}
+        size='xl'
         title={"Novo Lote " + lote?.name}
       >
         <CreateLoteForm onClose={handleCloseCreate}></CreateLoteForm>

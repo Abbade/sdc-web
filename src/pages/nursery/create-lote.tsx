@@ -17,7 +17,7 @@ import {
   Genetic,
   PropagationType,
 } from "../../interfaces/LoteInterface";
-import CreateLoteForm from "../../components/Forms/CreateLoteForm";
+import CreateLoteForm from "../../components/Forms/action/CreateLoteForm";
 
 
 
