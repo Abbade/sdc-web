@@ -1,5 +1,6 @@
 import {
   DataGrid,
+  DataGridProps,
   GridCallbackDetails,
   GridColDef,
   GridSelectionModel,
@@ -7,8 +8,10 @@ import {
 import LinearProgress from "@mui/material/LinearProgress";
 
 let pageSize = 10;
+type teste = DataGridProps & {
 
-export interface DataTableInterface {
+}
+export type   DataTableInterface = DataGridProps &  {
   columns: GridColDef[];
   rows: any[];
   rowCount: number;
@@ -36,12 +39,14 @@ export default function DataTable({
   pageSize,
   loading,
   useCheckBox,
-  height
+  height,
+  ...rest
 }: DataTableInterface) {
   const heightStr = height != null ? height : "calc(100vh - 300px)";
   return (
     <div style={{   height: heightStr, width: "100%" }}>
       <DataGrid
+      
         rows={rows}
         columns={columns}
         onPageChange={onPageChange}
@@ -58,6 +63,7 @@ export default function DataTable({
           LoadingOverlay: LinearProgress,
         }}
         loading={loading}
+        {...rest}
       />
     </div>
   );

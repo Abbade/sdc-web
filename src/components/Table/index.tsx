@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import {
+  DataGridProps,
   GridCallbackDetails,
   GridColDef,
   GridSelectionModel,
@@ -19,7 +20,7 @@ import SplitButton, {
 } from "../SplitButton";
 import DataTable from "./DataTable";
 
-export interface TableIndexInterface {
+export type TableIndexInterface =  DataGridProps &  {
   columns: GridColDef[];
   rows: any[];
   searchName: string;
@@ -66,7 +67,8 @@ export default function Table({
   loading,
   onOpenSplitButton,
   selection,
-  height
+  height,
+  ...rest
 }: TableIndexInterface) {
   const theme = useTheme();
   const isSmallOrLess = useMediaQuery(theme.breakpoints.up("md"));
@@ -163,6 +165,7 @@ export default function Table({
           </Grid>
         </Grid>
         <DataTable
+          {...rest}
           columns={columns}
           rows={rows}
           onPageChange={onPageChange}

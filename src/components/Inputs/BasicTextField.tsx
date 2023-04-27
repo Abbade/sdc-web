@@ -4,16 +4,11 @@ import FormControl from "@mui/material/FormControl";
 import { FieldError, Controller, FieldValues, Control } from "react-hook-form";
 import { TextField, TextFieldProps } from "@mui/material";
 
-interface selectParams {
-  label: string;
+type selectParams = Omit<TextFieldProps, "error"> & {
   name: string;
   error?: FieldError;
-  multiline?: boolean;
   control?: Control<FieldValues, any>;
-  type?: string;
-  disabled?: boolean;
-  minRows?: number;
-}
+};
 export default function BasicTextField({
   name,
   label,
@@ -23,29 +18,40 @@ export default function BasicTextField({
   error = null,
   type = "text",
   disabled = false,
-
+  ...rest
 }: selectParams) {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <Controller
-          name={name}
-          control={control}
-     
-          render={({ field: { onChange, value = '' } }) => (
-            <TextField
-              onChange={onChange}
-              value={value}
-              label={label}
-              error={!!error}
-              multiline={multiline}
-              helperText={error?.message}
-              type={type}
-              disabled={disabled}
-              minRows={minRows}
-            />
-          )}
-        />
+        {control ? (
+          <Controller
+            name={name}
+            control={control}
+            render={({ field: { onChange, value = "" } }) => (
+              <TextField
+                onChange={onChange}
+                value={value}
+                label={label}
+                error={!!error}
+                variant="outlined"
+                multiline={multiline}
+                helperText={error?.message}
+                type={type}
+                disabled={disabled}
+                minRows={minRows}
+                {...rest}
+              />
+            )}
+          />
+        ) : (
+          <TextField
+  
+            label={label}
+            variant="outlined"
+            type={type}
+            {...rest}
+          />
+        )}
       </FormControl>
     </Box>
   );

@@ -24,6 +24,7 @@ function MyApp(props: MyAppProps) {
 
  
 const LayoutComponent = isLayoutNeeded ? Layout : React.Fragment;
+
   return (
     <AuthProvider>
       <Theme >

@@ -37,7 +37,7 @@ import Avatar from "@mui/material/Avatar";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { Can } from "./Can";
-
+import InventoryIcon from '@mui/icons-material/Inventory';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -231,7 +231,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={handleMenu}
                 color="inherit"
               >
-                     <AccountCircle />
+                <AccountCircle />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -249,12 +249,12 @@ export default function Layout({ children }: LayoutProps) {
                 onClose={handleClose}
               >
                 <AnchorLink onClick={() => handleClose()} href={"/myaccount"}>
-                  
                   <MenuItem>
-                  <ListItemIcon>
+                    <ListItemIcon>
                       <AccountCircle fontSize="small" />
                     </ListItemIcon>
-                  Minha Conta</MenuItem>
+                    Minha Conta
+                  </MenuItem>
                 </AnchorLink>
                 <AnchorLink onClick={() => handleClose()} href={"/company"}>
                   <MenuItem>
@@ -294,60 +294,53 @@ export default function Layout({ children }: LayoutProps) {
             icon={<ForestIcon />}
           >
             <>
-            <Can permissions={["nursery.list"]}>
+              <Can permissions={["nursery.list"]}>
                 <CustomLink
-                    keylink="clone_link"
-                    linkstr="/nursery"
-                    name="Berçario"
-                    open={open}
-                    icon={<GrassIcon />}
-                  />
-            </Can>
-            <Can permissions={["plant.list"]}>
-              <CustomLink
+                  keylink="clone_link"
+                  linkstr="/nursery"
+                  name="Berçario"
+                  open={open}
+                  icon={<GrassIcon />}
+                />
+              </Can>
+              <Can permissions={["plant.list"]}>
+                <CustomLink
                   keylink="clone_link"
                   linkstr="/plants"
                   name="Plantas"
                   open={open}
                   icon={<ForestIcon />}
                 />
-            </Can>
-            <Can permissions={["crop.list"]}>
-              <CustomLink
+              </Can>
+              <Can permissions={["crop.list"]}>
+                <CustomLink
                   keylink="clone_link"
                   linkstr="/crops"
                   name="Colheitas"
                   open={open}
                   icon={<ContentCutIcon />}
                 />
-            </Can>
-            <Can permissions={["statistics.culti"]}>
-              <CustomLink
+              </Can>
+              <Can permissions={["statistics.culti"]}>
+                <CustomLink
                   keylink="clone_link"
                   linkstr="/statistics"
                   name="Relatórios"
                   open={open}
                   icon={<TrendingUpIcon />}
                 />
-            </Can>
-            <Can permissions={["parameter.list"]}>
-              <CustomLink
+              </Can>
+              <Can permissions={["parameter.list"]}>
+                <CustomLink
                   keylink="clone_link"
                   linkstr="/params/cultivation/propagation-type"
                   name="Parâmetros"
                   open={open}
                   icon={<SettingsIcon />}
                 />
-            </Can>
-               
-              
-              
+              </Can>
             </>
           </CustomMenu>
-
-          {/* <CustomLink keylink='audit_lkb' linkstr='apr' name='Auditorias' open={open} icon={<PageviewIcon />} /> */}
-
-          {/* mais aqui */}
         </List>
         <Divider />
 
@@ -372,6 +365,46 @@ export default function Layout({ children }: LayoutProps) {
           {/* mais aqui */}
         </List>
         <Divider />
+
+        <List>
+          <CustomMenu
+            keylink="stock_link"
+            name="Estoque"
+            open={open}
+            icon={<InventoryIcon />}
+          >
+            <>
+              <Can permissions={["nursery.list"]}>
+                <CustomLink
+                  keylink="clone_link"
+                  linkstr="/products"
+                  name="Produto"
+                  open={open}
+                  icon={<InventoryIcon />}
+                />
+              </Can>
+              <Can permissions={["statistics.culti"]}>
+                <CustomLink
+                  keylink="clone_link"
+                  linkstr="/statistics"
+                  name="Relatórios"
+                  open={open}
+                  icon={<TrendingUpIcon />}
+                />
+              </Can>
+              <Can permissions={["parameter.list"]}>
+                <CustomLink
+                  keylink="config_stock_link"
+                  linkstr="/stock/config/"
+                  name="Parâmetros"
+                  open={open}
+                  icon={<SettingsIcon />}
+                />
+              </Can>
+            </>
+          </CustomMenu>
+        </List>
+
 
         <Divider />
         <List>
